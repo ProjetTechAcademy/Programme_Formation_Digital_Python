@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formation Développeur Web Python</title>
-    <!-- Chargement de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chargement de Font Awesome (pour les icônes UI générales, pas les liens) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     
-    <!-- Fonts intégrées -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -106,12 +103,10 @@
         }
 
         /* APP STYLES - CORRECTION OPACITÉ */
-        /* Quand le lien est vide : opacité à 30%, pas de filtre gris, non cliquable */
         .empty-link-button { 
             opacity: 0.3 !important; 
             pointer-events: none; 
             cursor: default; 
-            /* filter: grayscale(100%);  <-- SUPPRIMÉ POUR GARDER LA COULEUR */
         }
         
         .resource-link-btn { transition: all 0.2s ease-in-out; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -134,7 +129,6 @@
 </head>
 <body class="p-0">
     
-    <!-- HEADER -->
     <div class="top-bar" id="mainHeader">
         <div class="top-bar-container">
             <div class="top-left">
@@ -162,7 +156,6 @@
         <nav id="mobileNav" class="mobile-nav-container" aria-label="Navigation mobile"></nav>
     </div>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-grow p-4 sm:p-8 pt-6">
         <div id="app-container" class="max-w-7xl mx-auto">
             <header class="text-center mb-8 p-6 rounded-xl bg-white shadow-lg border-b-4 border-cta">
@@ -190,16 +183,14 @@
             </div>
 
             <div id="resources-container" class="space-y-8">
-                <!-- Dynamic Content -->
-            </div>
+                </div>
         </div>
-    </main>
+    main>
 
     <button id="scrollToTopBtn" onclick="scrollToTop()" class="bg-cta hover-bg-cta text-white p-4 rounded-full shadow-lg">
         <i class="fas fa-arrow-up text-xl"></i>
     </button>
     
-    <!-- FOOTER -->
     <footer class="main-footer" role="contentinfo">
         <div class="footer-container">
             <div class="footer-left">
@@ -233,7 +224,6 @@
         </div>
     </footer>
 
-    <!-- SCRIPT JS -->
     <script>
         function toggleMobileMenu() {
             const nav = document.getElementById('mobileNav');
@@ -242,8 +232,8 @@
             button.classList.toggle('active');
         }
         
-        // --- DONNÉES COMPLÈTES ET CORRIGÉES (B3_M07 : NoteBook vide, décalage appliqué) ---
-        // Mapping Colonnes: NoteBook_ML | Cours_Python | Audio | Excel | Infographie | Présentation | Video
+        // --- DONNÉES COMPLÈTES ---
+        // Mapping Colonnes Modifié : Cours_Python | Audio | Excel | Infographie | Présentation | Video
         const resources = {
             "B1": {
                 title: "B1: Conception et spécification d'une solution digitale",
@@ -582,7 +572,6 @@
                         { 
                             title: "S001-L'interpréteur de commande Python", 
                             links: { 
-                                "NoteBook_ML": null, // Décalage appliqué : Vide comme demandé
                                 "Cours_Python": "https://drive.google.com/file/d/1D8aarg1WANnu00gJXPWC0ItJVU195WKP/view?usp=drivesdk",
                                 "Audio": "https://drive.google.com/file/d/1ShcLmK-ojhexgFS5WSVC_vnJ38LNQXBL/view?usp=drivesdk",
                                 "Excel": "https://docs.google.com/spreadsheets/d/1pc3vpHpB22WpUvxkPx1LdKvLCn07qvrL8QxuLvlq0hA/edit?usp=drivesdk",
@@ -594,7 +583,6 @@
                         { 
                             title: "S002-Environnements de travail", 
                             links: { 
-                                "NoteBook_ML": null, // Décalage appliqué
                                 "Cours_Python": "https://drive.google.com/file/d/1tCTNdZwSUnR5BCG5whBNeB2LH9SmMeze/view?usp=drivesdk",
                                 "Audio": "https://drive.google.com/file/d/1wX-kR0OWql1ACJgPF2n6e4EnN9-9nz88/view?usp=drivesdk",
                                 "Excel": "https://docs.google.com/spreadsheets/d/1Aur1x30sO-d29lJsm2oPTBiSFlBhC7tMsK3T2mTZmnY/edit?usp=drivesdk",
@@ -699,12 +687,11 @@
             }
         };
 
-        // Liste fixe des catégories pour l'affichage (dans l'ordre)
-        const linkCategories = ['NoteBook_ML', 'Cours_Python', 'Audio', 'Excel', 'Infographie', 'Présentation', 'Video'];
+        // Liste fixe des catégories pour l'affichage (SUPPRESSION DE NoteBook_ML)
+        const linkCategories = ['Cours_Python', 'Audio', 'Excel', 'Infographie', 'Présentation', 'Video'];
 
-        // Mapping des icônes emojis et couleurs
+        // Mapping des icônes emojis et couleurs (SUPPRESSION DE NoteBook_ML)
         const linkIcons = {
-            "NoteBook_ML": { icon: "📕", title: "NoteBook ML", linkClass: "bg-indigo-600 hover:bg-indigo-700" },
             "Cours_Python": { icon: "🐍", title: "Cours Python", linkClass: "bg-cta hover:bg-yellow-600" },
             "Audio": { icon: "🎧", title: "Audio", linkClass: "bg-teal-600 hover:bg-teal-700" },
             "Excel": { icon: "📊", title: "Excel", linkClass: "bg-green-600 hover:bg-green-700" },
@@ -738,14 +725,14 @@
             let allChecked = true;
             // On vérifie seulement les ressources DISPONIBLES (non null) pour cocher/décocher
             for (const type in subject.links) {
-                if (subject.links[type] !== null && !isResourceCompleted(blocKey, subjectId, type)) {
+                if (subject.links[type] !== null && linkCategories.includes(type) && !isResourceCompleted(blocKey, subjectId, type)) {
                     allChecked = false;
                     break;
                 }
             }
             const newState = !allChecked; 
             for (const type in subject.links) {
-                if (subject.links[type] !== null) {
+                if (subject.links[type] !== null && linkCategories.includes(type)) {
                     progressStore[blocKey][subjectId] = progressStore[blocKey][subjectId] || {};
                     progressStore[blocKey][subjectId][type] = newState;
                 }
@@ -762,9 +749,9 @@
             if (!subject) return 0;
             let totalAvailable = 0;
             let completedCount = 0;
-            // On ne compte que les liens réels pour le pourcentage
+            // On ne compte que les liens réels et présents dans linkCategories pour le pourcentage
             for (const type in subject.links) {
-                if (subject.links[type] !== null) {
+                if (subject.links[type] !== null && linkCategories.includes(type)) {
                     totalAvailable++;
                     if (isResourceCompleted(blocKey, subjectId, type)) { completedCount++; }
                 }
@@ -825,7 +812,7 @@
                            ${meta.icon}
                         </a>`;
                 } else {
-                    // Lien absent : Opacité 30%, non cliquable, classe "empty-link-button" (COULEUR CONSERVÉE)
+                    // Lien absent : Opacité 30%, non cliquable
                     linkButton = `
                         <span title="${meta.title} (En attente)" 
                               class="inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} empty-link-button text-lg">
