@@ -142,10 +142,10 @@
             </div>
 
             <div style="display: flex; gap: 10px; align-items: center;">
-                <a class="btn-portfolio-cosmic-desktop" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" title="Mon Portfolio">
+                <a class="btn-portfolio-cosmic-desktop" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" title="Mon Portfolio">
                     <i class="fa-solid fa-code"></i> Portfolio
                 </a>
-                <a class="mobile-icon-btn btn-portfolio-mobile" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" title="Mon Portfolio">
+                <a class="mobile-icon-btn btn-portfolio-mobile" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" title="Mon Portfolio">
                     <i class="fa-solid fa-briefcase"></i> 💼
                 </a>
                 <div id="hamburgerBtn" class="mobile-icon-btn hamburger-btn" onclick="toggleMobileMenu()">
@@ -185,7 +185,7 @@
             <div id="resources-container" class="space-y-8">
                 </div>
         </div>
-    main>
+    </main>
 
     <button id="scrollToTopBtn" onclick="scrollToTop()" class="bg-cta hover-bg-cta text-white p-4 rounded-full shadow-lg">
         <i class="fas fa-arrow-up text-xl"></i>
@@ -209,11 +209,11 @@
                 <div class="footer-section">
                     <div class="footer-section-title">Réseaux Sociaux</div>
                     <div class="footer-links-row">
-                        <a class="icon-btn" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp" style="color:#25D366;"></i></a>
-                        <a class="icon-btn" href="https://discord.gg/redT9wEE6T" target="_blank" title="Discord"><i class="fab fa-discord" style="color:#5865F2;"></i></a>
-                        <a class="icon-btn" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin" style="color:#0077b5;"></i></a>
-                        <a class="icon-btn" href="https://www.instagram.com/enervyx/" target="_blank" title="Instagram"><i class="fab fa-instagram" style="color:#C13584;"></i></a>
-                        <a class="icon-btn" href="https://www.tiktok.com/@enervyx" target="_blank" title="TikTok"><i class="fab fa-tiktok" style="color:#ffffff;"></i></a>
+                        <a class="icon-btn" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" title="WhatsApp"><i class="fab fa-whatsapp" style="color:#25D366;"></i></a>
+                        <a class="icon-btn" href="https://discord.gg/redT9wEE6T" title="Discord"><i class="fab fa-discord" style="color:#5865F2;"></i></a>
+                        <a class="icon-btn" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" title="LinkedIn"><i class="fab fa-linkedin" style="color:#0077b5;"></i></a>
+                        <a class="icon-btn" href="https://www.instagram.com/enervyx/" title="Instagram"><i class="fab fa-instagram" style="color:#C13584;"></i></a>
+                        <a class="icon-btn" href="https://www.tiktok.com/@enervyx" title="TikTok"><i class="fab fa-tiktok" style="color:#ffffff;"></i></a>
                     </div>
                 </div>
             </div>
@@ -807,7 +807,7 @@
                 if (isAvailable) {
                     // Lien présent : Opacité 100%, Lien actif
                     linkButton = `
-                        <a href="${link}" target="_blank" title="${meta.title} (Lien)" 
+                        <a href="${link}" title="${meta.title} (Lien)" 
                            class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">
                            ${meta.icon}
                         </a>`;
@@ -888,7 +888,7 @@
         function showPlanningOptions(blocKey, subjectIndex, subjectTitle) {
             const modalContent = document.getElementById('planningModalContent');
             const options = [ { days: 3, label: "Relire dans 3 jours" }, { days: 7, label: "Relire dans 7 jours (J+7)" }, { days: 10, label: "Relire dans 10 jours" }, { days: 30, label: "Relire dans 30 jours (J+30)" }, { days: 60, label: "Relecture approfondie (J+60)" }, { days: 90, label: "Relecture Finale (J+90)" } ];
-            const optionsHtml = options.map(opt => { const link = generateGoogleCalendarLink(blocKey, opt.days, subjectTitle); return `<a href="${link}" target="_blank" onclick="closeModal('planningModal')" class="w-full bg-title text-white py-2 px-4 rounded-lg hover:opacity-90 transition duration-150 text-center font-semibold mb-2 flex justify-between items-center">${opt.label} <i class="fas fa-external-link-alt ml-2 text-cta"></i></a>`; }).join('');
+            const optionsHtml = options.map(opt => { const link = generateGoogleCalendarLink(blocKey, opt.days, subjectTitle); return `<a href="${link}" onclick="closeModal('planningModal')" class="w-full bg-title text-white py-2 px-4 rounded-lg hover:opacity-90 transition duration-150 text-center font-semibold mb-2 flex justify-between items-center">${opt.label} <i class="fas fa-external-link-alt ml-2 text-cta"></i></a>`; }).join('');
             modalContent.innerHTML = `<h3 class="text-xl font-bold text-title mb-4">Planifier la Relecture du Sujet</h3><p class="text-sm text-gray-600 mb-4 font-code truncate">${subjectTitle}</p><div class="space-y-2">${optionsHtml}</div><button onclick="closeModal('planningModal')" class="mt-4 w-full text-title border border-gray-300 py-2 rounded-lg hover:bg-gray-100">Fermer</button>`;
             document.getElementById('planningModal').classList.remove('hidden');
         }
@@ -917,7 +917,7 @@
                 let blocColorClass, accentColorClass;
                 if (key === 'B1') { blocColorClass = 'border-b1'; accentColorClass = 'text-b1'; } else if (key === 'B2') { blocColorClass = 'border-b2'; accentColorClass = 'text-b2'; } else { blocColorClass = 'border-title'; accentColorClass = 'text-title'; }
                 const planningSteps = [ { label: "1ère Lecture (Aujourd'hui)", days: 0 }, { label: "2ème Lecture (J+7)", days: 7 }, { label: "3ème Lecture (J+30)", days: 30 }, { label: "Relecture (J+60)", days: 60 }, { label: "Relecture (J+90)", days: 90 }, { label: "Relecture (J+180 - 6 mois)", days: 180 } ];
-                const planningHtml = planningSteps.map(step => `<div class="flex items-center justify-between p-3 border-b border-gray-100 last:border-b-0"><span class="text-sm text-gray-700">${step.label}</span><a href="${generateGoogleCalendarLink(blocTitle, step.days, `[BLOC ${key}] Relecture ${step.label}`)}" target="_blank" class="bg-cta hover-bg-cta text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center"><i class="fas fa-calendar-plus mr-1"></i> Planifier</a></div>`).join('');
+                const planningHtml = planningSteps.map(step => `<div class="flex items-center justify-between p-3 border-b border-gray-100 last:border-b-0"><span class="text-sm text-gray-700">${step.label}</span><a href="${generateGoogleCalendarLink(blocTitle, step.days, `[BLOC ${key}] Relecture ${step.label}`)}" class="bg-cta hover-bg-cta text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center"><i class="fas fa-calendar-plus mr-1"></i> Planifier</a></div>`).join('');
                 return `<div class="p-6 rounded-xl shadow-lg bg-white space-y-4 home-card ${blocColorClass}" style="border-top: 4px solid var(--color-cta);"><h3 class="text-xl font-semibold flex items-center mb-4 text-title"><i class="fas fa-cubes mr-3 ${accentColorClass}"></i> ${blocTitle} (${completedCount}/${sessionCount} sujets validés)</h3><div class="relative pt-1"><div class="flex mb-2 items-center justify-between"><div class="text-right"><span class="text-xs font-semibold inline-block text-progress">${percentage}% Sujets Terminés</span></div></div><div class="flex h-2 mb-4 overflow-hidden text-xs bg-gray-200 rounded"><div style="width:${percentage}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-progress"></div></div></div><div class="bg-surface text-title p-4 rounded-lg border border-gray-200"><h4 class="font-semibold mb-2 flex items-center text-title"><i class="fas fa-clock mr-2 ${accentColorClass}"></i> Horloge de Relecture du Bloc</h4>${planningHtml}</div><button onclick="showTab('${key}')" class="w-full bg-cta text-title py-2 rounded-lg hover-bg-cta transition duration-150 font-semibold">Accéder aux sujets détaillés</button></div>`;
             }).join('');
             container.innerHTML = `<div class="bg-surface p-8 rounded-xl shadow-lg border-l-4 border-cta"><h2 class="text-3xl font-bold text-title mb-4">Synthèse de la Progression 📊</h2><p class="mt-2 text-lg text-gray-700 mb-6">Utilisez l'horloge pour planifier vos relectures de blocs ou validez les sujets dans les onglets B1, B2, B3 pour suivre votre avancement.</p><div class="grid grid-cols-1 md:grid-cols-3 gap-6">${blocksHtml}</div></div>`;
@@ -955,7 +955,7 @@
                         
                         let linkButton;
                         if (isAvailable) {
-                            linkButton = `<a href="${link}" target="_blank" title="${meta.title} (Lien)" class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">${meta.icon}</a>`;
+                            linkButton = `<a href="${link}" title="${meta.title} (Lien)" class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">${meta.icon}</a>`;
                         } else {
                             linkButton = `<span title="${meta.title} (En attente)" class="inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} empty-link-button text-lg">${meta.icon}</span>`;
                         }
