@@ -6,6 +6,8 @@
     <title>Formation Développeur Web Python</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Librairie pour lire le CSV Google Sheet -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 
@@ -102,7 +104,7 @@
             .footer-identity { align-items: center; }
         }
 
-        /* APP STYLES - CORRECTION OPACITÉ */
+        /* APP STYLES */
         .empty-link-button { 
             opacity: 0.3 !important; 
             pointer-events: none; 
@@ -111,6 +113,7 @@
         
         .resource-link-btn { transition: all 0.2s ease-in-out; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .resource-link-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+        .resource-link-btn img { pointer-events: none; }
         
         .tab-button { transition: all 0.2s; border-bottom: 3px solid transparent; }
         .tab-button:hover:not(.active-tab) { background-color: #f8f8f8; border-radius: 8px 8px 0 0; }
@@ -125,6 +128,18 @@
         .awaiting-subject { color: #5a6678; font-style: italic; }
         .awaiting-indicator { animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        
+        /* Spinner pour le chargement */
+        .loading-spinner {
+            border: 4px solid rgba(217, 165, 38, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--color-cta);
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="p-0">
@@ -163,6 +178,11 @@
                     Formation Développeur Web Python
                 </h1>
                 <p class="mt-2 text-lg text-gray-600">Programme de formation</p>
+                <!-- Zone de notification de chargement -->
+                <div id="loading-status" class="mt-4 text-sm text-gray-500">
+                    <div class="loading-spinner"></div>
+                    <p class="mt-2">Synchronisation avec ton fichier Excel en cours...</p>
+                </div>
             </header>
 
             <div class="bg-white rounded-xl shadow-lg mb-8 p-4">
@@ -183,7 +203,7 @@
             </div>
 
             <div id="resources-container" class="space-y-8">
-                </div>
+            </div>
         </div>
     </main>
 
@@ -225,473 +245,23 @@
     </footer>
 
     <script>
-        function toggleMobileMenu() {
-            const nav = document.getElementById('mobileNav');
-            const button = document.getElementById('hamburgerBtn');
-            nav.classList.toggle('visible');
-            button.classList.toggle('active');
-        }
+        // ---------------------------------------------------------
+        // LIEN CSV GOOGLE SHEET CONFIGURÉ
+        // ---------------------------------------------------------
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK_tBmpTFXHK-e-U-cy_XbjLY2cx4FVbP7X0fhLs34B8DLzIr6yUP_eYo4ueAIzFBABopTCQdd-TK/pub?gid=0&single=true&output=csv"; 
         
-        // --- DONNÉES COMPLÈTES ---
-        // Mapping Colonnes Modifié : Cours_Python | Audio | Excel | Infographie | Présentation | Video
-        const resources = {
-            "B1": {
-                title: "B1: Conception et spécification d'une solution digitale",
-                color: "bg-b1",
-                modules: {
-                    "M01 - Analyser les besoins client et identifier les solutions adaptées": [
-                        { title: "S000-Comment et pourquoi se former...", links: { "Cours_Python": "https://drive.google.com/file/d/1Z39_3RlOVkJuyeRRGekaG4x2XAdaPDS4/view?usp=drivesdk" } },
-                        { title: "S001-La veille et l'innovation", links: { "Cours_Python": "https://drive.google.com/file/d/1ckK4LaL2y8z1FzAGzdYX0_8c37iFp0ik/view?usp=drivesdk" } },
-                        { title: "S002-Les modes d'innovation", links: { "Cours_Python": "https://drive.google.com/file/d/1xYophzdJGqP8EN6J2YB-z33iIrbzxdXU/view?usp=drivesdk" } },
-                        { title: "S003-Les entreprises et l'innovation", links: { "Cours_Python": "https://drive.google.com/file/d/15M_zhUhPgzSKoecAXa12NVlPul5_kHoD/view?usp=drivesdk" } },
-                        { title: "S004-La créativité moteur de l'innovation", links: { "Cours_Python": "https://drive.google.com/file/d/1lrri8iizleyihiibfXr19AQG5ukuJh9W/view?usp=drivesdk" } },
-                        { title: "S005-Panorama des techniques de créativité", links: { "Cours_Python": "https://drive.google.com/file/d/1avKw0cJoOk0IKIQgIvjS3-orWhGNRlaQ/view?usp=drivesdk" } },
-                        { title: "S006-L'écosystème d'un projet digital", links: { "Cours_Python": "https://drive.google.com/file/d/1KR6oH3nkMIcTlhohPcE1muAHmLUst5Qc/view?usp=drivesdk" } },
-                        { title: "S007-Étude comparative, le benchmark des solutions existantes", links: { "Cours_Python": "https://drive.google.com/file/d/12BBuk8EsFN-AroawrPt9ghiGlH1mZd1f/view?usp=drivesdk" } },
-                        { title: "S008-Définir la cible de la solution digitale", links: { "Cours_Python": "https://drive.google.com/file/d/1ztaNOwH_zEE8INoCPLBk24SirOzcPsRN/view?usp=drivesdk" } },
-                        { title: "S009-Les principaux acteurs d’un projet digital - la maîtrise d’oeuvre", links: { "Cours_Python": null } },
-                        { title: "S010-Les principaux acteurs d’un projet digital - la maîtrise d’ouvrage", links: { "Cours_Python": "https://drive.google.com/file/d/14hW0DdIkF9XOLXhXGclXHROUy5aA-EYj/view?usp=drivesdk" } },
-                        { title: "S011-Identifier les parties prenantes", links: { "Cours_Python": "https://drive.google.com/file/d/1OiaJl3p9y37Q0HVbMCJBImY2Emrlctxu/view?usp=drivesdk" } },
-                        { title: "S012-Etablir la gouvernance du projet, définir les rôles et les responsabilités", links: { "Cours_Python": "https://drive.google.com/file/d/1ELLj3C8VOqXOctKUgdVVnOVrWlw95RSk/view?usp=drivesdk" } },
-                        { title: "S013-Comprendre les enjeux et les retombées d’un projet", links: { "Cours_Python": "https://drive.google.com/file/d/1VuGexvmqZdzPV0721cAP8lzsxIDRmTmq/view?usp=drivesdk" } },
-                        { title: "S014-Le cahier des charges - l'expression du besoin", links: { "Cours_Python": "https://drive.google.com/file/d/11EFYPTSb3KsdwOnc0QVxXAB9WZJDejQD/view?usp=drivesdk" } }
-                    ],
-                    "M02 - Définir les options techniques de la solution digitale": [
-                        { title: "S001-Les spécificités du projet digital", links: { "Cours_Python": "https://drive.google.com/file/d/1Lu6ebHuWkAiwfpd2YmpiUPJMBCo-qLCV/view?usp=drivesdk" } },
-                        { title: "S002-Le recueil de l'analyse des besoins", links: { "Cours_Python": null } },
-                        { title: "S003-Définir la solution et le projet cibles", links: { "Cours_Python": "https://drive.google.com/file/d/1L78Fb1l4t4aVCQ9KwReYFqwwEP5BQ7Hc/view?usp=drivesdk" } },
-                        { title: "S004-Définir les objectifs et faire valider l’opportunité du projet", links: { "Cours_Python": "https://drive.google.com/file/d/1XbJMiH_FhwoswOMjR2H5wXcFFBY69Kz1/view?usp=drivesdk" } },
-                        { title: "S005-Le choix technologique de la solution", links: { "Cours_Python": "https://drive.google.com/file/d/1Oiwt1HO6MnqGWaH32WhTiTaxSXryEXKZ/view?usp=drivesdk" } },
-                        { title: "S006-Le cahier des charges technique : détailler la mise en œuvre", links: { "Cours_Python": "https://drive.google.com/file/d/1GzyQ0AQuIyHizfuyQTMxHnzOtovHtdym/view?usp=drivesdk" } },
-                        { title: "S007-Le cahier des charges technique : du besoin à la solution technique", links: { "Cours_Python": "https://drive.google.com/file/d/1kjBOkYrBPGKhlOvtOOIigQfPvlYzrEmY/view?usp=drivesdk" } },
-                        { title: "S008-Le cahier des charges technique : description fonctionnelle et technique", links: { "Cours_Python": "https://drive.google.com/file/d/1Is6alrS81ZgbVvfDTAmv6reb5_82Xs73/view?usp=drivesdk" } },
-                        { title: "S009-La présentation et la validation de sa solution", links: { "Cours_Python": "https://drive.google.com/file/d/1ucVlFqT2fOtJC1xT2eAR9qUNx1TeBrzS/view?usp=drivesdk" } },
-                        { title: "S010-L'utilisation en interne du CDC", links: { "Cours_Python": "https://drive.google.com/file/d/18o6u2m-ki9sTsLy_VzKbQYt7Nd2Yg0kU/view?usp=drivesdk" } }
-                    ],
-                    "M03 - Découvrir Adobe XD": [
-                        { title: "S001-Présentation générale", links: { "Cours_Python": null } },
-                        { title: "S002-Gestion des documents", links: { "Cours_Python": null } },
-                        { title: "S003-Les outils de dessin vectoriel", links: { "Cours_Python": null } },
-                        { title: "S004-Les textes", links: { "Cours_Python": "https://drive.google.com/file/d/1T_ADHbfxwixaB9mKRz0DM9CpS-yCBX9J/view?usp=drivesdk" } },
-                        { title: "S005-Importation de fichiers et d'images", links: { "Cours_Python": null } },
-                        { title: "S006-Les différents effets graphiques", links: { "Cours_Python": null } },
-                        { title: "S007-Création d'éléments répétés", links: { "Cours_Python": null } },
-                        { title: "S008-Redimensionnement réactif", links: { "Cours_Python": null } },
-                        { title: "S009-Utilisation des composants", links: { "Cours_Python": null } },
-                        { title: "S010-Utilisation et gestion des Actifs", links: { "Cours_Python": null } },
-                        { title: "S011-Le mode Prototype", links: { "Cours_Python": null } },
-                        { title: "S012-Plug-ins", links: { "Cours_Python": null } },
-                        { title: "S013-Partage de designs et de prototypes", links: { "Cours_Python": null } },
-                        { title: "S014-Les différents types d'export", links: { "Cours_Python": null } }
-                    ],
-                    "M04 - Utiliser l'éditeur de graphiques Figma": [
-                        { title: "S001-Présentation de l'application", links: { "Cours_Python": "https://drive.google.com/file/d/1bsshPHhcbf6H7fQSE8f0GGVzdNJZqazF/view?usp=drivesdk" } },
-                        { title: "S002-L'application Figma", links: { "Cours_Python": "https://drive.google.com/file/d/1BJuK4k3CY3ABbrEfi7mmbtbK_21HYQh7/view?usp=drivesdk" } },
-                        { title: "S003-Importation et exportation de fichiers, utilisation de modèles", links: { "Cours_Python": "https://drive.google.com/file/d/148EaRbE_2MGwGKdwQu_9PvmNpDqoGU3L/view?usp=drivesdk" } },
-                        { title: "S004-Conception avancée", links: { "Cours_Python": "https://drive.google.com/file/d/124lgtMEVHAyPATsksB__wqPlEC1jLVhv/view?usp=drivesdk" } },
-                        { title: "S005-Créer un prototype, partager et exporter", links: { "Cours_Python": "https://drive.google.com/file/d/1mWcYHPi1rksy0Jndsbfa0T8g2NxXPpyD/view?usp=drivesdk" } }
-                    ],
-                    "M05 - Définir la méthodologie, la roadmap, les ressources et les livrables": [
-                        { title: "S001-Introduction à l'organisation d'un projet digital", links: { "Cours_Python": "https://drive.google.com/file/d/1wlPXn_1WVx3H9vp8XuPsGMcbPr2FtbgU/view?usp=drivesdk" } },
-                        { title: "S002-Méthodologie pour piloter un projet digital", links: { "Cours_Python": "https://drive.google.com/file/d/14inTmNv_nkszQGtXmmQzMe1wuOmS2BoX/view?usp=drivesdk" } },
-                        { title: "S003-Le rôle du chef de projet digital", links: { "Cours_Python": "https://drive.google.com/file/d/1yG9EFxIZNz7gysyLAyLQEm3olVE-fy-d/view?usp=drivesdk" } },
-                        { title: "S004-Les modes de gestion de projet dits 'classiques'", links: { "Cours_Python": null } },
-                        { title: "S005-Les méthodologies agiles", links: { "Cours_Python": null } },
-                        { title: "S006-Les processus et les disciplines", links: { "Cours_Python": "https://drive.google.com/file/d/1Esq-bMR7ViFA96j6im0q21xIm_z-pco0/view?usp=drivesdk" } },
-                        { title: "S007-Les acteurs et les ressources du projet", links: { "Cours_Python": "https://drive.google.com/file/d/1uU0hmdFoZ7qehUZAipT9brQa3vZpAoei/view?usp=drivesdk" } },
-                        { title: "S008-La première découpe du projet", links: { "Cours_Python": "https://drive.google.com/file/d/1v7uNb3JyKRPT6_CU-uVxuPzRDGDnmnt9/view?usp=drivesdk" } },
-                        { title: "S009-La construction du planning", links: { "Cours_Python": "https://drive.google.com/file/d/1wpYggm6ZQkrFijFdkFMkj4Tesqeqxgs3/view?usp=drivesdk" } },
-                        { title: "S010-La gestion du budget du projet", links: { "Cours_Python": "https://drive.google.com/file/d/1DLRr2VPAHFN3totKqz5VBUAShXdcMvs2/view?usp=drivesdk" } },
-                        { title: "S011-La gestion des risques", links: { "Cours_Python": "https://drive.google.com/file/d/1_QQtVerT4a7LU80o0-0Ba7wdUBQZBTqc/view?usp=drivesdk" } },
-                        { title: "S012-La communication autour du projet", links: { "Cours_Python": "https://drive.google.com/file/d/1KEjuAIu-ew5vOnNpCnp-dNOxnLon6y9p/view?usp=drivesdk" } }
-                    ],
-                    "M06 - Concevoir une solution digitale": [
-                        { title: "S001-La réalisation d'une étude d'opportunité", links: { "Cours_Python": "https://drive.google.com/file/d/1dcsDJDDOop_zqe1TC_jHmne-XtGrHY33/view?usp=drivesdk" } },
-                        { title: "S002-Le rôle de la note de cadrage", links: { "Cours_Python": "https://drive.google.com/file/d/1UlJ5fUWdzofp-o0Wwr4myjcufX6LmMz_/view?usp=drivesdk" } },
-                        { title: "S003-L'étude de faisabilité", links: { "Cours_Python": "https://drive.google.com/file/d/1qk-q99LxTwVAB2m6Elt8pmxXlV5_kYGu/view?usp=drivesdk" } },
-                        { title: "S004-L'analyse des risques", links: { "Cours_Python": "https://drive.google.com/file/d/1S9bKmrLzQfYc1Flmnls6uunfgEaLDMxD/view?usp=drivesdk" } },
-                        { title: "S005-L'analyse fonctionnelle", links: { "Cours_Python": "https://drive.google.com/file/d/1rkEv27z0ludaH8kZtlu2yE9YaKRGZEaK/view?usp=drivesdk" } },
-                        { title: "S006-Proposer une solution optimale en termes de coût", links: { "Cours_Python": "https://drive.google.com/file/d/1RI-hWYJg8lODRYrTVkpN0tr5a-vgJWDi/view?usp=drivesdk" } },
-                        { title: "S007-Proposer une solution optimale en termes de délais", links: { "Cours_Python": null } },
-                        { title: "S008-Proposer une solution optimale en termes de performance", links: { "Cours_Python": "https://drive.google.com/file/d/1sbNDmKVRc7jqgF0_B0BRGKph2It3MHJU/view?usp=drivesdk" } },
-                        { title: "S009-Proposer une solution optimale en termes de pérennité", links: { "Cours_Python": "https://drive.google.com/file/d/16t7OEvKuFmWZ1AlAkfWSYm5WpXZuzghq/view?usp=drivesdk" } },
-                        { title: "S010-L'utilité du suivi de la performance", links: { "Cours_Python": "https://drive.google.com/file/d/1Zj2o1hjSqogCs8x5KjjjeFTfhs75iSIk/view?usp=drivesdk" } },
-                        { title: "S011-Les indicateurs de suivi selon les objectifs", links: { "Cours_Python": "https://drive.google.com/file/d/1vEZ-3hJ5AUprYVVEVw2DGpxmp-Eig7xW/view?usp=drivesdk" } },
-                        { title: "S012-La construction d'un tableau de bord opérationnel", links: { "Cours_Python": "https://drive.google.com/file/d/1khMHN03Th7uUoVTgpDwPhULZTpZNwaTh/view?usp=drivesdk" } }
-                    ],
-                    "M07 - Découvrir les méthodologies de gestion de projets agiles": [
-                        { title: "S001-Les méthodologies agiles", links: { "Cours_Python": "https://drive.google.com/file/d/1BC4vccx5lyLGo5gpQytBzh5C_3wnE-Um/view?usp=drivesdk" } },
-                        { title: "S002-Introduction à la méthode Scrum", links: { "Cours_Python": "https://drive.google.com/file/d/1yfcAyI7tYbIiKrnTuhHbdHGjLVVSGZ5F/view?usp=drivesdk" } },
-                        { title: "S003-Comprendre Kanban", links: { "Cours_Python": "https://drive.google.com/file/d/1Su78zeNU5i2MbuJO1EE_Kr2X4qWnXBLl/view?usp=drivesdk" } },
-                        { title: "S004-Présentation du diagramme de Gantt", links: { "Cours_Python": "https://drive.google.com/file/d/123x8ZBTyJRCQvf46PKpCfMdYmlZiMqQv/view?usp=drivesdk" } }
-                    ],
-                    "M08 - Concevoir l’architecture logicielle de la solution": [
-                        { title: "S001-L’architecture en appels et retours", links: { "Cours_Python": "https://drive.google.com/file/d/1xavRPD901FvTPISiv3CxT7-PC1UCivFg/view?usp=drivesdk" } },
-                        { title: "S002-L’architecture en couches", links: { "Cours_Python": "https://drive.google.com/file/d/18ylydO1F_3V_lnTcWH927RVBPo8Vck9A/view?usp=drivesdk" } },
-                        { title: "S003-L’architecture centrée sur les données", links: { "Cours_Python": "https://drive.google.com/file/d/1rZU2zRy7NwRz5-eaus_tovHG1P6P7RWs/view?usp=drivesdk" } },
-                        { title: "S004-L’architecture en flot de données", links: { "Cours_Python": "https://drive.google.com/file/d/1dTyr079mFxQhnrPwI6mAurNsQuNoldj0/view?usp=drivesdk" } },
-                        { title: "S005-L’architecture orientée objets", links: { "Cours_Python": "https://drive.google.com/file/d/1w6Q7g-z9KRb01w9kfsjqZN4th5WUh-ka/view?usp=drivesdk" } },
-                        { title: "S006-L’architecture orientée agents", links: { "Cours_Python": "https://drive.google.com/file/d/1oMxFUOxfb_pltoEt1gb0JXOQJzJbRKc7/view?usp=drivesdk" } }
-                    ],
-                    "M09 - Comprendre la spécification fonctionnelle": [
-                        { title: "S001-Comprendre les objectifs de la spécification fonctionnelle", links: { "Cours_Python": "https://drive.google.com/file/d/1lK6coiqM73i7Sc7PhY5TNfa2hbojNnuo/view?usp=drivesdk" } },
-                        { title: "S002-Comment rédiger une spécification fonctionnelle", links: { "Cours_Python": "https://drive.google.com/file/d/1WpbEMoowtwhYZ8RXMVTRnui_Jrnva-vz/view?usp=drivesdk" } }
-                    ],
-                    "M10 - Elaborer un cahier des charges fonctionnel": [
-                        { title: "S001-Le cahier des charges fonctionnel : le contexte", links: { "Cours_Python": "https://drive.google.com/file/d/1fde-MNMUvYKssQLj4EtfKi1F3lLgzA1D/view?usp=drivesdk" } },
-                        { title: "S002-Le cahier des charges fonctionnel : la portée", links: { "Cours_Python": "https://drive.google.com/file/d/1_6IZolb3MynsSVCBu_IH9z2dX_swKBwT/view?usp=drivesdk" } },
-                        { title: "S003-Le cahier des charges fonctionnel : les contraintes", links: { "Cours_Python": "https://drive.google.com/file/d/1a8mEuW9aDtJ56Mbfl7xog5VDQwSM3Dqv/view?usp=drivesdk" } },
-                        { title: "S004-Le cahier des charges fonctionnel : les parcours utilisateurs", links: { "Cours_Python": "https://drive.google.com/file/d/1nYT5x_DGZA7s8f1CnFV9VjPE7dWOz9qx/view?usp=drivesdk" } },
-                        { title: "S005-Le cahier des charges fonctionnel : les fonctionnalités clés", links: { "Cours_Python": "https://drive.google.com/file/d/1TgfUkA0AZ68k2Gzsp_W5ZcBR6-wP-p10/view?usp=drivesdk" } },
-                        { title: "S006-Le cahier des charges fonctionnel : l'approche créative", links: { "Cours_Python": "https://drive.google.com/file/d/1H_hkfXZZOsMOen3YW_yYnB01fU5iXweQ/view?usp=drivesdk" } },
-                        { title: "S007-Le cahier des charges fonctionnel : l'organisation du projet", links: { "Cours_Python": "https://drive.google.com/file/d/12DTFr7rYORzMpG-Mr40dRJ_1pdz_dpYR/view?usp=drivesdk" } }
-                    ],
-                    "M11 - Définir les objectifs SMART de sa solution digitale": [
-                        { title: "S001-Le recueil et l'analyse des besoins", links: { "Cours_Python": "https://drive.google.com/file/d/1RFlPE2UFzF1432THX531UgUHex00tXBA/view?usp=drivesdk" } },
-                        { title: "S002-La validation de la solution", links: { "Cours_Python": "https://drive.google.com/file/d/1N8v0GptoFJV_Qi_A7I-lIv489zjYBJOU/view?usp=drivesdk" } },
-                        { title: "S003-Le droit du web", links: { "Cours_Python": "https://drive.google.com/file/d/1LUhkSZlJUdv1EnRXBx1V6X06p2vJDNRY/view?usp=drivesdk" } },
-                        { title: "S004-Définition du droit numérique", links: { "Cours_Python": "https://drive.google.com/file/d/1lM37aQWUA0D1LsIH--ufzLegxTAhAzq1/view?usp=drivesdk" } },
-                        { title: "S005-Les responsabilités des intervenants", links: { "Cours_Python": "https://drive.google.com/file/d/1nynnSQtR27BK0xAM9pHbYbiHz5riziGL/view?usp=drivesdk" } },
-                        { title: "S006-Le droit pénal de l'informatique", links: { "Cours_Python": "https://drive.google.com/file/d/1ijh_XJlGt1N9xgxnoIwteL1H9wy000O_/view?usp=drivesdk" } },
-                        { title: "S007-L'informatique sur le lieu de travail", links: { "Cours_Python": "https://drive.google.com/file/d/11xqvXFFQqHoDHFRNHOIypipxyT22o2C7/view?usp=drivesdk" } },
-                        { title: "S008-La législation comparée", links: { "Cours_Python": "https://drive.google.com/file/d/1vne00Xpo-3vG-q-mVeaHgKhnu-iVWeRW/view?usp=drivesdk" } },
-                        { title: "S009-L'informatique et droit public", links: { "Cours_Python": "https://drive.google.com/file/d/1CIMqRy-Ofvj3f60BV_6YzMQDb6YfKSFn/view?usp=drivesdk" } },
-                        { title: "S010-Le cadre juridique du e-commerce", links: { "Cours_Python": "https://drive.google.com/file/d/10TR-GxriWj9FSAo1Y3AN0f161RORHf77/view?usp=drivesdk" } },
-                        { title: "S011-Les textes de référence", links: { "Cours_Python": null } }
-                    ]
-                }
-            },
-            "B2": {
-                title: "B2: Gestion et Pilotage de Projet Digital",
-                color: "bg-amber-500",
-                modules: {
-                    "M01 - Manager et piloter les tâches avec ses équipes projet grâce à TRELLO": [
-                        { title: "S001-L'application Trello", links: { "Cours_Python": "https://drive.google.com/file/d/1zbsQHfHcTPwJG5dtxuhZqpUABxfefIIr/view?usp=drivesdk" } },
-                        { title: "S002-Création du compte", links: { "Cours_Python": null } },
-                        { title: "S003-Découverte de l'interface", links: { "Cours_Python": null } },
-                        { title: "S004-Découvrir le contenu d'un projet", links: { "Cours_Python": null } },
-                        { title: "S005-Le travail collaboratif : les membres", links: { "Cours_Python": null } },
-                        { title: "S006-Le travail collaboratif : les équipes", links: { "Cours_Python": null } },
-                        { title: "S007-Les tableaux", links: { "Cours_Python": "https://drive.google.com/file/d/1PR90K2AYEt0cVqkURabsXJSjeg2PfXuJ/view?usp=drivesdk" } },
-                        { title: "S008-Les listes", links: { "Cours_Python": null } },
-                        { title: "S009-Les cartes", links: { "Cours_Python": null } },
-                        { title: "S010-Les checklists", links: { "Cours_Python": null } },
-                        { title: "S011-Les utilitaires", links: { "Cours_Python": null } },
-                        { title: "S012-Les Power-ups", links: { "Cours_Python": null } }
-                    ],
-                    "M02 - Manager et piloter les tâches avec ses équipes projet grâce à JIRA": [
-                        { title: "S001-Découvrir JIRA", links: { "Cours_Python": null } },
-                        { title: "S002-Apprendre JIRA", links: { "Cours_Python": null } },
-                        { title: "S003-Les méthodologies agiles avec JIRA", links: { "Cours_Python": null } },
-                        { title: "S004-JIRA pour les équipes", links: { "Cours_Python": null } },
-                        { title: "S005-JIRA pour les administrateurs", links: { "Cours_Python": null } },
-                        { title: "S006-Utiliser JIRA avec Gitlab", links: { "Cours_Python": null } }
-                    ],
-                    "M03 - Gérer son projet avec GanttProject": [
-                        { title: "S001-Apprendre à utiliser Gantt project", links: { "Cours_Python": null } },
-                        { title: "S002-Cadrer le projet", links: { "Cours_Python": null } },
-                        { title: "S003-Construire le plan de projet", links: { "Cours_Python": null } },
-                        { title: "S004-Création des dépendances", links: { "Cours_Python": null } },
-                        { title: "S005-Gérer les affichages", links: { "Cours_Python": null } },
-                        { title: "S006-Le réseau du projet", links: { "Cours_Python": null } },
-                        { title: "S007-Gérer les ressources", links: { "Cours_Python": null } },
-                        { title: "S008-Le suivi de projet", links: { "Cours_Python": null } },
-                        { title: "S009-Les outils d'impression et d'exportation", links: { "Cours_Python": null } },
-                        { title: "S010-Application - Gestion de projet", links: { "Cours_Python": null } }
-                    ],
-                    "M04 - Comprendre la modélisation UML": [
-                        { title: "S001-Introduction à la modélisation", links: { "Cours_Python": "https://drive.google.com/file/d/11C0FbjQZyZL7XYK5WcOuHfql7Tstrqph/view?usp=drivesdk" } },
-                        { title: "S002-Les diagrammes de classes", links: { "Cours_Python": null } },
-                        { title: "S003-Les diagrammes d'objets", links: { "Cours_Python": "https://drive.google.com/file/d/1AWfPwv8-2HTqTW9HM2MBKL3I_rM9iint/view?usp=drivesdk" } },
-                        { title: "S004-Les diagrammes de composants", links: { "Cours_Python": "https://drive.google.com/file/d/1ZzWJvIClGmdZlC8QucHubWKgCxL4U7Wf/view?usp=drivesdk" } },
-                        { title: "S005-Les diagrammes de déploiement", links: { "Cours_Python": "https://drive.google.com/file/d/1FnaT9wgMJFH9Vor6wzI7iPtTGqyIyEzC/view?usp=drivesdk" } },
-                        { title: "S006-Les diagrammes des paquets", links: { "Cours_Python": "https://drive.google.com/file/d/1Vqzajd8bDkHMWgo69t2xBcuWkRervwOH/view?usp=drivesdk" } },
-                        { title: "S007-Les diagrammes de structure composite", links: { "Cours_Python": "https://drive.google.com/file/d/13WGvoMPNDVObrcvj8NfcJ67RGdCsSGGH/view?usp=drivesdk" } },
-                        { title: "S008-Les diagrammes de profils", links: { "Cours_Python": "https://drive.google.com/file/d/1w1Cf0Kq80eiPs06RXSnPgfCuBZK7Nzi4/view?usp=drivesdk" } },
-                        { title: "S009-Diagrammes de cas d'utilisation UML", links: { "Cours_Python": "https://drive.google.com/file/d/16zm-wu5UizF516WXJEKb88VWc-fDW9lB/view?usp=drivesdk" } },
-                        { title: "S010-Les diagrammes états-transitions", links: { "Cours_Python": "https://drive.google.com/file/d/1Zebxm4dLr-G3Kkw-CmpUuLh5lVdz-8VC/view?usp=drivesdk" } },
-                        { title: "S011-Les diagrammes d'activité", links: { "Cours_Python": "https://drive.google.com/file/d/1gVYYzprOUjGWd_PKGf-NZiWr-3TPboQY/view?usp=drivesdk" } },
-                        { title: "S012-Les diagrammes de séquence", links: { "Cours_Python": "https://drive.google.com/file/d/1fiyz_YzR-c_0cweQUitEj-7W3jIuDJ1-/view?usp=drivesdk" } },
-                        { title: "S013-Les diagrammes de communication", links: { "Cours_Python": "https://drive.google.com/file/d/190KorswhJpa96ytAscgBLNHoR1DEQRcA/view?usp=drivesdk" } },
-                        { title: "S014-Les diagrammes global d'interaction", links: { "Cours_Python": "https://drive.google.com/file/d/1pVn1CNRUY9Ap8ShQ3jfPWl2wGm4kX87n/view?usp=drivesdk" } },
-                        { title: "S015-Les diagrammes de temps", links: { "Cours_Python": "https://drive.google.com/file/d/1BXoJweWfvb8axjEQGGFiaMRFmVDlpqe6/view?usp=drivesdk" } }
-                    ],
-                    "M05 - Utiliser l'outil Agile : Scrum": [
-                        { title: "S001-Comprendre les différents cycles de vie", links: { "Cours_Python": "https://drive.google.com/file/d/1x_V9IpZxMdGw7uCVksFUJiz6P-WKfkMM/view?usp=drivesdk" } },
-                        { title: "S002-Définir le cadre de la solution digitale", links: { "Cours_Python": "https://drive.google.com/file/d/1_Nuu75GCB82rhbGStEcZc0YjGGI0Vf8M/view?usp=drivesdk" } },
-                        { title: "S003-La préparation du backlog", links: { "Cours_Python": "https://drive.google.com/file/d/1tvkfLMcK_uVtbEHau9_zvuXmc-SzHjOM/view?usp=drivesdk" } },
-                        { title: "S004-La notion de travail en sprint", links: { "Cours_Python": "https://drive.google.com/file/d/1N-OneyZDc6uGAXjEKt7sl4lO5XYR-m41/view?usp=drivesdk" } },
-                        { title: "S005-Les retours et les feedbacks", links: { "Cours_Python": "https://drive.google.com/file/d/1etreTbbZCo0LxZNyZspRiDPgrEHTyE02/view?usp=drivesdk" } },
-                        { title: "S006-La réitération en fonction des feedbacks", links: { "Cours_Python": null } },
-                        { title: "S007-Le rôle du Scrum Master", links: { "Cours_Python": "https://drive.google.com/file/d/1H2TZGIUupLgPAconSoh5z4dKXcIYX-f9/view?usp=drivesdk" } },
-                        { title: "S008-Le rôle du product owner", links: { "Cours_Python": "https://drive.google.com/file/d/1HseUkuLJzYZNqUATeTrFtVfh46nLWWV_/view?usp=drivesdk" } }
-                    ],
-                    "M06 - Utiliser l'outil Agile : Kanban": [
-                        { title: "S001-L'application Smartsheet", links: { "Cours_Python": null } },
-                        { title: "S002-La plateforme Monday", links: { "Cours_Python": null } }
-                    ],
-                    "M07 - Tester son application Web": [
-                        { title: "S001L’examen des exigences", links: { "Cours_Python": null } },
-                        { title: "S002-Les tests d’usabilité", links: { "Cours_Python": null } },
-                        { title: "S003-Les tests unitaires", links: { "Cours_Python": "https://drive.google.com/file/d/1SymzQPccFCxjqwxAgqgs_leL7_z9P0mS/view?usp=drivesdk" } },
-                        { title: "S004-Les tests d’intégration", links: { "Cours_Python": "https://drive.google.com/file/d/1mNHxJFD660xqK2vdWURpzmB88c4IGwJD/view?usp=drivesdk" } },
-                        { title: "S005-Les tests des composants", links: { "Cours_Python": "https://drive.google.com/file/d/1b-89Vjgtfmfw0JbK8P4bMyMrIN4doBdN/view?usp=drivesdk" } },
-                        { title: "S006-Les tests de bout en bout (End to End)", links: { "Cours_Python": null } },
-                        { title: "S007-Les tests d’acceptation", links: { "Cours_Python": null } },
-                        { title: "S008-Les tests de régression", links: { "Cours_Python": null } },
-                        { title: "S009-Intégration continue", links: { "Cours_Python": "https://drive.google.com/file/d/1pvRzjiKNTyElBSW-Qa-Zy-kvBn3tVlfj/view?usp=drivesdk" } },
-                        { title: "S010-Le déploiement continu (CD)", links: { "Cours_Python": "https://drive.google.com/file/d/1Al4jib4VCM6TRlWBFFaeZe0tZc3lZse2/view?usp=drivesdk" } }
-                    ],
-                    "M08 - Réaliser des tests fonctionnels": [
-                        { title: "S001-Les notions de test unitaire et test fonctionnel", links: { "Cours_Python": null } },
-                        { title: "S002-Les tests unitaires avec PHPUnit", links: { "Cours_Python": "https://drive.google.com/file/d/1EA4iZuqMveMw9pghj2FB6884elQbUXWA/view?usp=drivesdk" } },
-                        { title: "S003-Les tests fonctionnels avec WebTestCase et Panther", links: { "Cours_Python": "https://drive.google.com/file/d/1TBWgkPdTTrFS_EuXh0Mapv4lpDIiQ6y5/view?usp=drivesdk" } },
-                        { title: "S004-Les tests unitaires avec les mocks", links: { "Cours_Python": "https://drive.google.com/file/d/1nbusq4CRrYsGHv8SXzOS8RX6wnBDVPDE/view?usp=drivesdk" } },
-                        { title: "S005-Le Test Driven Development", links: { "Cours_Python": "https://drive.google.com/file/d/1DYsW5Hb73nYXGAZUuShoTTTYS4NMLFHE/view?usp=drivesdk" } },
-                        { title: "S006-Les services", links: { "Cours_Python": "https://drive.google.com/file/d/1VAITr-KWRWdY7cslCZOBARl5zXn-xEPu/view?usp=drivesdk" } },
-                        { title: "S007-L'Ajax avec Axios et Symfony", links: { "Cours_Python": "https://drive.google.com/file/d/1I_2KQXcjYhIjUxY6McQuE7mwSZGkq393/view?usp=drivesdk" } },
-                        { title: "S008-Tests d'intégration et recette fonctionnelle", links: { "Cours_Python": "https://drive.google.com/file/d/1Uei2Fh0bvJhjvoIn_Fqc3lW_ewg2dUaf/view?usp=drivesdk" } },
-                        { title: "S009-Mesurer son application", links: { "Cours_Python": "https://drive.google.com/file/d/17bXESr-n7WU7mV9WzKv9phYWOk2IcQFE/view?usp=drivesdk" } },
-                        { title: "S010-A/B testing", links: { "Cours_Python": null } }
-                    ],
-                    "M09 - Proposer des solutions suite à un audit": [
-                        { title: "S001-La résolution d'une situation critique pour la survie du projet", links: { "Cours_Python": "https://drive.google.com/file/d/1x0Vy-J34GiOM7DSRokQgLFp66NS-c370/view?usp=drivesdk" } },
-                        { title: "S002-Le suivi des indicateurs qualité et amélioration continue", links: { "Cours_Python": "https://drive.google.com/file/d/1z4OvBxAUJPmOvsTruIJuLb_IdTJOzpZ9/view?usp=drivesdk" } },
-                        { title: "S003-La conception de la solution grâce au Design Thinking", links: { "Cours_Python": "https://drive.google.com/file/d/1zglUy51suwlqkooUPSS0DV91IfEw-q_L/view?usp=drivesdk" } },
-                        { title: "S004-Design Thinking La phase d’empathie", links: { "Cours_Python": "https://drive.google.com/file/d/1jBXSvNNFujrqC059ZncxDUK2LBohBk-C/view?usp=drivesdk" } },
-                        { title: "S005-Design Thinking Définir la problématique", links: { "Cours_Python": "https://drive.google.com/file/d/1Asj422Y9t_HF78WmJwGVSZqT0FdZXSHZ/view?usp=drivesdk" } },
-                        { title: "S006-Design Thinking La phase d’idéation", links: { "Cours_Python": "https://drive.google.com/file/d/1PnVD1leZd72Y0WHAmE82_eCDOKuk8gV_/view?usp=drivesdk" } },
-                        { title: "S007-Design Thinking La phase de prototypage de la solution", links: { "Cours_Python": "https://drive.google.com/file/d/11xz1g6m_C_MiR7cOm7EaQhMefefTHfTH/view?usp=drivesdk" } },
-                        { title: "S008-Design Thinking La phase de test de la solution", links: { "Cours_Python": "https://drive.google.com/file/d/1QH1gTSB49JoDSg8B4300YoiXG4OsZfLL/view?usp=drivesdk" } }
-                    ]
-                }
-            },
-            "B3": {
-                title: "B3: Développement Logiciel et Data",
-                color: "bg-b3",
-                modules: {
-                    "M01 - Piloter la production de contenus digitaux": [
-                        { title: "S001-Comment et pourquoi se former...", links: { "Cours_Python": null } },
-                        { title: "S002-Introduction à la production", links: { "Cours_Python": "https://drive.google.com/file/d/1RSr45isOJ7N1SHsyt7wWIGHgdJY54nJI/view?usp=drivesdk" } },
-                        { title: "S003-La création de contenu digital", links: { "Cours_Python": "https://drive.google.com/file/d/1te0EocV7CFWzRhGUIgyi0-VnkkzMagrZ/view?usp=drivesdk" } },
-                        { title: "S004-L'orientation artistique", links: { "Cours_Python": "https://drive.google.com/file/d/1e2tvg1rqoZQtcLP6U0_EZTCX4ntSfWYH/view?usp=drivesdk" } },
-                        { title: "S005-La gestion de la production", links: { "Cours_Python": "https://drive.google.com/file/d/1-5wDuUxx7Nf7kfrMJDJjsNR6ucf2h6xf/view?usp=drivesdk" } },
-                        { title: "S006-La mise en place opérationnelle", links: { "Cours_Python": "https://drive.google.com/file/d/1t-oB6MwjKOGUNwZvauMLGM9B9UKh9E8z/view?usp=drivesdk" } },
-                        { title: "S007-La proposition de production", links: { "Cours_Python": "https://drive.google.com/file/d/1ceA_thtcZ0aiSV-k8rVpJE4ApasdeHp5/view?usp=drivesdk" } },
-                        { title: "S008-Application", links: { "Cours_Python": null } }
-                    ],
-                    "M02 - Créer un site web avec HTML, CSS et Bootstrap": [
-                        { title: "S001-Introduction HTML et CSS", links: { "Cours_Python": "https://drive.google.com/file/d/1C4HOWyWNWGwYdz0AARCdvrC0pCJR52Kn/view?usp=drivesdk" } },
-                        { title: "S002-Syntaxe générale de HTML", links: { "Cours_Python": "https://drive.google.com/file/d/1799WhS_SptlcWYwlAF_YVRDCJqPpvCtY/view?usp=drivesdk" } },
-                        { title: "S003-L'organisation du texte", links: { "Cours_Python": "https://drive.google.com/file/d/10TMyGzrrSX0358BI_og1pCzJLvEWJbBE/view?usp=drivesdk" } },
-                        { title: "S004-Un langage hypertexte", links: { "Cours_Python": "https://drive.google.com/file/d/1uqZl_utYYj0sl7f5anwEnkzeHeAequYe/view?usp=drivesdk" } },
-                        { title: "S005-Le multimédia en HTML", links: { "Cours_Python": "https://drive.google.com/file/d/1Z1kH-aXMunEdlH0JxAZV_URdGXdqM4vn/view?usp=drivesdk" } },
-                        { title: "S006-Introduction au CSS", links: { "Cours_Python": null } },
-                        { title: "S007-CSS3 : Le stylage du texte", links: { "Cours_Python": "https://drive.google.com/file/d/1jpYXxU88yZCRu4oRvJeERFU-Hd8-bF2s/view?usp=drivesdk" } },
-                        { title: "S008-La structuration logique", links: { "Cours_Python": "https://drive.google.com/file/d/1qot-v_KR522TKZOSc8uZuF7-cwpP9LvJ/view?usp=drivesdk" } },
-                        { title: "S009-Les sélecteurs CSS", links: { "Cours_Python": "https://drive.google.com/file/d/1U7lHa9AleRU-f8LD5ail1qJXo6llu2qN/view?usp=drivesdk" } },
-                        { title: "S010-La mise en page avec CSS", links: { "Cours_Python": "https://drive.google.com/file/d/1t08QyKbZePQ0eEwe599zluGlD4Ya1Mq7/view?usp=drivesdk" } },
-                        { title: "S011-La création de tableaux", links: { "Cours_Python": "https://drive.google.com/file/d/1kkunDQOMN6knlTbUqUZKADyW8KpolZNE/view?usp=drivesdk" } },
-                        { title: "S012-La création de formulaires", links: { "Cours_Python": "https://drive.google.com/file/d/13hJ4JAs1Yoib-eGKV3MDfC-VOY2IchWR/view?usp=drivesdk" } },
-                        { title: "S013-Layout avec CSS Grid", links: { "Cours_Python": "https://drive.google.com/file/d/1ERoXaNgtariaL9fcw5wfzB98wqAqYowt/view?usp=drivesdk" } },
-                        { title: "S014-Les effets avancés de CSS", links: { "Cours_Python": "https://drive.google.com/file/d/1aCfxiP13_fheYo5JP-nvHdijy_gTnufA/view?usp=drivesdk" } },
-                        { title: "S015-Utiliser des documentations CSS", links: { "Cours_Python": "https://drive.google.com/file/d/1zxlqDKFODOKtBM680cjOFQQV5ADl4zgP/view?usp=drivesdk" } },
-                        { title: "S016-Le responsive design", links: { "Cours_Python": "https://drive.google.com/file/d/1ilwgsFxJF5jWrBPbNi36cB1eWHYT-T3V/view?usp=drivesdk" } },
-                        { title: "S017-Valider la qualité de son site", links: { "Cours_Python": "https://drive.google.com/file/d/1kpKgLdupeWuL-ean1cKCbrfHR4vKbJgx/view?usp=drivesdk" } },
-                        { title: "S018-L'installation framework Bootstrap", links: { "Cours_Python": "https://drive.google.com/file/d/1qb8SP_EN4eOdK9po2FFnPDPgil4IwtMb/view?usp=drivesdk" } },
-                        { title: "S019-La grille bootstrap", links: { "Cours_Python": "https://drive.google.com/file/d/1wpzbi3vDXsYCQaTYfCeu3dkU1nRPanTn/view?usp=drivesdk" } },
-                        { title: "S020-Les éléments bootstrap", links: { "Cours_Python": "https://drive.google.com/file/d/13X7xhkrLho81uoCglXnRfjJRpHoVchse/view?usp=drivesdk" } },
-                        { title: "S021-Les composants bootstrap", links: { "Cours_Python": "https://drive.google.com/file/d/1CN92PT3dfkptmudWxwNl8ZPiHHt0t6_Q/view?usp=drivesdk" } },
-                        { title: "S022-Ouverture vers d'autres framework CSS", links: { "Cours_Python": "https://drive.google.com/file/d/1wi8tcPE3tCFlIJd1_9uyjI3xKtR6c602/view?usp=drivesdk" } },
-                        { title: "S023-SASS", links: { "Cours_Python": "https://drive.google.com/file/d/1dNoTwdizoip7tlg5Be39rrTdaR7L8JS_/view?usp=drivesdk" } },
-                        { title: "S024-Le référencement des sites Web", links: { "Cours_Python": "https://drive.google.com/file/d/1iKK3aZwLngdHWF7nMnIRwtN8W7Mk6JNb/view?usp=drivesdk" } },
-                        { title: "S025-Déployer son site sur le Web", links: { "Cours_Python": "https://drive.google.com/file/d/1I_wCwAY7u-JlndM2pvVlYmxo0rc-H1UG/view?usp=drivesdk" } }
-                    ],
-                    "M03 - Dynamiser vos sites web avec JavaScript": [
-                        { title: "S001-La programmation événementielle", links: { "Cours_Python": null } },
-                        { title: "S002-Le formulaire HTML et JavaScript", links: { "Cours_Python": null } },
-                        { title: "S003-Initiation aux objets et aux classes", links: { "Cours_Python": null } },
-                        { title: "S004-L'API DOM", links: { "Cours_Python": null } },
-                        { title: "S005-Présentation de la librairie JQuery", links: { "Cours_Python": null } },
-                        { title: "S006-Les bases de JQuery", links: { "Cours_Python": null } },
-                        { title: "S007-La programmation AJAX", links: { "Cours_Python": null } },
-                        { title: "S008-Les promesses et l'API Fetch", links: { "Cours_Python": null } },
-                        { title: "S009-L'utilisation de JSON", links: { "Cours_Python": null } },
-                        { title: "S010-L'API Canvas en JavaScript", links: { "Cours_Python": null } }
-                    ],
-                    "M04 - Développer des sites web dynamiques avec PHP": [
-                        { title: "S001-PHP et HTML (sorties)", links: { "Cours_Python": "https://drive.google.com/file/d/1U8mg_M68hoyFGn--nE5Y3TT_Oj8KNIt-/view?usp=drivesdk" } },
-                        { title: "S002-Les types de données", links: { "Cours_Python": "https://drive.google.com/file/d/1IWwWyux1yZg9PLlyCTqU5GGrGMM6UnwN/view?usp=drivesdk" } },
-                        { title: "S003-Les opérateurs de comparaison", links: { "Cours_Python": "https://drive.google.com/file/d/1sfMtvkB2UT1VBQg7gHz8Qk5LS9OzhQMz/view?usp=drivesdk" } },
-                        { title: "S004-Les fonctions", links: { "Cours_Python": "https://drive.google.com/file/d/1b85vW1wPAyQtlDrdMNqLYC8tjXNxZ6SW/view?usp=drivesdk" } },
-                        { title: "S005-Les tableaux", links: { "Cours_Python": "https://drive.google.com/file/d/1MgPubbA_PEFfgMvnRbeXSv3q5PpOfE2-/view?usp=drivesdk" } },
-                        { title: "S006-Les conditions", links: { "Cours_Python": "https://drive.google.com/file/d/1UwR5Xj4uvzJPCF1U1CniSJZIRqnjG4BY/view?usp=drivesdk" } },
-                        { title: "S007-Les boucles", links: { "Cours_Python": "https://drive.google.com/file/d/1A--l1TCKBycRdaw42G4brrkJzzJRffGR/view?usp=drivesdk" } },
-                        { title: "S008-Créer ses propres fonctions", links: { "Cours_Python": "https://drive.google.com/file/d/1ptLN9A6jjd8lZgqwY3nuWxRW53R40OIb/view?usp=drivesdk" } },
-                        { title: "S009-L'organisation des fichiers PHP", links: { "Cours_Python": "https://drive.google.com/file/d/1M1ndJEGcsEm2Xg30z8sDW2fg4-mfKSdI/view?usp=drivesdk" } },
-                        { title: "S010-Les superglobales Get, Post et Files", links: { "Cours_Python": "https://drive.google.com/file/d/14JhcnRwAWG-L6b7yUnfZoVAPOewoXbEu/view?usp=drivesdk" } },
-                        { title: "S011-Les superglobales Server, Env et Session", links: { "Cours_Python": "https://drive.google.com/file/d/19U-At7qpf36yfbgVPBvWUivanezX-N0R/view?usp=drivesdk" } },
-                        { title: "S012-La sécurité", links: { "Cours_Python": "https://drive.google.com/file/d/1Fkv4aSVh09frYychleVd_xg74138M6PF/view?usp=drivesdk" } },
-                        { title: "S013-La manipulation des dates", links: { "Cours_Python": "https://drive.google.com/file/d/1Il-bsMJFn_O0xu0ZiZJhhHR7CYaxt26t/view?usp=drivesdk" } },
-                        { title: "S014-La manipulation des fichiers en PHP", links: { "Cours_Python": "https://drive.google.com/file/d/1vO1T47U_Pftu0IciZgSADhAwozJFi_JG/view?usp=drivesdk" } },
-                        { title: "S015-Les expressions régulières", links: { "Cours_Python": "https://drive.google.com/file/d/1wHlKlOo2kamlcM_YNsojETI_pffF8Umi/view?usp=drivesdk" } },
-                        { title: "S016-Utiliser la documentation PHP", links: { "Cours_Python": "https://drive.google.com/file/d/1IelihcJGtv25v6Aqbhqj-BH2O1AFXelB/view?usp=drivesdk" } },
-                        { title: "S017-La préparation de l'environnement", links: { "Cours_Python": "https://drive.google.com/file/d/1S0mZ6lgkPQINWLw__cC5XrjmMEktEAUS/view?usp=drivesdk" } },
-                        { title: "S018-La programmation Orientée Objet base", links: { "Cours_Python": "https://drive.google.com/file/d/1aeWBuRM7FO9W8-hg4RB0vIXF_i2aE37a/view?usp=drivesdk" } },
-                        { title: "S019-La programmation Orientée Objet avancé", links: { "Cours_Python": "https://drive.google.com/file/d/1PpDlpmMw2JGsc-fdEy-pJM67Fx25iUqP/view?usp=drivesdk" } },
-                        { title: "S020-La gestion des erreurs", links: { "Cours_Python": "https://drive.google.com/file/d/1H17LgHYdMLy82gKdBUkdgfrOvA1yiiUo/view?usp=drivesdk" } },
-                        { title: "S021-La programmation Orientée Objet Patterns", links: { "Cours_Python": "https://drive.google.com/file/d/1wgVhiRmQiOrpI3vR_RUmCV-Za5e5m_IG/view?usp=drivesdk" } },
-                        { title: "S022-La programmation Orientée Objet", links: { "Cours_Python": "https://drive.google.com/file/d/1HuWjw6tVG05Tm7dg8CP0alDWB1vA_Z0-/view?usp=drivesdk" } },
-                        { title: "S023-Le modèle MVC", links: { "Cours_Python": "https://drive.google.com/file/d/1FchN8s9AzB247KVakv9h78EIIGZuH57R/view?usp=drivesdk" } }
-                    ],
-                    "M05 - Créer et administrer une base de données relationnelle": [
-                        { title: "S001-Introduction générale aux bases de données", links: { "Cours_Python": "https://drive.google.com/file/d/14VtMXYWB-d6qgT3UwlWktVdDvuCb6Jc3/view?usp=drivesdk" } },
-                        { title: "S002-Modèle conceptuel de données", links: { "Cours_Python": "https://drive.google.com/file/d/1SpI69-6M_pUgCjRyKxfNTUV4Pj26dNwW/view?usp=drivesdk" } },
-                        { title: "S003-Les diagrammes fonctionnels", links: { "Cours_Python": "https://drive.google.com/file/d/1QSlb9yjXVDlSTyJk932aa8CLeEkvNojt/view?usp=drivesdk" } },
-                        { title: "S004-Le diagramme de classe", links: { "Cours_Python": "https://drive.google.com/file/d/1ZaCGSj3HpQWDuq7okzvG04iNuJrz1b5k/view?usp=drivesdk" } },
-                        { title: "S005-Introduction au passage UML- Relationnel", links: { "Cours_Python": "https://drive.google.com/file/d/1NDJXuFvxs4rYf5JIfbzGoEAbsnNAd9iY/view?usp=drivesdk" } },
-                        { title: "S006-Création et alimentation de bases de données SQL", links: { "Cours_Python": "https://drive.google.com/file/d/1d7ekwXj_zg5vp_VMrhtMC59pdG0PLFD7/view?usp=drivesdk" } },
-                        { title: "S007-L'interrogation de bases de données SQL", links: { "Cours_Python": "https://drive.google.com/file/d/1BKB21Fr7xXR-X3AgEM7xBQYAYDlVIMPb/view?usp=drivesdk" } },
-                        { title: "S008-Découvrir un autre SGBDR PostgreSQL", links: { "Cours_Python": "https://drive.google.com/file/d/1NYsQ7YFxNtMmnAZ5Mpdnz10aLmU-fAaC/view?usp=drivesdk" } },
-                        { title: "S009-Connexion à la base de données en PHP", links: { "Cours_Python": "https://drive.google.com/file/d/1d_iZQCimOm314q97b4RFku9hZzgWUZfD/view?usp=drivesdk" } },
-                        { title: "S010-PHP/PDO : accès en lecture/écriture", links: { "Cours_Python": null } },
-                        { title: "S011-Les requetes SQL", links: { "Cours_Python": "https://drive.google.com/file/d/1lSUDDGuDBLW1bHDAaiL0g4c2j6WtDAEN/view?usp=drivesdk" } },
-                        { title: "S012-Les fonctions SQL", links: { "Cours_Python": null } },
-                        { title: "S013-Les jointures SQL", links: { "Cours_Python": "https://drive.google.com/file/d/1QpcwdBxsVCh8LwMFzMdcq2D_piM3IjSU/view?usp=drivesdk" } },
-                        { title: "S014-Gérer les accès des utilisateurs", links: { "Cours_Python": "https://drive.google.com/file/d/10GmVxZ2gzfIgHNhoalecYuWmPudr4sHq/view?usp=drivesdk" } },
-                        { title: "S015-Découverte d'un ORM PHP", links: { "Cours_Python": "https://drive.google.com/file/d/1NEGcNkEfdcsLHV0wr4xCf99hZCc5whC4/view?usp=drivesdk" } },
-                        { title: "S016-Projet : Créer et administrer une base de données", links: { "Cours_Python": "https://drive.google.com/file/d/1tH28cKikCfuOfZXQfA-w98aukeSySbwG/view?usp=drivesdk" } },
-                        { title: "S017-Introduction NOSQL", links: { "Cours_Python": "https://drive.google.com/file/d/1eW2JCKo13oc30JFs20SF_VZuk5ZNpKqu/view?usp=drivesdk" } },
-                        { title: "S018-Introduction à MongoDB", links: { "Cours_Python": "https://drive.google.com/file/d/1RKz8kdYIhCDLxsWh90Wj693hnCT47tk-/view?usp=drivesdk" } }
-                    ],
-                    "M06 - Créer et administrer une base de données non relationnelle": [
-                        { title: "S001-Introduction NOSQL", links: { "Cours_Python": null } },
-                        { title: "S002-Introduction à MongoDB", links: { "Cours_Python": null } }
-                    ],
-                    "M07 - Développer une application web avec Python": [
-                        { 
-                            title: "S001-L'interpréteur de commande Python", 
-                            links: { 
-                                "Cours_Python": "https://drive.google.com/file/d/1D8aarg1WANnu00gJXPWC0ItJVU195WKP/view?usp=drivesdk",
-                                "Audio": "https://drive.google.com/file/d/1ShcLmK-ojhexgFS5WSVC_vnJ38LNQXBL/view?usp=drivesdk",
-                                "Excel": "https://docs.google.com/spreadsheets/d/1pc3vpHpB22WpUvxkPx1LdKvLCn07qvrL8QxuLvlq0hA/edit?usp=drivesdk",
-                                "Infographie": "https://drive.google.com/file/d/1IVlSrXboO3EukzSbl7H4lT3wVnXFTuC3/view?usp=drivesdk",
-                                "Présentation": "https://drive.google.com/file/d/1S1bjVlfClb7nUWO66yc6C7dGE4B0_VY2/view?usp=drivesdk",
-                                "Video": "https://drive.google.com/file/d/1CInzYc7tRdIotWKT1nCsuHWGox8kZRz7/view?usp=drivesdk"
-                            } 
-                        },
-                        { 
-                            title: "S002-Environnements de travail", 
-                            links: { 
-                                "Cours_Python": "https://drive.google.com/file/d/1tCTNdZwSUnR5BCG5whBNeB2LH9SmMeze/view?usp=drivesdk",
-                                "Audio": "https://drive.google.com/file/d/1wX-kR0OWql1ACJgPF2n6e4EnN9-9nz88/view?usp=drivesdk",
-                                "Excel": "https://docs.google.com/spreadsheets/d/1Aur1x30sO-d29lJsm2oPTBiSFlBhC7tMsK3T2mTZmnY/edit?usp=drivesdk",
-                                "Infographie": "https://drive.google.com/file/d/1s5SSzxU5bMdaojVkpTwIiX622Jxx5Bzd/view?usp=drivesdk",
-                                "Présentation": "https://drive.google.com/file/d/1zPe25MZZnL2aQ4lyBV7LZIHgAgTKm6wt/view?usp=drivesdk",
-                                "Video": "https://drive.google.com/file/d/1f2ITyddecClD-vrQoXxJ3911oGKkPO9q/view?usp=drivesdk"
-                            } 
-                        },
-                        { title: "S003-Variables et types de données", links: { "Cours_Python": "https://drive.google.com/file/d/1_2gJOUkAzo4EQ1qi-ODdPhulkjyJL-PF/view?usp=drivesdk" } },
-                        { title: "S004-Portée des variables et notion de référence", links: { "Cours_Python": "https://drive.google.com/file/d/1_00vqYa4nAmChqWiekoj9pkHNPAZETr4/view?usp=drivesdk" } },
-                        { title: "S005-Conditions en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1j_ctk6l39vMAzOGZ5AeHX5QWoVrztFS_/view?usp=drivesdk" } },
-                        { title: "S006-Boucles en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1GQEQS7SC5sSxWGsEl9qTcVG8lRqBvHUL/view?usp=drivesdk" } },
-                        { title: "S007-Les structures de données en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1y581U449J-mVTWsAJbt2XC22KDbcc9oF/view?usp=drivesdk" } },
-                        { title: "S008-Structure d'un programme - fonctions", links: { "Cours_Python": "https://drive.google.com/file/d/1Gp7jXmileTHQb4CHOSW-PiITp0fnd_CS/view?usp=drivesdk" } },
-                        { title: "S009-Améliorer la qualité du code", links: { "Cours_Python": "https://drive.google.com/file/d/1atdy6nhppKOLlfUCQRXZU7q_8hxYu8Hq/view?usp=drivesdk" } },
-                        { title: "S010-Structure d'un programme - modules", links: { "Cours_Python": "https://drive.google.com/file/d/1JnfKllG7Pt9rUC7G0cLxI5lWW7glMmYr/view?usp=drivesdk" } },
-                        { title: "S011-Améliorer la qualité du code - les tests", links: { "Cours_Python": null } },
-                        { title: "S012-Notions théoriques de classe", links: { "Cours_Python": "https://drive.google.com/file/d/1TUj8iWKIp15X0OV51XgZSIkFSqweHodf/view?usp=drivesdk" } },
-                        { title: "S013-Constructeur et mot-clé self", links: { "Cours_Python": "https://drive.google.com/file/d/1q6_FAH3gBBhF9ksoTiAhuTuowv2LO3GL/view?usp=drivesdk" } },
-                        { title: "S014-Les méthodes spéciales", links: { "Cours_Python": "https://drive.google.com/file/d/1LJ1DDmGywALh6ifj0BtgAscHOm-9q20U/view?usp=drivesdk" } },
-                        { title: "S015-L'héritage", links: { "Cours_Python": "https://drive.google.com/file/d/1dFNRfjqiLKFLgLdN_egfsjgUcYoCBOng/view?usp=drivesdk" } },
-                        { title: "S016-La notion de décorateur en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1iK8h2r8Gm25A0-Z_6nd3otaFpyepaQ89/view?usp=drivesdk" } },
-                        { title: "S017-Chaîne de caractères en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1uiw7olueQL5dgC47qmaTNko03jXBjoTu/view?usp=drivesdk" } },
-                        { title: "S018-La gestion du temps en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1A7YicpDinjqLa_Kd1BMGrRHDe_RcimBx/view?usp=drivesdk" } },
-                        { title: "S019-Mathématiques en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1nMvAa-HlIQi-nS4F1yIMw4a0MegL6umd/view?usp=drivesdk" } },
-                        { title: "S020-Plus loin en mathématiques", links: { "Cours_Python": "https://drive.google.com/file/d/1lcY2YirU27wXoqt6_hhdRxngJRv4ivUr/view?usp=drivesdk" } },
-                        { title: "S021-Visualiser des données sous formes de graphiques", links: { "Cours_Python": "https://drive.google.com/file/d/18JwEVNbcFAfxt1VhA4VW8FhD3xhK6OEL/view?usp=drivesdk" } },
-                        { title: "S022-Gestion des fichiers en Python", links: { "Cours_Python": "https://drive.google.com/file/d/1xk5UnGyzhbnFsRCTXhDEiQzamyTc4Kl9/view?usp=drivesdk" } },
-                        { title: "S023-Requêtes HTTP", links: { "Cours_Python": "https://drive.google.com/file/d/1i6bU9qvyMkLs5l0NKNwN7RpR9opXkITM/view?usp=drivesdk" } },
-                        { title: "S024-Les bases de données relationnelles et Python", links: { "Cours_Python": null } },
-                        { title: "S025-Notion d'ORM (object-relational mapping)", links: { "Cours_Python": "https://drive.google.com/file/d/17tBdnXOmEjyiR0u2tdqLARruL97uDizL/view?usp=drivesdk" } },
-                        { title: "S026-Cadre théorique de Flask", links: { "Cours_Python": "https://drive.google.com/file/d/1Z-4FwZe-edjY0xkc-L5agSdmPs5X3q4j/view?usp=drivesdk" } },
-                        { title: "S027-Le moteur de template Jinja", links: { "Cours_Python": "https://drive.google.com/file/d/1mHkxVbalqTjOC9tE0sbGvJqNHjSZMFE6/view?usp=drivesdk" } },
-                        { title: "S028-Déploiement en ligne du site Flask", links: { "Cours_Python": "https://drive.google.com/file/d/1WWTGJTVTGL33pQtMGVhYpZGy2yRtiBr-/view?usp=drivesdk" } },
-                        { title: "S029-Cadre théorique de Django", links: { "Cours_Python": "https://drive.google.com/file/d/1vjwBdhZCOd6NwNm5fIhRqJNskBED7pN3/view?usp=drivesdk" } },
-                        { title: "S030-Les modèles en Django", links: { "Cours_Python": "https://drive.google.com/file/d/1qs9u9uDXnW33LowOs1V5aYYcePhUFVZv/view?usp=drivesdk" } },
-                        { title: "S031-Les vues en Django", links: { "Cours_Python": "https://drive.google.com/file/d/13S7kO30TkaPunrX3X_Lg5KQv2sVCKPbm/view?usp=drivesdk" } },
-                        { title: "S032-API REST en Python", links: { "Cours_Python": "https://drive.google.com/file/d/134FpclPeo3E4-MDm3aO3nlk2JDxseE1U/view?usp=drivesdk" } },
-                        { title: "S033-La data visualisation avec Python", links: { "Cours_Python": "https://drive.google.com/file/d/1Wr5c4yarNW1m4T-RV0Wrd1NRDaUcTI9y/view?usp=drivesdk" } },
-                        { title: "S034-La présentation des données et des librairies", links: { "Cours_Python": "https://drive.google.com/file/d/1VhVt8bzm42QmH12A-BbHkGe5VFFCRQ8j/view?usp=drivesdk" } },
-                        { title: "S035-La librairie numpy", links: { "Cours_Python": "https://drive.google.com/file/d/1c5Lg6zAdzuHyLbuLAttteaE7DwEqMTxV/view?usp=drivesdk" } },
-                        { title: "S036-La librairie pandas première approche", links: { "Cours_Python": "https://drive.google.com/file/d/1Xzu7mZOqEXl2AaYfdRh9tyzkJdL3LP_n/view?usp=drivesdk" } },
-                        { title: "S037-Aller plus loin avec la librairie pandas", links: { "Cours_Python": "https://drive.google.com/file/d/1vownw7WwIEUhn44_PyZt8PCv9uigOlQ6/view?usp=drivesdk" } },
-                        { title: "S038-La librairie matplotlib", links: { "Cours_Python": "https://drive.google.com/file/d/11t4_-dms0qtMcDGaWhy_pMc3bUy6LWkk/view?usp=drivesdk" } },
-                        { title: "S039-La librairie Seaborn", links: { "Cours_Python": "https://drive.google.com/file/d/1A5YLjpQM5ieYFwzZEqkqjbna-lLtJ_3N/view?usp=drivesdk" } },
-                        { title: "S040-La librairie Bokeh", links: { "Cours_Python": "https://drive.google.com/file/d/1MxsoIFQAFM9aXpMNCKQsbL4bjpWFVZyr/view?usp=drivesdk" } },
-                        { title: "S041-La data visualisation avancée avec Streamlit", links: { "Cours_Python": "https://drive.google.com/file/d/15ChQVUzS6gjgaNChvNima5D008cTJrNr/view?usp=drivesdk" } },
-                        { title: "S042-Des présentations de résultats impactantes", links: { "Cours_Python": "https://drive.google.com/file/d/1OUr89UAmRM7voA27Pjbc2DKE5-_3mL9M/view?usp=drivesdk" } }
-                    ],
-                    "M08 - Développer une application mobile avec React Native": [
-                        { title: "S001-Le développement Mobile", links: { "Cours_Python": null } },
-                        { title: "S002-Introduction à React Native : l'outil Expo", links: { "Cours_Python": null } },
-                        { title: "S003-Les bases de React Native", links: { "Cours_Python": null } },
-                        { title: "S004-Les composants React Native", links: { "Cours_Python": null } },
-                        { title: "S005-Les props et les states", links: { "Cours_Python": null } },
-                        { title: "S006-Style et mise en page avec Flexbox", links: { "Cours_Python": null } },
-                        { title: "S007-Du code différent en fonction de la plateforme", links: { "Cours_Python": null } },
-                        { title: "S008-L'utilisation de Redux", links: { "Cours_Python": null } },
-                        { title: "S009-Les extensions de Redux", links: { "Cours_Python": null } },
-                        { title: "S010-L'organisation d'une application React Native", links: { "Cours_Python": null } },
-                        { title: "S011-La navigation avec React Native", links: { "Cours_Python": null } },
-                        { title: "S012-Les différents types de navigators", links: { "Cours_Python": null } },
-                        { title: "S013-L'animation avec React Native", links: { "Cours_Python": null } },
-                        { title: "S014-Installer les émulateurs", links: { "Cours_Python": null } },
-                        { title: "S015-Utiliser une base données locale : SQLITE", links: { "Cours_Python": null } },
-                        { title: "S016-Les APIs React Native et modules natifs", links: { "Cours_Python": null } },
-                        { title: "S017-Le debugging", links: { "Cours_Python": null } },
-                        { title: "S018-Le déploiement d'une application sur les stores", links: { "Cours_Python": null } },
-                        { title: "S019-Créer une application React Native sans Expo", links: { "Cours_Python": null } },
-                        { title: "S020-Projet - développer une application mobile avec React Native", links: { "Cours_Python": null } }
-                    ],
-                    "M09 - Concevoir une API": [
-                        { title: "S001-Présentation des API", links: { "Cours_Python": "https://drive.google.com/file/d/1You3f6tCDPsFLopJRLB8QSwNy5IRuDhi/view?usp=drivesdk" } },
-                        { title: "S002-Concevoir une API", links: { "Cours_Python": "https://drive.google.com/file/d/1t8AzDCbsfnZQdRvYvxtaYAi8xvgYDpqv/view?usp=drivesdk" } },
-                        { title: "S003-Gérer les accès à une API", links: { "Cours_Python": "https://drive.google.com/file/d/1TEv7u1-mY9mRl-CFagT0B3kjfn4a0SfN/view?usp=drivesdk" } }
-                    ],
-                    "M10 - Utiliser des API": [
-                        { title: "S001-Les API d'authentification (OAuth, ..)", links: { "Cours_Python": "https://drive.google.com/file/d/1ZcViN5TRzAuFFIJoUTchHmmEsRJOt3Lz/view?usp=drivesdk" } },
-                        { title: "S002-Les API Google / AWS", links: { "Cours_Python": "https://drive.google.com/file/d/1Dk1UfLaS-cmkqctlTKAPjoPSJBP49Ol9/view?usp=drivesdk" } },
-                        { title: "S003-Les API de paiement", links: { "Cours_Python": "https://drive.google.com/file/d/1FbRZZ-Q6-bk1beVuDBXSn-fLo8_3YM8n/view?usp=drivesdk" } }
-                    ],
-                    "M11 - Utiliser un outil de gestion de version de code source": [
-                        { title: "S001-Introduction à la ligne de commande", links: { "Cours_Python": "https://drive.google.com/file/d/1eXvZ40At-QmC9yz9x75xxCy5CETFcxxI/view?usp=drivesdk" } },
-                        { title: "S002-Introduction à Git et Github", links: { "Cours_Python": "https://drive.google.com/file/d/15xBJ5KFgR3I6GBm-rFBNrvpqb7-MAVYe/view?usp=drivesdk" } },
-                        { title: "S003-Les bases", links: { "Cours_Python": "https://drive.google.com/file/d/1mk8cOr5yXuUVQ6B0wWGeo8Y3ZJ9loZU8/view?usp=drivesdk" } },
-                        { title: "S004-Les interactions avec le dépôt distant", links: { "Cours_Python": "https://drive.google.com/file/d/1lEwjRrNjGNVN19Xk5IYgVlscqi3u6JEL/view?usp=drivesdk" } },
-                        { title: "S005-Naviguer dans l'historique", links: { "Cours_Python": "https://drive.google.com/file/d/1HWd6UEcKbPi1O4RYAKdlbxzrNqGyneCX/view?usp=drivesdk" } },
-                        { title: "S006-La gestion des branches", links: { "Cours_Python": "https://drive.google.com/file/d/1ufJEgnMkcfIkDOSugmgfVt1Piu16qooS/view?usp=drivesdk" } },
-                        { title: "S007-Les branches avec Git - Rebaser", links: { "Cours_Python": "https://drive.google.com/file/d/1bhQkQgJlp-guGRMPfof6NO27pcc4vXuw/view?usp=drivesdk" } },
-                        { title: "S008-Les bonnes pratiques", links: { "Cours_Python": "https://drive.google.com/file/d/1iL_2o_hZBrXno9anZQpWXPmkckdTs4S1/view?usp=drivesdk" } },
-                        { title: "S009-Projet - Utiliser Git et Github pour gérer son code source", links: { "Cours_Python": "https://drive.google.com/file/d/1C0w_JDKKFXcfuIE94bJY7q3Nss2WRX7x/view?usp=drivesdk" } },
-                        { title: "S010-Introduction à Gitlab", links: { "Cours_Python": "https://drive.google.com/file/d/1TWwucqHlYK7zoSqbLZzQ8wT9GdOIgoVs/view?usp=drivesdk" } }
-                    ],
-                    "M12 - Maintenir et documenter son projet": [
-                        { title: "S001-La documentation de l'architecture et du code", links: { "Cours_Python": null } },
-                        { title: "S002-Améliorer sa solution", links: { "Cours_Python": "https://drive.google.com/file/d/1tnQcSjT-ngQuLb2fjGcwS28UU1Q3oZNn/view?usp=drivesdk" } },
-                        { title: "S003-La documentation pour l'utilisateur", links: { "Cours_Python": "https://drive.google.com/file/d/1voLQ-sdng9f6kXSWyWW3NuROt-oBPPue/view?usp=drivesdk" } },
-                        { title: "S004-Le pentesthttps", links: { "Cours_Python": "https://drive.google.com/file/d/1UsnxfrERlt5cWNSUJC0bfUzSM62jyIQb/view?usp=drivesdk" } },
-                        { title: "S005-Gestion de la dette technique", links: { "Cours_Python": "https://drive.google.com/file/d/1c-GDTD81XSkh6vvuZHN_kvu0q6ofN9VT/view?usp=drivesdk" } }
-                    ]
-                }
-            }
+        let resources = {
+            "B1": { title: "B1: Conception et spécification d'une solution digitale", color: "bg-b1", modules: {} },
+            "B2": { title: "B2: Gestion et Pilotage de Projet Digital", color: "bg-amber-500", modules: {} },
+            "B3": { title: "B3: Développement Logiciel et Data", color: "bg-b3", modules: {} }
         };
 
-        // Liste fixe des catégories pour l'affichage (SUPPRESSION DE NoteBook_ML)
-        const linkCategories = ['Cours_Python', 'Audio', 'Excel', 'Infographie', 'Présentation', 'Video'];
+        const linkCategories = ['Intro_Python_Gamma', 'Cours_Python', 'Audio', 'Excel', 'Infographie', 'Présentation', 'Video'];
 
-        // Mapping des icônes emojis et couleurs (SUPPRESSION DE NoteBook_ML)
+        // --- CONFIGURATION DES ICÔNES ---
         const linkIcons = {
+            // Utilisation d'une balise IMG pour le logo Gamma (assurez-vous d'avoir Icon.png dans le même dossier)
+            "Intro_Python_Gamma": { icon: '<img src="Icon.png" alt="Gamma" class="w-5 h-5 object-contain" onerror="this.style.display=\'none\';">', title: "Introduction / Gamma", linkClass: "bg-indigo-600 hover:bg-indigo-700" },
             "Cours_Python": { icon: "🐍", title: "Cours Python", linkClass: "bg-cta hover:bg-yellow-600" },
             "Audio": { icon: "🎧", title: "Audio", linkClass: "bg-teal-600 hover:bg-teal-700" },
             "Excel": { icon: "📊", title: "Excel", linkClass: "bg-green-600 hover:bg-green-700" },
@@ -701,6 +271,107 @@
         };
 
         const progressStore = JSON.parse(localStorage.getItem('progressStore') || '{}');
+
+        function fetchDataAndRender() {
+            Papa.parse(GOOGLE_SHEET_CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processCSVData(results.data);
+                    document.getElementById('loading-status').style.display = 'none';
+                    renderAccueil();
+                },
+                error: function(err) {
+                    document.getElementById('loading-status').innerHTML = `<p class="text-red-600">Erreur de chargement : ${err.message}</p>`;
+                }
+            });
+        }
+
+        // --- MOTEUR CORRIGÉ : RESPECT STRICT DE LA CODIFICATION ---
+        function processCSVData(data) {
+            resources["B1"].modules = {};
+            resources["B2"].modules = {};
+            resources["B3"].modules = {};
+
+            let currentBloc = null;
+            let currentModuleKey = null; 
+
+            data.forEach(row => {
+                let titleRaw = row['Titres des catégories'];
+                if (!titleRaw) return; 
+
+                // 1. DÉTECTION BLOC
+                if (/^B[1-3]_/.test(titleRaw) && !titleRaw.includes('_M')) {
+                    let parts = titleRaw.split('_');
+                    if(parts.length > 0) currentBloc = parts[0];
+                }
+                // 2. DÉTECTION MODULE
+                // C'est un module si ça contient "_M" mais PAS "_S"
+                else if (titleRaw.includes('_M') && !titleRaw.includes('_S')) {
+                    if (currentBloc && resources[currentBloc]) {
+                        
+                        let displayTitle = titleRaw.replace(/^B\d+_/, '').replace(/_/g, ' - ');
+                        currentModuleKey = displayTitle; 
+
+                        if (!resources[currentBloc].modules[currentModuleKey]) {
+                            resources[currentBloc].modules[currentModuleKey] = [];
+                        }
+                    }
+                }
+                // 3. DÉTECTION SESSION
+                // C'est une session si ça contient "_S"
+                else if (titleRaw.includes('_S')) {
+                    if (currentBloc && currentModuleKey && resources[currentBloc]) {
+                        
+                        // EXTRACTION DU CODE COMPLET (B3_M07_S001)
+                        let fullCode = "";
+                        let cleanTitle = titleRaw;
+
+                        // Regex pour capturer le code : B chiffre _ M chiffre _ S chiffre
+                        let matchCode = titleRaw.match(/^(B\d+_M\d+_S\d+)/);
+                        
+                        if (matchCode) {
+                            fullCode = matchCode[1]; // Ex: B1_M01_S001
+                            cleanTitle = titleRaw.substring(fullCode.length).replace(/^[-_\s]+/, '');
+                        } else {
+                            fullCode = "CODE?";
+                        }
+
+                        // Liens
+                        let rawGamma = row['Intro_Python_Gamma'];
+                        let gammaLink = null;
+                        if (rawGamma && rawGamma.trim() !== "") {
+                            let linkMatch = rawGamma.match(/(https?:\/\/[^\s]+)/);
+                            gammaLink = linkMatch ? linkMatch[0] : rawGamma.trim();
+                        }
+
+                        const links = {
+                            "Intro_Python_Gamma": gammaLink,
+                            "Cours_Python": row['Cours_Python'] ? row['Cours_Python'].trim() : null,
+                            "Audio": row['Audio'] ? row['Audio'].trim() : null,
+                            "Excel": row['Excel'] ? row['Excel'].trim() : null,
+                            "Infographie": row['Infographie'] ? row['Infographie'].trim() : null,
+                            "Présentation": row['Présentation'] ? row['Présentation'].trim() : null,
+                            "Video": row['Video'] ? row['Video'].trim() : null
+                        };
+
+                        resources[currentBloc].modules[currentModuleKey].push({
+                            title: cleanTitle,
+                            fullCode: fullCode, // On stocke le code complet pour l'affichage
+                            links: links
+                        });
+                    }
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mobileNav');
+            const button = document.getElementById('hamburgerBtn');
+            nav.classList.toggle('visible');
+            button.classList.toggle('active');
+        }
 
         function saveProgress() {
             localStorage.setItem('progressStore', JSON.stringify(progressStore));
@@ -723,7 +394,6 @@
             const subject = getSubjectById(blocKey, subjectIndex);
             
             let allChecked = true;
-            // On vérifie seulement les ressources DISPONIBLES (non null) pour cocher/décocher
             for (const type in subject.links) {
                 if (subject.links[type] !== null && linkCategories.includes(type) && !isResourceCompleted(blocKey, subjectId, type)) {
                     allChecked = false;
@@ -749,7 +419,6 @@
             if (!subject) return 0;
             let totalAvailable = 0;
             let completedCount = 0;
-            // On ne compte que les liens réels et présents dans linkCategories pour le pourcentage
             for (const type in subject.links) {
                 if (subject.links[type] !== null && linkCategories.includes(type)) {
                     totalAvailable++;
@@ -779,40 +448,26 @@
         function renderSingleSubjectRow(blocKey, subjectId, targetElement) {
             const globalIndex = parseInt(subjectId.split('_')[1]);
             const session = getSubjectById(blocKey, globalIndex);
-            let sessionCounter = 0;
-            let found = false;
-            for (const moduleTitle in resources[blocKey].modules) {
-                const sessions = resources[blocKey].modules[moduleTitle];
-                for (let i = 0; i < sessions.length; i++) {
-                    if (sessions[i].title === session.title) { found = true; break; }
-                    sessionCounter++;
-                }
-                if (found) break;
-            }
-            sessionCounter++;
-            const sessionNumber = String(sessionCounter).padStart(3, '0');
+            
             const progressPercent = getSubjectProgress(blocKey, globalIndex);
             const isFullyCompleted = progressPercent === 100;
             
             let linksHtml = '';
             
-            // --- GÉNÉRATION DYNAMIQUE AVEC EMOJIS ---
             linkCategories.forEach(catKey => {
                 const link = session.links && session.links[catKey] ? session.links[catKey] : null;
                 const meta = linkIcons[catKey];
-                const isAvailable = link !== null;
+                const isAvailable = link !== null && link !== ""; 
                 const isChecked = isResourceCompleted(blocKey, subjectId, catKey);
                 
                 let linkButton;
                 if (isAvailable) {
-                    // Lien présent : Opacité 100%, Lien actif
                     linkButton = `
-                        <a href="${link}" title="${meta.title} (Lien)" 
+                        <a href="${link}" title="${meta.title} (Lien)" target="_blank"
                            class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">
                            ${meta.icon}
                         </a>`;
                 } else {
-                    // Lien absent : Opacité 30%, non cliquable
                     linkButton = `
                         <span title="${meta.title} (En attente)" 
                               class="inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} empty-link-button text-lg">
@@ -820,7 +475,6 @@
                         </span>`;
                 }
                 
-                // Le bouton check n'est actif que si la ressource est dispo
                 const checkButton = `
                     <button title="${meta.title} (Marquer comme lu)" 
                             onclick="toggleResourceCompletion('${blocKey}', '${subjectId}', '${catKey}')" 
@@ -833,29 +487,22 @@
                 linksHtml += `<div class="flex items-center space-x-1">${linkButton}${checkButton}</div>`;
             });
 
-            // Calcul si tout est en attente
             let resourceCount = 0;
             linkCategories.forEach(k => { if(session.links && session.links[k]) resourceCount++; });
             const isAwaitingAll = resourceCount === 0;
             const lineClass = isAwaitingAll ? 'awaiting-subject' : 'text-gray-700';
             
-            let rawTitle = session.title; 
-            let sNumber = ''; 
-            let cleanTitle = rawTitle;
-            const match = rawTitle.match(/^(S\d+)\s*-\s*(.*)/);
-            if (match) { sNumber = match[1]; cleanTitle = match[2].trim(); } 
-            else if (rawTitle.startsWith('S000')) { sNumber = 'S000'; cleanTitle = rawTitle.substring(4).replace(/^ - /, '').trim(); }
-            
-            const finalTitle = `${sNumber} - ${cleanTitle}`;
             const accentColorClassInner = (blocKey === 'B1') ? 'text-b1' : (blocKey === 'B2') ? 'text-b2' : 'text-title';
             const isCompletedLineClass = isFullyCompleted ? 'border-l-4 border-progress' : 'border-l-4 border-gray-100';
 
+            // --- AFFICHAGE : CODE COMPLET + TITRE ---
             targetElement.outerHTML = `
                 <div id="subject-row-${subjectId}" class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100 ${isCompletedLineClass}">
                     <div class="flex items-center flex-grow min-w-0 mb-2 sm:mb-0">
                         <label for="check_${subjectId}" class="text-base font-medium cursor-pointer ${lineClass} flex items-center min-w-0">
-                            <span class="font-mono ${accentColorClassInner} mr-2 font-bold flex-shrink-0">${sessionNumber}.</span>
-                            <span class="truncate">${finalTitle}</span>
+                            <!-- Code complet en gras (B1_M01_S001) -->
+                            <span class="font-mono ${accentColorClassInner} mr-2 font-bold flex-shrink-0 text-sm tracking-tight">${session.fullCode}</span>
+                            <span class="truncate" title="${session.title}"> - ${session.title}</span>
                             ${isAwaitingAll ? `<i class="fas fa-triangle-exclamation text-alert ml-3 awaiting-indicator" title="Sujet en attente de ressources"></i>` : ''}
                         </label>
                     </div>
@@ -866,7 +513,7 @@
                         <div class="flex items-center space-x-2">
                             <button title="${progressPercent}% d'avancement des ressources" class="w-16 bg-gray-200 text-title py-1 rounded-lg text-xs font-bold text-progress">${progressPercent}%</button>
                             <button onclick="validateSubjectLine('${blocKey}', ${globalIndex})" title="${isFullyCompleted ? 'Décocher tout' : 'Valider toute la ligne'}" class="w-8 h-8 rounded-full text-white transition duration-150 flex items-center justify-center ${isFullyCompleted ? 'bg-progress hover:bg-red-500' : 'bg-gray-400 hover:bg-progress'}"><i class="fas ${isFullyCompleted ? 'fa-check' : 'fa-plus'}"></i></button>
-                            <button onclick="showPlanningOptions('${blocKey}', ${globalIndex}, '${finalTitle.replace(/'/g, "\\'")}')" title="Planifier la relecture (Google Agenda)" class="w-8 h-8 rounded-full bg-title hover:bg-gray-600 text-white transition duration-150 flex items-center justify-center"><i class="fas fa-clock"></i></button>
+                            <button onclick="showPlanningOptions('${blocKey}', ${globalIndex}, '${session.title.replace(/'/g, "\\'")}')" title="Planifier la relecture (Google Agenda)" class="w-8 h-8 rounded-full bg-title hover:bg-gray-600 text-white transition duration-150 flex items-center justify-center"><i class="fas fa-clock"></i></button>
                         </div>
                     </div>
                 </div>`;
@@ -909,16 +556,28 @@
 
         function renderAccueil() {
             const container = document.getElementById('resources-container');
+            
             const blocksHtml = Object.keys(resources).map(key => {
-                let sessionCount = 0; let completedCount = 0;
-                for (const module in resources[key].modules) { resources[key].modules[module].forEach((subject, index) => { sessionCount++; if (getSubjectProgress(key, index) === 100) { completedCount++; } }); }
-                const percentage = sessionCount > 0 ? Math.round((completedCount / sessionCount) * 100) : 0;
+                let blocTotal = 0;
+                let blocCompleted = 0;
+                let tempCounter = 0;
+                
+                for (const module in resources[key].modules) {
+                    resources[key].modules[module].forEach(subj => {
+                        const progress = getSubjectProgress(key, tempCounter);
+                        if (progress === 100) blocCompleted++;
+                        blocTotal++;
+                        tempCounter++;
+                    });
+                }
+
+                const percentage = blocTotal > 0 ? Math.round((blocCompleted / blocTotal) * 100) : 0;
                 const blocTitle = resources[key].title.split(':')[0];
                 let blocColorClass, accentColorClass;
                 if (key === 'B1') { blocColorClass = 'border-b1'; accentColorClass = 'text-b1'; } else if (key === 'B2') { blocColorClass = 'border-b2'; accentColorClass = 'text-b2'; } else { blocColorClass = 'border-title'; accentColorClass = 'text-title'; }
                 const planningSteps = [ { label: "1ère Lecture (Aujourd'hui)", days: 0 }, { label: "2ème Lecture (J+7)", days: 7 }, { label: "3ème Lecture (J+30)", days: 30 }, { label: "Relecture (J+60)", days: 60 }, { label: "Relecture (J+90)", days: 90 }, { label: "Relecture (J+180 - 6 mois)", days: 180 } ];
                 const planningHtml = planningSteps.map(step => `<div class="flex items-center justify-between p-3 border-b border-gray-100 last:border-b-0"><span class="text-sm text-gray-700">${step.label}</span><a href="${generateGoogleCalendarLink(blocTitle, step.days, `[BLOC ${key}] Relecture ${step.label}`)}" class="bg-cta hover-bg-cta text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center"><i class="fas fa-calendar-plus mr-1"></i> Planifier</a></div>`).join('');
-                return `<div class="p-6 rounded-xl shadow-lg bg-white space-y-4 home-card ${blocColorClass}" style="border-top: 4px solid var(--color-cta);"><h3 class="text-xl font-semibold flex items-center mb-4 text-title"><i class="fas fa-cubes mr-3 ${accentColorClass}"></i> ${blocTitle} (${completedCount}/${sessionCount} sujets validés)</h3><div class="relative pt-1"><div class="flex mb-2 items-center justify-between"><div class="text-right"><span class="text-xs font-semibold inline-block text-progress">${percentage}% Sujets Terminés</span></div></div><div class="flex h-2 mb-4 overflow-hidden text-xs bg-gray-200 rounded"><div style="width:${percentage}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-progress"></div></div></div><div class="bg-surface text-title p-4 rounded-lg border border-gray-200"><h4 class="font-semibold mb-2 flex items-center text-title"><i class="fas fa-clock mr-2 ${accentColorClass}"></i> Horloge de Relecture du Bloc</h4>${planningHtml}</div><button onclick="showTab('${key}')" class="w-full bg-cta text-title py-2 rounded-lg hover-bg-cta transition duration-150 font-semibold">Accéder aux sujets détaillés</button></div>`;
+                return `<div class="p-6 rounded-xl shadow-lg bg-white space-y-4 home-card ${blocColorClass}" style="border-top: 4px solid var(--color-cta);"><h3 class="text-xl font-semibold flex items-center mb-4 text-title"><i class="fas fa-cubes mr-3 ${accentColorClass}"></i> ${blocTitle} (${blocCompleted}/${blocTotal} sujets validés)</h3><div class="relative pt-1"><div class="flex mb-2 items-center justify-between"><div class="text-right"><span class="text-xs font-semibold inline-block text-progress">${percentage}% Sujets Terminés</span></div></div><div class="flex h-2 mb-4 overflow-hidden text-xs bg-gray-200 rounded"><div style="width:${percentage}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-progress"></div></div></div><div class="bg-surface text-title p-4 rounded-lg border border-gray-200"><h4 class="font-semibold mb-2 flex items-center text-title"><i class="fas fa-clock mr-2 ${accentColorClass}"></i> Horloge de Relecture du Bloc</h4>${planningHtml}</div><button onclick="showTab('${key}')" class="w-full bg-cta text-title py-2 rounded-lg hover-bg-cta transition duration-150 font-semibold">Accéder aux sujets détaillés</button></div>`;
             }).join('');
             container.innerHTML = `<div class="bg-surface p-8 rounded-xl shadow-lg border-l-4 border-cta"><h2 class="text-3xl font-bold text-title mb-4">Synthèse de la Progression 📊</h2><p class="mt-2 text-lg text-gray-700 mb-6">Utilisez l'horloge pour planifier vos relectures de blocs ou validez les sujets dans les onglets B1, B2, B3 pour suivre votre avancement.</p><div class="grid grid-cols-1 md:grid-cols-3 gap-6">${blocksHtml}</div></div>`;
         }
@@ -931,31 +590,36 @@
             let accentColorClass, blocBorderColorClass;
             if (blocKey === 'B1') { accentColorClass = 'text-b1'; blocBorderColorClass = 'border-b1'; } else if (blocKey === 'B2') { accentColorClass = 'text-b2'; blocBorderColorClass = 'border-b2'; } else { accentColorClass = 'text-title'; blocBorderColorClass = 'border-title'; }
             html += `<section class="bloc-section bg-surface p-6 sm:p-8 rounded-xl shadow-lg border-l-4 ${blocBorderColorClass} space-y-6"><h2 class="2xl sm:text-3xl font-bold text-title border-b border-gray-300 pb-3 mb-4 flex items-center"><i class="fas fa-layer-group mr-3 ${accentColorClass}"></i> ${bloc.title}</h2><div class="space-y-4">`;
+            
+            let globalSubjectIndex = 0;
+
             for (const moduleTitle in bloc.modules) {
                 const sessions = bloc.modules[moduleTitle];
+                // ID unique pour l'accordéon (pas d'espace)
                 const moduleId = blocKey + "_" + moduleTitle.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+                
+                // --- TITRE MODULE ---
                 html += `<div class="module-card rounded-lg border border-gray-200 overflow-hidden shadow-md"><button id="btn-${moduleId}" onclick="toggleAccordion('${moduleId}')" class="accordion-button flex justify-between items-center w-full p-4 bg-white hover:bg-gray-50 transition duration-150"><h3 class="text-xl font-semibold text-title flex items-center"><i class="fas fa-folder-open accordion-icon mr-2 ${accentColorClass}"></i> ${moduleTitle}</h3><i class="fas fa-chevron-right accordion-icon text-gray-500"></i></button><div id="content-${moduleId}" class="accordion-content p-0"><div class="space-y-2 p-4 pt-0 border-t border-gray-100">`;
+                
                 sessions.forEach((session, index) => {
                     sessionCounter++;
-                    let currentSubjectIndex = -1; let globalIndexCheck = 0;
-                    for (const mod in resources[blocKey].modules) { resources[blocKey].modules[mod].forEach(subj => { if (subj.title === session.title && currentSubjectIndex === -1) { currentSubjectIndex = globalIndexCheck; } globalIndexCheck++; }); }
+                    const currentSubjectIndex = globalSubjectIndex;
+                    globalSubjectIndex++;
+
                     const subjectId = `${blocKey}_${currentSubjectIndex}`;
-                    const sessionNumber = String(sessionCounter).padStart(3, '0');
                     const progressPercent = getSubjectProgress(blocKey, currentSubjectIndex);
                     const isFullyCompleted = progressPercent === 100;
                     
-                    // --- GÉNÉRATION DYNAMIQUE DES LIENS ---
                     let linksHtml = '';
-                    // On boucle sur TOUTES les catégories fixes
                     linkCategories.forEach(catKey => {
                         const link = session.links && session.links[catKey] ? session.links[catKey] : null;
                         const meta = linkIcons[catKey];
-                        const isAvailable = link !== null;
+                        const isAvailable = link !== null && link !== "";
                         const isChecked = isResourceCompleted(blocKey, subjectId, catKey);
                         
                         let linkButton;
                         if (isAvailable) {
-                            linkButton = `<a href="${link}" title="${meta.title} (Lien)" class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">${meta.icon}</a>`;
+                            linkButton = `<a href="${link}" title="${meta.title} (Lien)" target="_blank" class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">${meta.icon}</a>`;
                         } else {
                             linkButton = `<span title="${meta.title} (En attente)" class="inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} empty-link-button text-lg">${meta.icon}</span>`;
                         }
@@ -963,20 +627,16 @@
                         linksHtml += `<div class="flex items-center space-x-1">${linkButton}${checkButton}</div>`;
                     });
 
-                    // Calcul si tout est en attente
                     let resourceCount = 0;
                     linkCategories.forEach(k => { if(session.links && session.links[k]) resourceCount++; });
                     const isAwaitingAll = resourceCount === 0;
                     const lineClass = isAwaitingAll ? 'awaiting-subject' : 'text-gray-700';
                     
-                    let rawTitle = session.title; let sNumber = ''; let cleanTitle = rawTitle;
-                    const match = rawTitle.match(/^(S\d+)\s*-\s*(.*)/);
-                    if (match) { sNumber = match[1]; cleanTitle = match[2].trim(); } else if (rawTitle.startsWith('S000')) { sNumber = 'S000'; cleanTitle = rawTitle.substring(4).replace(/^ - /, '').trim(); }
-                    const finalTitle = `${sNumber} - ${cleanTitle}`;
                     const accentColorClassInner = (blocKey === 'B1') ? 'text-b1' : (blocKey === 'B2') ? 'text-b2' : 'text-title';
                     const isCompletedLineClass = isFullyCompleted ? 'border-l-4 border-progress' : 'border-l-4 border-gray-100';
                     
-                    html += `<div id="subject-row-${subjectId}" class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100 ${isCompletedLineClass}"><div class="flex items-center flex-grow min-w-0 mb-2 sm:mb-0"><label for="check_${blocKey}_${currentSubjectIndex}" class="text-base font-medium cursor-pointer ${lineClass} flex items-center min-w-0"><span class="font-mono ${accentColorClassInner} mr-2 font-bold flex-shrink-0">${sessionNumber}.</span><span class="truncate">${finalTitle}</span>${isAwaitingAll ? `<i class="fas fa-triangle-exclamation text-alert ml-3 awaiting-indicator" title="Sujet en attente de ressources"></i>` : ''}</label></div><div class="flex items-center space-x-2 flex-shrink-0 mt-2 sm:mt-0 flex-wrap justify-end gap-y-2"><div class="link-icon-container flex space-x-2 flex-shrink-0">${linksHtml}</div><div class="flex items-center space-x-2"><button title="${progressPercent}% d'avancement des ressources" class="w-16 bg-gray-200 text-title py-1 rounded-lg text-xs font-bold text-progress">${progressPercent}%</button><button onclick="validateSubjectLine('${blocKey}', ${currentSubjectIndex})" title="${isFullyCompleted ? 'Décocher tout' : 'Valider toute la ligne'}" class="w-8 h-8 rounded-full text-white transition duration-150 flex items-center justify-center ${isFullyCompleted ? 'bg-progress hover:bg-red-500' : 'bg-gray-400 hover:bg-progress'}"><i class="fas ${isFullyCompleted ? 'fa-check' : 'fa-plus'}"></i></button><button onclick="showPlanningOptions('${blocKey}', ${currentSubjectIndex}, '${finalTitle.replace(/'/g, "\\'")}')" title="Planifier la relecture (Google Agenda)" class="w-8 h-8 rounded-full bg-title hover:bg-gray-600 text-white transition duration-150 flex items-center justify-center"><i class="fas fa-clock"></i></button></div></div></div>`;
+                    // AFFICHAGE SUJET
+                    html += `<div id="subject-row-${subjectId}" class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100 ${isCompletedLineClass}"><div class="flex items-center flex-grow min-w-0 mb-2 sm:mb-0"><label for="check_${blocKey}_${currentSubjectIndex}" class="text-base font-medium cursor-pointer ${lineClass} flex items-center min-w-0"><span class="font-mono ${accentColorClassInner} mr-2 font-bold flex-shrink-0 text-sm tracking-tight">${session.fullCode}</span><span class="truncate" title="${session.title}"> - ${session.title}</span>${isAwaitingAll ? `<i class="fas fa-triangle-exclamation text-alert ml-3 awaiting-indicator" title="Sujet en attente de ressources"></i>` : ''}</label></div><div class="flex items-center space-x-2 flex-shrink-0 mt-2 sm:mt-0 flex-wrap justify-end gap-y-2"><div class="link-icon-container flex space-x-2 flex-shrink-0">${linksHtml}</div><div class="flex items-center space-x-2"><button title="${progressPercent}% d'avancement des ressources" class="w-16 bg-gray-200 text-title py-1 rounded-lg text-xs font-bold text-progress">${progressPercent}%</button><button onclick="validateSubjectLine('${blocKey}', ${currentSubjectIndex})" title="${isFullyCompleted ? 'Décocher tout' : 'Valider toute la ligne'}" class="w-8 h-8 rounded-full text-white transition duration-150 flex items-center justify-center ${isFullyCompleted ? 'bg-progress hover:bg-red-500' : 'bg-gray-400 hover:bg-progress'}"><i class="fas ${isFullyCompleted ? 'fa-check' : 'fa-plus'}"></i></button><button onclick="showPlanningOptions('${blocKey}', ${currentSubjectIndex}, '${session.title.replace(/'/g, "\\'")}')" title="Planifier la relecture (Google Agenda)" class="w-8 h-8 rounded-full bg-title hover:bg-gray-600 text-white transition duration-150 flex items-center justify-center"><i class="fas fa-clock"></i></button></div></div></div>`;
                 });
                 html += `</div></div></div>`;
             }
@@ -992,7 +652,10 @@
         function scrollFunction() { if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { scrollToTopBtn.classList.add('show'); } else { scrollToTopBtn.classList.remove('show'); } }
         function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         
-        document.addEventListener('DOMContentLoaded', () => { showTab('accueil'); });
+        // Initialisation : Lancer le chargement des données CSV
+        document.addEventListener('DOMContentLoaded', () => { 
+            fetchDataAndRender();
+        });
     </script>
     
     <div id="planningModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50"><div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full"><div id="planningModalContent"></div></div></div>
