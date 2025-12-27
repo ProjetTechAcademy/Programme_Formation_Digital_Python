@@ -611,12 +611,12 @@ B7_M3_004_Contenu via IA`;
                 const checked = progressStore[blocKey]?.[id]?.[cat.id];
                 const isActive = link !== null && link !== "";
                 return `
-                <div class=\"res-box ${isActive ? 'full' : 'empty'}\">
-                    <span class=\"res-label\">${cat.title}</span>
-                    <div class=\"flex items-center gap-2\">
-                        ${isActive ? `<a href=\"${link}\" target=\"_blank\" class=\"text-xl\">${cat.icon}</a>` : `<span class=\"text-xl\">${cat.icon}</span>`}
-                        <button onclick=\"toggleResource('${blocKey}','${id}','${cat.id}')\" class=\"w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] ${checked ? 'bg-[#00D2BE]' : 'bg-gray-600'} shadow-sm\">
-                            <i class=\"fas ${checked ? 'fa-check' : 'fa-plus'}\"></i>
+                <div class="res-box ${isActive ? 'full' : 'empty'}">
+                    <span class="res-label">${cat.title}</span>
+                    <div class="flex items-center gap-2">
+                        ${isActive ? `<a href="${link}" target="_blank" class="text-xl">${cat.icon}</a>` : `<span class="text-xl">${cat.icon}</span>`}
+                        <button onclick="toggleResource('${blocKey}','${id}','${cat.id}')" class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] ${checked ? 'bg-[#00D2BE]' : 'bg-gray-600'} shadow-sm">
+                            <i class="fas ${checked ? 'fa-check' : 'fa-plus'}"></i>
                         </button>
                     </div>
                 </div>`;
