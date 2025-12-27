@@ -179,7 +179,6 @@
 </head>
 <body>
     
-    <!-- SIDEBAR AVEC EMOJIS 2025 -->
     <aside class="sidebar">
         <div class="mb-12 flex items-center gap-4 px-4">
             <img class="w-10 h-10 rounded-full border border-[var(--neon-gold)]" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo">
@@ -227,7 +226,6 @@
         <div id="resources-container"></div>
     </div>
 
-    <!-- FOOTER RESTAURÉ -->
     <footer class="footer-fixed">
         <div class="flex items-center gap-8">
             <div class="w-14 h-14 rounded-xl border border-[var(--neon-gold)] overflow-hidden bg-white shrink-0">
@@ -260,6 +258,7 @@
     </div>
 
     <script>
+        // CORRECTION : Utilisation du lien de publication vers le Google Sheet Python_B1_B2_B3
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK_tBmpTFXHK-e-U-cy_XbjLY2cx4FVbP7X0fhLs34B8DLzIr6yUP_eYo4ueAIzFBABopTCQdd-TK/pub?gid=0&single=true&output=csv"; 
         
         let resources = {
@@ -468,9 +467,6 @@ B7_M1_003_KPI Contenu
 B7_M1_004_Développement
 B7_M1_005_Création Contenu
 B7_M1_006_Réussir son contenu
-B7_M1_007_Direction artistique
-B7_M1_008_Production Digitale
-B7_M1_009_Contenu vs Cible
 B7_M1_010_Brand Content
 B7_M1_011_Storytelling
 B7_M1_012_Marque
@@ -615,12 +611,12 @@ B7_M3_004_Contenu via IA`;
                 const checked = progressStore[blocKey]?.[id]?.[cat.id];
                 const isActive = link !== null && link !== "";
                 return `
-                <div class="res-box ${isActive ? 'full' : 'empty'}">
-                    <span class="res-label">${cat.title}</span>
-                    <div class="flex items-center gap-2">
-                        ${isActive ? `<a href="${link}" target="_blank" class="text-xl">${cat.icon}</a>` : `<span class="text-xl">${cat.icon}</span>`}
-                        <button onclick="toggleResource('${blocKey}','${id}','${cat.id}')" class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] ${checked ? 'bg-[#00D2BE]' : 'bg-gray-600'} shadow-sm">
-                            <i class="fas ${checked ? 'fa-check' : 'fa-plus'}"></i>
+                <div class=\"res-box ${isActive ? 'full' : 'empty'}\">
+                    <span class=\"res-label\">${cat.title}</span>
+                    <div class=\"flex items-center gap-2\">
+                        ${isActive ? `<a href=\"${link}\" target=\"_blank\" class=\"text-xl\">${cat.icon}</a>` : `<span class=\"text-xl\">${cat.icon}</span>`}
+                        <button onclick=\"toggleResource('${blocKey}','${id}','${cat.id}')\" class=\"w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] ${checked ? 'bg-[#00D2BE]' : 'bg-gray-600'} shadow-sm\">
+                            <i class=\"fas ${checked ? 'fa-check' : 'fa-plus'}\"></i>
                         </button>
                     </div>
                 </div>`;
@@ -632,7 +628,6 @@ B7_M3_004_Contenu via IA`;
                         <span class="jp-text font-mono text-[10px] opacity-40">${subj.fullCode}</span>
                         <div class="flex items-center gap-3">
                             <button onclick="validateRow('${blocKey}', ${idx})" class="btn-neo btn-neo-check ${isDone ? 'done' : ''}"><i class="fas fa-check"></i></button>
-                            <!-- BOUTON AGENDA DYNAMIQUE -->
                             <button onclick="showPlanningModal('${blocKey}', ${idx})" class="btn-neo btn-neo-cal" title="Planifier la relecture"><i class="fas fa-calendar-day"></i></button>
                         </div>
                     </div>
