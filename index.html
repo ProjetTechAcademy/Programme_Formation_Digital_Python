@@ -427,7 +427,6 @@ B6_M1_005_Choix technologique
 B6_M1_006_CDG Technique
 B6_M1_007_Besoin vs Solution
 B6_M1_008_Planning
-B6_M1_009_MOE
 B6_M1_010_MOA
 B6_M1_011_Gouvernance
 B6_M2.Architecture Technique
@@ -467,6 +466,9 @@ B7_M1_003_KPI Contenu
 B7_M1_004_Développement
 B7_M1_005_Création Contenu
 B7_M1_006_Réussir son contenu
+B7_M1_007_Direction artistique
+B7_M1_008_Production Digitale
+B7_M1_009_Contenu vs Cible
 B7_M1_010_Brand Content
 B7_M1_011_Storytelling
 B7_M1_012_Marque
@@ -541,9 +543,11 @@ B7_M3_004_Contenu via IA`;
             let currentBloc = null; let currentModule = null;
             data.forEach(row => {
                 let title = row['Titres des catégories']; if (!title) return;
+                
+                // LOGIQUE 1 : PYTHON (BLOCS B1, B2, B3)
                 if (/^B[1-3]_/.test(title) && !title.includes('_M')) {
                     currentBloc = title.split('_')[0];
-                } else if (title.includes('_M') && !title.includes('_S')) {
+                } else if (title.includes('_M') && !title.includes('_S') && !/B\d+_M\d+_\d+/.test(title)) {
                     if (currentBloc) {
                         currentModule = title.replace(/^B\d+_/, '').replace(/_/g, ' - ');
                         if (!resources[currentBloc].modules[currentModule]) resources[currentBloc].modules[currentModule] = [];
@@ -557,6 +561,23 @@ B7_M3_004_Contenu via IA`;
                         });
                     }
                 }
+                
+                // LOGIQUE 2 : EXPERT CDO (Mise à jour par détection de code exact)
+                Object.keys(resourcesCDO).forEach(bk => {
+                    Object.keys(resourcesCDO[bk].modules).forEach(mk => {
+                        resourcesCDO[bk].modules[mk].forEach(subj => {
+                            if (title.includes(subj.fullCode)) {
+                                subj.links["Intro_Python_Gamma"] = row['Intro_Python_Gamma'] || null;
+                                subj.links["Cours_Python"] = row['Cours_Python'] || null;
+                                subj.links["Audio"] = row['Audio'] || null;
+                                subj.links["Excel"] = row['Excel'] || null;
+                                subj.links["Infographie"] = row['Infographie'] || null;
+                                subj.links["Présentation"] = row['Présentation'] || null;
+                                subj.links["Video"] = row['Video'] || null;
+                            }
+                        });
+                    });
+                });
             });
         }
 
@@ -609,7 +630,7 @@ B7_M3_004_Contenu via IA`;
             let miniCardsHtml = linkCategories.map(cat => {
                 const link = subj.links[cat.id];
                 const checked = progressStore[blocKey]?.[id]?.[cat.id];
-                const isActive = link !== null && link !== "";
+                const isActive = link !== null && link !== "" && link.toString().startsWith("http");
                 return `
                 <div class="res-box ${isActive ? 'full' : 'empty'}">
                     <span class="res-label">${cat.title}</span>
@@ -747,7 +768,6 @@ B7_M3_004_Contenu via IA`;
             icon.style.transform = content.classList.contains('open') ? "rotate(180deg)" : "rotate(0deg)";
         }
 
-        // --- NOUVEAU SYSTÈME DE PLANIFICATION AVEC LIENS ---
         function showPlanningModal(blocKey, idx) {
             let source = blocKey.startsWith('CDO') ? resourcesCDO : resources;
             let key = blocKey.startsWith('CDO') ? blocKey.replace('CDO_', '') : blocKey;
@@ -756,7 +776,6 @@ B7_M3_004_Contenu via IA`;
             const modal = document.getElementById('planningModal');
             const cont = document.getElementById('planningModalContent');
             
-            // On construit la liste des documents pour l'agenda
             let docLinks = "";
             linkCategories.forEach(cat => {
                 if(subj.links[cat.id]) docLinks += `- ${cat.title} : ${subj.links[cat.id]}%0A`;
