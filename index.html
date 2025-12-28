@@ -3,811 +3,662 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Club - Mathilde Martine PAISLEY</title>
+    <title>Formation Développeur Web Python</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Librairie pour lire le CSV Google Sheet -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* *** STYLES CSS *** */
         :root {
-            --neon-gold: #D9A526;
-            --cyber-blue: #0F2C48;
-            --hibiscus: #FF2E63;
-            --lagon: #00D2BE;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --color-cta: #D9A526;
+            --color-title: #0F2C48;
+            --color-surface: #F6F2E8;
+            --color-alert: #B4792A;
+            --color-progress: #E91E63;
+            --color-b1: #B91C1C;
+            --color-b2: #f59e0b;
+            --color-b3: #0F2C48;
+            
+            --brand-blue: var(--color-title);
+            --brandGold: var(--color-cta);
+            --ivory: var(--color-surface);
+            --footer-bg: var(--color-title);
+            --footer-text: var(--color-surface);
         }
 
-        html, body { height: 100%; margin: 0; }
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background: radial-gradient(circle at top right, #1a4a7a, #0b1a2b);
-            background-attachment: fixed;
-            display: flex;
-            flex-direction: column;
-            color: #e2e8f0;
-            overflow-x: hidden;
-            text-align: left;
-        }
+        .bg-cta { background-color: var(--color-cta); }
+        .text-title { color: var(--color-title); }
+        .bg-title { background-color: var(--color-title); }
+        .bg-surface { background-color: var(--color-surface); }
+        .border-title { border-color: var(--color-title); }
+        .bg-progress { background-color: var(--color-progress); }
+        .text-progress { color: var(--color-progress); }
+        
+        .bg-b1 { background-color: var(--color-b1); }
+        .border-b1 { border-color: var(--color-b1); }
+        .text-b1 { color: var(--color-b1); }
+        
+        .bg-b2 { background-color: var(--color-b2); }
+        .border-b2 { border-color: var(--color-b2); }
+        .text-b2 { color: var(--color-b2); }
 
-        h1, h2, h3 { font-family: 'Syne', sans-serif; }
+        .bg-b3 { background-color: var(--color-b3); }
+        .border-b3 { border-color: var(--color-b3); }
+        .text-b3 { color: var(--color-b3); }
 
-        /* SIDEBAR MODERN 2025 */
-        .sidebar {
-            width: 280px;
-            background: rgba(15, 44, 72, 0.98);
-            backdrop-filter: blur(30px);
-            border-right: 2px solid var(--glass-border);
-            height: 100vh;
-            position: fixed;
-            left: 0; top: 0;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            padding: 30px 20px;
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; }
+        .font-code { font-family: 'Fira Code', monospace; }
 
-        .nav-link {
-            padding: 14px 20px;
-            margin-bottom: 8px;
-            border-radius: 14px;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; align-items: center; gap: 15px;
-            cursor: pointer; color: #94a3b8; font-size: 1.1rem;
-        }
-        .nav-link:hover { background: rgba(255,255,255,0.08); color: white; transform: scale(1.02); }
-        .nav-link.active { 
-            background: linear-gradient(90deg, rgba(217, 165, 38, 0.2), transparent);
-            border-left: 5px solid var(--neon-gold);
-            color: var(--neon-gold);
-            font-weight: 700;
-        }
+        /* HEADER */
+        .top-bar { background: var(--brand-blue); padding: 12px 0; position: sticky; top: 0; z-index: 9999; border-bottom: 4px solid var(--brandGold); box-shadow: 0 4px 12px rgba(15, 44, 72, 0.3); width: 100%; }
+        .top-bar-container { width: 100%; max-width: 100%; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .top-left { display: flex; align-items: center; gap: 14px; margin-right: auto; }
+        .logo-top { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--brandGold); background: var(--ivory); padding: 0; transition: transform 0.3s ease; }
+        .logo-top:hover { transform: rotate(10deg) scale(1.1); }
+        .identity-stack { display: flex; flex-direction: column; }
+        .club-title-main { font-family: 'Fira Code', monospace; font-weight: 700; color: var(--ivory); font-size: 1.0rem; letter-spacing: -0.5px; }
+        .club-subtitle { color: var(--brandGold); font-weight: 600; font-size: 0.8rem; }
+        
+        .btn-portfolio-cosmic-desktop { padding: 6px 14px; border-radius: 8px; background: var(--brandGold); color: var(--brand-blue); text-decoration: none; font-family: 'Fira Code', monospace; font-weight: 700; display: inline-flex; gap: 6px; align-items: center; transition: background 0.3s, color 0.3s; white-space: nowrap; box-shadow: 2px 2px 0px var(--color-alert); border: 1px solid var(--ivory); }
+        .btn-portfolio-cosmic-desktop:hover { transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--color-alert); background: var(--ivory); }
 
-        /* MAIN CONTENT */
-        .main-wrapper { flex: 1 0 auto; margin-left: 280px; padding: 40px; }
+        .mobile-icon-btn { width: 40px; height: 40px; flex-shrink: 0; border-radius: 8px; display: none; align-items: center; justify-content: center; text-decoration: none; background: rgba(246, 242, 232, 0.1); color: var(--ivory); border: 1px solid rgba(217, 165, 38, 0.3); transition: all 0.2s ease; font-size: 1.2rem; position: relative; }
+        .mobile-icon-btn:hover { transform: translateY(-3px); box-shadow: 0 0 15px rgba(217, 165, 38, 0.5); background: var(--brandGold); color: var(--brand-blue); border-color: var(--ivory); }
+        .hamburger-btn { font-size: 1.4rem; cursor: pointer; transition: all 0.2s ease; }
+        .hamburger-btn.active { transform: rotate(90deg); }
+        .mobile-nav-container { display: none; width: 100%; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .mobile-nav-container.visible { display: flex; }
 
-        /* TITRES STANDARDISÉS */
-        .bloc-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--neon-gold);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        /* MODULES TIROIRS */
-        .module-entry {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 15px;
-            overflow: hidden;
-            transition: 0.3s;
-        }
-        .module-trigger {
-            padding: 20px 30px;
-            display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer;
-        }
-        .module-title-text {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: white;
-        }
-
-        /* SUBJECT CARDS GIGANTESQUES (POUR 34") */
-        .subjects-pane { max-height: 0; overflow: hidden; transition: max-height 0.8s ease-in-out; }
-        .subjects-pane.open { max-height: 20000px; padding: 25px; }
-
-        .subjects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
-        }
-
-        .subject-card-3d {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 18px;
-            border: 1px solid var(--glass-border);
-            padding: 22px;
-            display: flex; flex-direction: column; gap: 18px;
-            transition: 0.3s;
-        }
-        .subject-card-3d:hover { border-color: var(--neon-gold); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
-        .subject-card-3d.done { border-left: 6px solid var(--lagon); background: rgba(0, 210, 190, 0.03); }
-
-        .subject-title { font-size: 1.15rem; font-weight: 600; color: white; line-height: 1.4; }
-
-        /* MINI CARTES RESSOURCES - ZÉRO GRIS 🌈 */
-        .res-box {
-            display: flex; flex-direction: column; align-items: center; gap: 6px;
-            width: 65px; padding: 10px 4px; border-radius: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            transition: 0.3s;
-        }
-        .res-box.full { opacity: 1 !important; border-color: var(--neon-gold); background: rgba(217,165,38,0.1); }
-        .res-box.empty { opacity: 0.3 !important; filter: none !important; }
-
-        .res-label { font-size: 0.55rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
-
-        /* BOUTONS ACTIONS */
-        .btn-neo {
-            width: 38px; height: 38px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.2s; font-size: 0.95rem;
-        }
-        .btn-neo-check { background: rgba(255,255,255,0.05); }
-        .btn-neo-check.done { background: var(--lagon); color: var(--cyber-blue); box-shadow: 0 0 15px var(--lagon); }
-        .btn-neo-cal { background: var(--hibiscus); color: white; box-shadow: 0 0 15px var(--hibiscus); }
-
-        /* FOOTER FIXÉ */
-        .footer-fixed {
-            flex-shrink: 0;
-            margin-left: 280px;
-            padding: 40px;
-            background: rgba(10, 20, 35, 0.98);
-            border-top: 2px solid var(--neon-gold);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .icon-btn { 
-            width: 42px; height: 42px; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.05); transition: 0.3s; color: white;
-        }
-        .icon-btn:hover { background: var(--neon-gold); color: var(--cyber-blue); transform: scale(1.1); }
-
-        .modal-planning-btn {
-            width: 100%; padding: 16px; border-radius: 16px; margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.05); color: white; font-weight: 600;
-            transition: 0.3s; border: 1px solid var(--glass-border);
-        }
-        .modal-planning-btn:hover { background: var(--neon-gold); color: var(--cyber-blue); }
+        /* FOOTER */
+        .main-footer { background: var(--footer-bg); color: var(--footer-text); padding: 40px 0 20px 0; margin-top: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; width: 100%; }
+        .footer-container { width: 100%; max-width: 100%; padding: 0 40px; margin: 0 auto; display: flex; gap: 30px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+        .footer-left { display: flex; flex-direction: column; gap: 15px; }
+        .footer-identity { display: flex; gap: 12px; align-items: center; }
+        .footer-logo-img { width: 60px; height: 60px; border-radius: 8px; border: 2px solid var(--brandGold); background: var(--ivory); padding: 0; overflow: hidden; flex-shrink: 0; }
+        .footer-logo-img img { width: 100%; height: 100%; object-fit: cover; }
+        .footer-details { color: var(--footer-text); opacity: 0.95; display: flex; flex-direction: column; gap: 4px; min-width: 250px; }
+        .footer-contact-link { color: var(--brandGold); text-decoration: none; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .footer-contact-link:hover { color: #fff; text-decoration: underline; }
+        .footer-links-group-desktop { display: flex; gap: 20px; align-items: flex-start; }
+        .footer-section { display: flex; flex-direction: column; gap: 10px; }
+        .footer-section-title { font-size: 1rem; font-weight: 700; color: var(--brandGold); margin-bottom: 5px; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px; white-space: nowrap; }
+        .footer-links-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-start; }
+        .icon-btn { width: 40px; height: 40px; flex-shrink: 0; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.06); color: var(--footer-text); text-decoration: none; border: 1px solid rgba(217, 165, 38, 0.15); transition: all 0.2s; font-size: 1.1rem; position: relative; }
+        .icon-btn:hover { background: var(--brandGold); color: var(--brand-blue); transform: scale(1.1); border-color: #fff; }
+        .separator-desktop { width: 1px; height: 120px; background: rgba(255, 255, 255, 0.3); margin: 0 10px; border-radius: 1px; }
+        .copyright { width: 100%; text-align: center; color: rgba(255, 255, 255, 0.35); margin-top: 24px; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
 
         @media (max-width: 1100px) {
-            .sidebar { width: 85px; padding: 20px 15px; }
-            .sidebar span, .logo-txt { display: none; }
-            .main-wrapper, .footer-fixed { margin-left: 85px; }
+            .top-bar-container { flex-direction: row; justify-content: space-between; gap: 10px; padding: 0 20px; }
+            .top-left { margin-right: 0; flex-direction: row; align-items: center; }
+            .btn-portfolio-cosmic-desktop, .separator-desktop { display: none; }
+            .hamburger-btn, .mobile-icon-btn { display: flex; }
+            .footer-container { flex-direction: column; align-items: flex-start; padding: 0 20px; gap: 25px; }
+            .footer-left, .footer-links-group-desktop, .footer-section { width: 100%; align-items: center; text-align: center; }
+            .footer-links-group-desktop { flex-direction: column; gap: 25px; }
+            .footer-links-row { justify-content: center; }
+            .footer-identity { align-items: center; }
         }
+
+        /* APP STYLES */
+        .empty-link-button { 
+            opacity: 0.3 !important; 
+            pointer-events: none; 
+            cursor: default; 
+        }
+        
+        .resource-link-btn { transition: all 0.2s ease-in-out; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .resource-link-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+        .resource-link-btn img { pointer-events: none; }
+        
+        .tab-button { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-button:hover:not(.active-tab) { background-color: #f8f8f8; border-radius: 8px 8px 0 0; }
+        .tab-button.active-tab { border-bottom-color: var(--color-cta); color: var(--color-title); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; }
+        .accordion-button.active .accordion-icon { transform: rotate(90deg); }
+        .accordion-icon { transition: transform 0.3s ease; }
+        #scrollToTopBtn { position: fixed; bottom: 20px; right: 20px; z-index: 1000; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: scale(0.9); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+        #scrollToTopBtn.show { opacity: 1; transform: scale(1); }
+        .home-card { border-bottom: 5px solid var(--color-cta); background-color: white; }
+        .bloc-section { background-color: white; }
+        .awaiting-subject { color: #5a6678; font-style: italic; }
+        .awaiting-indicator { animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        
+        /* Spinner pour le chargement */
+        .loading-spinner {
+            border: 4px solid rgba(217, 165, 38, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--color-cta);
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="p-0">
     
-    <aside class="sidebar">
-        <div class="mb-12 flex items-center gap-4 px-4">
-            <img class="w-10 h-10 rounded-full border border-[var(--neon-gold)]" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo">
-            <div class="logo-txt">
-                <div class="font-bold text-white text-sm">ELITE CLUB</div>
-                <div class="text-[var(--neon-gold)] text-[8px] font-bold tracking-widest uppercase">M. Paisley</div>
+    <div class="top-bar" id="mainHeader">
+        <div class="top-bar-container">
+            <div class="top-left">
+                <a href="https://projettechacademy.github.io/Projet_Python/index.html" title="Accueil">
+                    <img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo Dev Elite Club">
+                </a>
+                <div class="identity-stack">
+                    <div class="club-title-main">💫 The Dev Elite Club ✨</div>
+                    <div class="club-subtitle">La Villa des Codeurs Brisés 💔 dans la Jungle du PYTHON ! 🌴</div>
+                </div>
             </div>
-        </div>
 
-        <nav class="flex-grow">
-            <div onclick="showTab('accueil')" id="nav-accueil" class="nav-link active">
-                <i class="fas fa-satellite-dish"></i> <span>Aperçu 🛸</span>
-            </div>
-            <div onclick="showTab('B1')" id="nav-B1" class="nav-link">
-                <i class="fas fa-atom"></i> <span>Python B1 ⚡</span>
-            </div>
-            <div onclick="showTab('B2')" id="nav-B2" class="nav-link">
-                <i class="fas fa-brain"></i> <span>Python B2 🧠</span>
-            </div>
-            <div onclick="showTab('B3')" id="nav-B3" class="nav-link">
-                <i class="fas fa-dna"></i> <span>Python B3 🧬</span>
-            </div>
-            <div onclick="showTab('CDO')" id="nav-CDO" class="nav-link mt-8 border-t border-white/5 pt-8">
-                <i class="fas fa-chess-king text-indigo-400"></i> <span class="text-indigo-200">Expert CDO 🦾</span>
-            </div>
-        </nav>
-
-        <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" class="nav-link mt-auto">
-            <i class="fas fa-id-card-clip"></i> <span>Portfolio 💼</span>
-        </a>
-    </aside>
-
-    <div class="main-wrapper">
-        <header class="flex justify-between items-center mb-12 border-b border-white/5 pb-8">
-            <div>
-                <div class="text-[var(--neon-gold)] text-xs font-mono mb-1 opacity-60">光り輝く未来 (Un futur radieux)</div>
-                <h1 id="page-main-title" class="text-2xl font-bold text-white tracking-tight">Bonjour Mathilde,</h1>
-            </div>
-            <div id="loading-status" class="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10">
-                <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                <span class="text-[10px] font-bold tracking-widest opacity-60">SYSTEM READY</span>
-            </div>
-        </header>
-
-        <div id="resources-container"></div>
-    </div>
-
-    <footer class="footer-fixed">
-        <div class="flex items-center gap-8">
-            <div class="w-14 h-14 rounded-xl border border-[var(--neon-gold)] overflow-hidden bg-white shrink-0">
-                <img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg" alt="Logo MMPA" class="w-full h-full object-cover">
-            </div>
-            <div>
-                <div class="font-bold text-white text-lg">Mathilde Martine PAISLEY</div>
-                <div class="text-[var(--neon-gold)] text-xs font-medium italic">Expert Stratégie Digitale & Développeur Python</div>
-                <div class="flex gap-6 mt-1 text-[10px] opacity-40 font-mono">
-                    <span>📧 Mathilde.martine.paisley@gmail.com</span>
-                    <span>📲 06 85 90 08 87</span>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a class="btn-portfolio-cosmic-desktop" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" title="Mon Portfolio">
+                    <i class="fa-solid fa-code"></i> Portfolio
+                </a>
+                <a class="mobile-icon-btn btn-portfolio-mobile" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" title="Mon Portfolio">
+                    <i class="fa-solid fa-briefcase"></i> 💼
+                </a>
+                <div id="hamburgerBtn" class="mobile-icon-btn hamburger-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
                 </div>
             </div>
         </div>
-        <div class="flex flex-col items-end gap-4">
-            <div class="flex gap-2">
-                <a class="icon-btn" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" title="WhatsApp"><i class="fab fa-whatsapp" style="color:#25D366;"></i></a>
-                <a class="icon-btn" href="https://discord.gg/redT9wEE6T" title="Discord"><i class="fab fa-discord" style="color:#5865F2;"></i></a>
-                <a class="icon-btn" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" title="LinkedIn"><i class="fab fa-linkedin" style="color:#0077b5;"></i></a>
-                <a class="icon-btn" href="https://www.instagram.com/enervyx/" title="Instagram"><i class="fab fa-instagram" style="color:#E4405F;"></i></a>
+        <nav id="mobileNav" class="mobile-nav-container" aria-label="Navigation mobile"></nav>
+    </div>
+
+    <main class="flex-grow p-4 sm:p-8 pt-6">
+        <div id="app-container" class="max-w-7xl mx-auto">
+            <header class="text-center mb-8 p-6 rounded-xl bg-white shadow-lg border-b-4 border-cta">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-title" style="font-family: 'Playfair Display', serif;">
+                    Formation Développeur Web Python
+                </h1>
+                <p class="mt-2 text-lg text-gray-600">Programme de formation</p>
+                <!-- Zone de notification de chargement -->
+                <div id="loading-status" class="mt-4 text-sm text-gray-500">
+                    <div class="loading-spinner"></div>
+                    <p class="mt-2">Synchronisation avec ton fichier Excel en cours...</p>
+                </div>
+            </header>
+
+            <div class="bg-white rounded-xl shadow-lg mb-8 p-4">
+                <nav class="flex space-x-4 border-b border-gray-200 overflow-x-auto">
+                    <button onclick="showTab('accueil')" id="tab-accueil" class="tab-button active-tab px-4 py-2 text-lg font-medium text-title border-cta whitespace-nowrap">
+                        <i class="fas fa-home mr-2"></i> Accueil
+                    </button>
+                    <button onclick="showTab('B1')" id="tab-B1" class="tab-button px-4 py-2 text-lg font-medium text-gray-600 whitespace-nowrap">
+                        <i class="fas fa-list-check mr-2"></i> Bloc B1
+                    </button>
+                    <button onclick="showTab('B2')" id="tab-B2" class="tab-button px-4 py-2 text-lg font-medium text-gray-600 whitespace-nowrap">
+                        <i class="fas fa-tasks mr-2"></i> Bloc B2
+                    </button>
+                    <button onclick="showTab('B3')" id="tab-B3" class="tab-button px-4 py-2 text-lg font-medium text-gray-600 whitespace-nowrap">
+                        <i class="fas fa-code mr-2"></i> Bloc B3
+                    </button>
+                </nav>
             </div>
-            <div class="text-[8px] tracking-[0.3em] opacity-30 uppercase font-mono">© 2025 ELITE CLUB | PARIS 13 - GUADELOUPE - NEOTOKYO</div>
+
+            <div id="resources-container" class="space-y-8">
+            </div>
+        </div>
+    </main>
+
+    <button id="scrollToTopBtn" onclick="scrollToTop()" class="bg-cta hover-bg-cta text-white p-4 rounded-full shadow-lg">
+        <i class="fas fa-arrow-up text-xl"></i>
+    </button>
+    
+    <footer class="main-footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-identity">
+                    <div class="footer-logo-img">
+                        <img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg" alt="Logo MMPA">
+                    </div>
+                    <div class="footer-details">
+                        <div style="font-weight:700; font-size: 1.1rem; margin-bottom:4px;">Mathilde Martine PAISLEY</div>
+                        <a href="mailto:Mathilde.martine.paisley@gmail.com" class="footer-contact-link">📧 Mathilde.martine.paisley@gmail.com</a>
+                        <a href="tel:+33685900887" class="footer-contact-link">📲 06 85 90 08 87</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-links-group-desktop">
+                <div class="footer-section">
+                    <div class="footer-section-title">Réseaux Sociaux</div>
+                    <div class="footer-links-row">
+                        <a class="icon-btn" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" title="WhatsApp"><i class="fab fa-whatsapp" style="color:#25D366;"></i></a>
+                        <a class="icon-btn" href="https://discord.gg/redT9wEE6T" title="Discord"><i class="fab fa-discord" style="color:#5865F2;"></i></a>
+                        <a class="icon-btn" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" title="LinkedIn"><i class="fab fa-linkedin" style="color:#0077b5;"></i></a>
+                        <a class="icon-btn" href="https://www.instagram.com/enervyx/" title="Instagram"><i class="fab fa-instagram" style="color:#C13584;"></i></a>
+                        <a class="icon-btn" href="https://www.tiktok.com/@enervyx" title="TikTok"><i class="fab fa-tiktok" style="color:#ffffff;"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                💫 The Dev Elite Club ✨ La Villa des Codeurs Brisés 💔 dans la Jungle du PYTHON ! 🌴 <br> 
+                By Mathilde Martine PAISLEY | © 2025 Tous droits réservés
+            </div>
         </div>
     </footer>
 
-    <div id="planningModal" class="hidden fixed inset-0 bg-black/95 flex items-center justify-center z-[200] p-6 backdrop-blur-md">
-        <div class="bg-[#0b1a2b] p-10 rounded-[30px] shadow-2xl max-w-sm w-full border border-white/10">
-            <div id="planningModalContent"></div>
-        </div>
-    </div>
-
     <script>
-        // CORRECTION : Utilisation du lien de publication vers le Google Sheet Python_B1_B2_B3
+        // ---------------------------------------------------------
+        // LIEN CSV GOOGLE SHEET CONFIGURÉ
+        // ---------------------------------------------------------
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK_tBmpTFXHK-e-U-cy_XbjLY2cx4FVbP7X0fhLs34B8DLzIr6yUP_eYo4ueAIzFBABopTCQdd-TK/pub?gid=0&single=true&output=csv"; 
         
         let resources = {
-            "B1": { title: "Conception et Spécification", modules: {} },
-            "B2": { title: "Gestion et Pilotage", modules: {} },
-            "B3": { title: "Développement Logiciel", modules: {} }
+            "B1": { title: "B1: Conception et spécification d'une solution digitale", color: "bg-b1", modules: {} },
+            "B2": { title: "B2: Gestion et Pilotage de Projet Digital", color: "bg-amber-500", modules: {} },
+            "B3": { title: "B3: Développement Logiciel et Data", color: "bg-b3", modules: {} }
         };
 
-        const CDO_DATA_RAW = `Chief Digital Officer - Expert Stratégie digitale
-B1_Animer un processus de problématisation et d’idéation
-B1_M1.Analyser les besoins de clients internes/externes
-B1_M1_001_La place de la stratégie digitale dans la stratégie globale de l'entreprise
-B1_M1_002_L'environnement technologique et son impact sur l'entreprise
-B1_M1_003_La culture et les valeurs de l'entreprise
-B1_M1_004_Les études de marché
-B1_M1_005_La notion de concurrence et diversité concurrentielle
-B1_M1_006_Le benchmark digital
-B1_M1_007_Le recueil et l'analyse des besoins
-B1_M1_008_Identifier et comprendre le client et sa demande
-B1_M1_009_Le brief digital
-B1_M2.Elaborer un dispositif de veille stratégique
-B1_M2_001_La démarche de veille
-B1_M2_002_La veille technologique
-B1_M2_003_La veille concurrentielle
-B1_M2_004_Les autres types de veille
-B1_M2_005_Les matrices de veille
-B1_M2_006_L'évaluation de la fiabilité
-B1_M3.Interpréter et articuler une problématique
-B1_M3_001_La problématique d'innovation
-B1_M3_002_Orienter le projet sur le client final
-B1_M4.Identifier et analyser les risques
-B1_M4_001_Analyse des contraintes
-B1_M4_002_Analyse des risques d'un projet
-B1_M4_003_Analyse de l'impact
-B1_M5.Animer un processus créatif
-B1_M5_001_Générer des idées
-B1_M5_002_Design Thinking : Problématique
-B1_M5_003_Design Thinking : Idéation
-B1_M5_004_Design Thinking : Prototypage
-B1_M5_005_Design Thinking : Test
-B1_M5_006_Design Thinking : Itération
-B1_M5_007_Animer un brainstorming
-B1_M5_008_Dossier de conception
-B1_M6.Evaluer l’adéquation des pistes
-B1_M6_001_Etudes Quali vs Quanti
-B1_M6_002_Les études qualitatives
-B1_M6_003_Mise en oeuvre quali
-B1_M6_004_Les types d'études quanti
-B1_M6_005_Réalisation d'une enquête
-B1_M6_006_Échantillonnage
-B1_M6_007_Le numérique en renfort
-B2_Concevoir un projet de transformation
-B2_M1.Proposition de valeur
-B2_M1_001_Fondamentaux
-B2_M1_002_Objectifs
-B2_M1_003_Communiquer sa valeur
-B2_M2.Organisation et Ressources
-B2_M2_001_Planification Web
-B2_M2_002_Note de cadrage
-B2_M2_003_Cahier des charges
-B2_M2_004_Acteurs du projet
-B2_M2_005_Sélection des prestataires
-B2_M2_006_Tableau de bord
-B2_M3.Modèle économique
-B2_M3_001_Budget digital
-B2_M3_002_Rentabilité projet
-B2_M3_003_Executive Summary
-B2_M4.Business Plan
-B2_M4_001_Structuration BP
-B2_M4_002_Faisabilité financière
-B2_M4_003_Indicateurs clés
-B2_M5.Soutenance projet
-B2_M5_001_Présenter son BP
-B2_M5_002_Soutenir son BP
-B2_M5_003_Présentation écrite
-B2_M5_004_Résultats impactants
-B3_Stratégie de communication
-B3_M1.Cibles et Personas
-B3_M1_001_Identifier les cibles
-B3_M1_002_Objectifs de com
-B3_M1_003_Cibles par réseaux
-B3_M1_004_Création des personas
-B3_M2.Com Interne
-B3_M2_001_Le positionnement
-B3_M2_002_Objectifs internes
-B3_M2_003_Cibles internes
-B3_M2_004_Axe créatif
-B3_M2_005_Le projet de com
-B3_M2_006_Objectifs SMART
-B3_M2_007_Mesure efficacité
-B3_M2_008_Conduite du changement
-B3_M3.Com Externe
-B3_M3_001_Positionnement externe
-B3_M3_002_Rôle du plan de com
-B3_M3_003_Composantes du plan
-B3_M3_004_Médias cibles
-B3_M3_005_Budgétisation
-B3_M4.Campagne Créative
-B3_M4_001_Messages clés
-B3_M4_002_Structurer son message
-B3_M4_003_Production message
-B3_M4_004_Le storytelling
-B3_M4_005_Supports de com
-B4_Pilotage de Projet Innovation
-B4_M1.Prototypage pistes
-B4_M1_001_Phase idéation
-B4_M1_002_Prototype solution
-B4_M1_003_Maquettes UX
-B4_M1_004_Parcours interactif
-B4_M2.Tests Utilisateurs
-B4_M2_001_Test utilisateur
-B4_M2_002_Eval Quanti
-B4_M2_003_Eval Quali
-B4_M2_004_Comportement usager
-B4_M2_005_Fiches d'observation
-B4_M2_006_Rapports de test
-B4_M3.Solution Finale
-B4_M3_001_Démarche Qualité
-B4_M3_002_Mesure Qualité
-B4_M3_003_Nature des livrables
-B4_M3_004_Normes et Réglementation
-B4_M3_005_Low tech
-B4_M3_006_Présentation maquette
-B4_M4.Revues de Projet
-B4_M4_001_Cycle de vie
-B4_M4_002_Participants
-B4_M4_003_Réunions structurées
-B4_M4_004_Outils de revue
-B4_M5.Évaluation Objectifs
-B4_M5_001_Cahier livrables
-B4_M5_002_Expérience Client
-B4_M5_003_Management Qualité
-B4_M6.Amélioration Continue
-B4_M6_001_Indicateurs Qualité
-B4_M6_002_Gouvernance
-B4_M6_003_Démarche Itérative
-B4_M6_004_Recommandations
-B5_Management d'Équipe
-B5_M1.Sélection Équipe
-B5_M1_001_Recrutement digital
-B5_M1_002_Compétences et talents
-B5_M1_003_Prestataires
-B5_M1_004_Suivi performance
-B5_M1_005_Evaluation prestation
-B5_M2.Adéquation Profils
-B5_M2_001_Cartographie skills
-B5_M2_002_Softskills
-B5_M2_003_Maîtrise processus
-B5_M2_004_Relations équipe
-B5_M2_005_Travail en équipe
-B5_M2_006_Communication équipe
-B5_M2_007_Dysfonctionnements
-B5_M3.Direction de Projet
-B5_M3_001_Développer l'adhésion
-B5_M3_002_Business Model Canvas
-B5_M3_003_Présentation écrite
-B5_M3_004_Politique inclusion
-B5_M3_005_Lutte discrimination
-B6_Performance Technique (CDO)
-B6_M1.Pilotage Projet Technique
-B6_M1_001_Spécificités digital
-B6_M1_002_Analyse besoins
-B6_M1_003_Solution cible
-B6_M1_004_Opportunité projet
-B6_M1_005_Choix technologique
-B6_M1_006_CDG Technique
-B6_M1_007_Besoin vs Solution
-B6_M1_008_Planning
-B6_M1_010_MOA
-B6_M1_011_Gouvernance
-B6_M2.Architecture Technique
-B6_M2_001_Introduction aux architectures multicouches
-B6_M2_002_Design patterns
-B6_M2_003_Frameworks & ORM
-B6_M2_004_Microservices
-B6_M2_005_Eco-conception
-B6_M2_006_Services Cloud
-B6_M2_007_SaaS
-B6_M2_008_Sécurité Archi
-B6_M2_009_Faisabilité
-B6_M2_010_Desc Technique
-B6_M2_011_Suivi Budget
-B6_M2_012_Dossier Architecture
-B6_M3.Tester sa solution digitale
-B6_M3_001_La démarche qualité en développement
-B6_M3_002_La démarche DevOps
-B6_M3_003_CI (Intégration)
-B6_M3_004_CD (Livraison)
-B6_M3_005_Plans de test
-B6_M3_006_Scénario test
-B6_M3_007_Environnement test
-B6_M3_008_Stratégies des tests de sécurité
-B6_M3_009_Planif tests
-B6_M3_010_Validation
-B6_M3_011_Automatisation
-B6_M4.Résolution Technique
-B6_M4_001_Situation critique
-B6_M4_002_Analyse causale
-B6_M4_003_DT Technique
-B7_Expert Stratégie digitale (CDO)
-B7_M1.Brand Content
-B7_M1_001_Stratégie Contenu
-B7_M1_002_Étapes Contenu
-B7_M1_003_KPI Contenu
-B7_M1_004_Développement
-B7_M1_005_Création Contenu
-B7_M1_006_Réussir son contenu
-B7_M1_007_Direction artistique
-B7_M1_008_Production Digitale
-B7_M1_009_Contenu vs Cible
-B7_M1_010_Brand Content
-B7_M1_011_Storytelling
-B7_M1_012_Marque
-B7_M2.Promotion & SEO
-B7_M2_001_Sites Internet
-B7_M2_002_Référencement
-B7_M2_003_Techniques SEO
-B7_M2_004_UX/UI Design
-B7_M2_005_Coûts Promotion
-B7_M2_006_Social Ads
-B7_M2_007_Formes Communication
-B7_M2_008_Supports Media
-B7_M2_009_Audio-visuel
-B7_M2_010_Mix Marketing
-B7_M2_011_Mesure Efficacité
-B7_M3.Marketing Innovation
-B7_M3_001_Ligne éditoriale
-B7_M3_002_Outils Marketing
-B7_M3_003_Plan d'action
-B7_M3_004_Contenu via IA`;
+        const linkCategories = ['Intro_Python_Gamma', 'Cours_Python', 'Audio', 'Excel', 'Infographie', 'Présentation', 'Video'];
 
-        let resourcesCDO = {};
-        const linkCategories = [
-            { id: 'Intro_Python_Gamma', title: 'Synthèse', icon: '📑' },
-            { id: 'Cours_Python', title: 'Cours', icon: '🐍' },
-            { id: 'Audio', title: 'Audio', icon: '🎧' },
-            { id: 'Excel', title: 'Excel', icon: '📊' },
-            { id: 'Infographie', title: 'Visuel', icon: '🖼️' },
-            { id: 'Présentation', title: 'Slides', icon: '📽️' },
-            { id: 'Video', title: 'Vidéo', icon: '📹' }
-        ];
+        // --- CONFIGURATION DES ICÔNES ---
+        const linkIcons = {
+            // Utilisation d'une balise IMG pour le logo Gamma (assurez-vous d'avoir Icon.png dans le même dossier)
+            "Intro_Python_Gamma": { icon: '<img src="Icon.png" alt="Gamma" class="w-5 h-5 object-contain" onerror="this.style.display=\'none\';">', title: "Introduction / Gamma", linkClass: "bg-indigo-600 hover:bg-indigo-700" },
+            "Cours_Python": { icon: "🐍", title: "Cours Python", linkClass: "bg-cta hover:bg-yellow-600" },
+            "Audio": { icon: "🎧", title: "Audio", linkClass: "bg-teal-600 hover:bg-teal-700" },
+            "Excel": { icon: "📊", title: "Excel", linkClass: "bg-green-600 hover:bg-green-700" },
+            "Infographie": { icon: "🖼️", title: "Infographie", linkClass: "bg-alert hover:bg-orange-700" }, 
+            "Présentation": { icon: "📽️", title: "Présentation", linkClass: "bg-title hover:bg-gray-600" },
+            "Video": { icon: "📹", title: "Video", linkClass: "bg-red-500 hover:bg-red-600" }
+        };
 
-        let progressStore = JSON.parse(localStorage.getItem('progressStore') || '{}');
-
-        function parseCDO() {
-            const lines = CDO_DATA_RAW.trim().split('\n');
-            let currentBloc = null; let currentModule = null;
-            lines.forEach(line => {
-                const text = line.trim();
-                if (!text || text === "Chief Digital Officer - Expert Stratégie digitale") return;
-                if (/^B\d+_/.test(text) && !text.includes('_M')) {
-                    const id = text.split('_')[0];
-                    resourcesCDO[id] = { title: text.replace(/^B\d+_/, ''), modules: {} };
-                    currentBloc = id;
-                } else if (text.includes('_M') && !text.includes('_00')) {
-                    const modName = text.replace(/^B\d+_/, '');
-                    resourcesCDO[currentBloc].modules[modName] = [];
-                    currentModule = modName;
-                } else if (/B\d+_M\d+_\d+/.test(text)) {
-                    const fullCode = text.match(/^(B\d+_M\d+_\d+)/)[1];
-                    const cleanTitle = text.substring(fullCode.length).replace(/^[-_\s]+/, '');
-                    resourcesCDO[currentBloc].modules[currentModule].push({
-                        title: cleanTitle, fullCode, links: { "Intro_Python_Gamma": null, "Cours_Python": null, "Audio": null, "Excel": null, "Infographie": null, "Présentation": null, "Video": null }
-                    });
-                }
-            });
-        }
+        const progressStore = JSON.parse(localStorage.getItem('progressStore') || '{}');
 
         function fetchDataAndRender() {
-            parseCDO();
             Papa.parse(GOOGLE_SHEET_CSV_URL, {
-                download: true, header: true, skipEmptyLines: true,
+                download: true,
+                header: true,
+                skipEmptyLines: true,
                 complete: function(results) {
-                    processCSV(results.data);
+                    processCSVData(results.data);
                     document.getElementById('loading-status').style.display = 'none';
-                    showTab('accueil');
+                    renderAccueil();
+                },
+                error: function(err) {
+                    document.getElementById('loading-status').innerHTML = `<p class="text-red-600">Erreur de chargement : ${err.message}</p>`;
                 }
             });
         }
 
-        function processCSV(data) {
-            let currentBloc = null; let currentModule = null;
+        // --- MOTEUR CORRIGÉ : RESPECT STRICT DE LA CODIFICATION ---
+        function processCSVData(data) {
+            resources["B1"].modules = {};
+            resources["B2"].modules = {};
+            resources["B3"].modules = {};
+
+            let currentBloc = null;
+            let currentModuleKey = null; 
+
             data.forEach(row => {
-                let title = row['Titres des catégories']; if (!title) return;
-                
-                // LOGIQUE 1 : PYTHON (BLOCS B1, B2, B3)
-                if (/^B[1-3]_/.test(title) && !title.includes('_M')) {
-                    currentBloc = title.split('_')[0];
-                } else if (title.includes('_M') && !title.includes('_S') && !/B\d+_M\d+_\d+/.test(title)) {
-                    if (currentBloc) {
-                        currentModule = title.replace(/^B\d+_/, '').replace(/_/g, ' - ');
-                        if (!resources[currentBloc].modules[currentModule]) resources[currentBloc].modules[currentModule] = [];
+                let titleRaw = row['Titres des catégories'];
+                if (!titleRaw) return; 
+
+                // 1. DÉTECTION BLOC
+                if (/^B[1-3]_/.test(titleRaw) && !titleRaw.includes('_M')) {
+                    let parts = titleRaw.split('_');
+                    if(parts.length > 0) currentBloc = parts[0];
+                }
+                // 2. DÉTECTION MODULE
+                // C'est un module si ça contient "_M" mais PAS "_S"
+                else if (titleRaw.includes('_M') && !titleRaw.includes('_S')) {
+                    if (currentBloc && resources[currentBloc]) {
+                        
+                        let displayTitle = titleRaw.replace(/^B\d+_/, '').replace(/_/g, ' - ');
+                        currentModuleKey = displayTitle; 
+
+                        if (!resources[currentBloc].modules[currentModuleKey]) {
+                            resources[currentBloc].modules[currentModuleKey] = [];
+                        }
                     }
-                } else if (title.includes('_S')) {
-                    if (currentBloc && currentModule) {
-                        let fullCode = (title.match(/^(B\d+_M\d+_S\d+)/) || ["","CODE"])[1];
-                        resources[currentBloc].modules[currentModule].push({
-                            title: title.substring(fullCode.length).replace(/^[-_\s]+/, ''),
-                            fullCode, links: { "Intro_Python_Gamma": row['Intro_Python_Gamma']||null, "Cours_Python": row['Cours_Python']||null, "Audio": row['Audio']||null, "Excel": row['Excel']||null, "Infographie": row['Infographie']||null, "Présentation": row['Présentation']||null, "Video": row['Video']||null }
+                }
+                // 3. DÉTECTION SESSION
+                // C'est une session si ça contient "_S"
+                else if (titleRaw.includes('_S')) {
+                    if (currentBloc && currentModuleKey && resources[currentBloc]) {
+                        
+                        // EXTRACTION DU CODE COMPLET (B3_M07_S001)
+                        let fullCode = "";
+                        let cleanTitle = titleRaw;
+
+                        // Regex pour capturer le code : B chiffre _ M chiffre _ S chiffre
+                        let matchCode = titleRaw.match(/^(B\d+_M\d+_S\d+)/);
+                        
+                        if (matchCode) {
+                            fullCode = matchCode[1]; // Ex: B1_M01_S001
+                            cleanTitle = titleRaw.substring(fullCode.length).replace(/^[-_\s]+/, '');
+                        } else {
+                            fullCode = "CODE?";
+                        }
+
+                        // Liens
+                        let rawGamma = row['Intro_Python_Gamma'];
+                        let gammaLink = null;
+                        if (rawGamma && rawGamma.trim() !== "") {
+                            let linkMatch = rawGamma.match(/(https?:\/\/[^\s]+)/);
+                            gammaLink = linkMatch ? linkMatch[0] : rawGamma.trim();
+                        }
+
+                        const links = {
+                            "Intro_Python_Gamma": gammaLink,
+                            "Cours_Python": row['Cours_Python'] ? row['Cours_Python'].trim() : null,
+                            "Audio": row['Audio'] ? row['Audio'].trim() : null,
+                            "Excel": row['Excel'] ? row['Excel'].trim() : null,
+                            "Infographie": row['Infographie'] ? row['Infographie'].trim() : null,
+                            "Présentation": row['Présentation'] ? row['Présentation'].trim() : null,
+                            "Video": row['Video'] ? row['Video'].trim() : null
+                        };
+
+                        resources[currentBloc].modules[currentModuleKey].push({
+                            title: cleanTitle,
+                            fullCode: fullCode, // On stocke le code complet pour l'affichage
+                            links: links
                         });
                     }
                 }
-                
-                // LOGIQUE 2 : EXPERT CDO (Mise à jour par détection de code exact)
-                Object.keys(resourcesCDO).forEach(bk => {
-                    Object.keys(resourcesCDO[bk].modules).forEach(mk => {
-                        resourcesCDO[bk].modules[mk].forEach(subj => {
-                            if (title.includes(subj.fullCode)) {
-                                subj.links["Intro_Python_Gamma"] = row['Intro_Python_Gamma'] || null;
-                                subj.links["Cours_Python"] = row['Cours_Python'] || null;
-                                subj.links["Audio"] = row['Audio'] || null;
-                                subj.links["Excel"] = row['Excel'] || null;
-                                subj.links["Infographie"] = row['Infographie'] || null;
-                                subj.links["Présentation"] = row['Présentation'] || null;
-                                subj.links["Video"] = row['Video'] || null;
-                            }
-                        });
-                    });
-                });
             });
         }
 
-        function getSubjectProgress(blocKey, index) {
-            let source = blocKey.startsWith('CDO') ? resourcesCDO : resources;
-            let key = blocKey.startsWith('CDO') ? blocKey.replace('CDO_', '') : blocKey;
-            const subj = Object.values(source[key].modules).flat()[index];
-            if (!subj) return 0;
-            const id = `${blocKey}_${index}`;
-            let avail = 0; let done = 0;
-            for (let k of linkCategories) {
-                if (subj.links[k.id]) { avail++; if (progressStore[blocKey]?.[id]?.[k.id]) done++; }
-            }
-            return avail > 0 ? Math.round((done / avail) * 100) : 0;
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mobileNav');
+            const button = document.getElementById('hamburgerBtn');
+            nav.classList.toggle('visible');
+            button.classList.toggle('active');
         }
 
-        function toggleResource(blocKey, subjId, type) {
-            progressStore[blocKey] = progressStore[blocKey] || {};
-            progressStore[blocKey][subjId] = progressStore[blocKey][subjId] || {};
-            progressStore[blocKey][subjId][type] = !progressStore[blocKey][subjId][type];
+        function saveProgress() {
             localStorage.setItem('progressStore', JSON.stringify(progressStore));
-            renderSubjectRow(blocKey, parseInt(subjId.split('_').slice(-1)[0]));
+            updateAllProgressBars();
         }
-
-        function validateRow(blocKey, idx) {
-            let source = blocKey.startsWith('CDO') ? resourcesCDO : resources;
-            let key = blocKey.startsWith('CDO') ? blocKey.replace('CDO_', '') : blocKey;
-            const subj = Object.values(source[key].modules).flat()[idx];
-            const id = `${blocKey}_${idx}`;
-            let allOk = true;
-            for (let k of linkCategories) { if (subj.links[k.id] && !progressStore[blocKey]?.[id]?.[k.id]) allOk = false; }
-            const state = !allOk;
+        
+        function toggleResourceCompletion(blocKey, subjectId, resourceType) {
             progressStore[blocKey] = progressStore[blocKey] || {};
-            progressStore[blocKey][id] = progressStore[blocKey][id] || {};
-            for (let k of linkCategories) { if (subj.links[k.id]) progressStore[blocKey][id][k.id] = state; }
+            progressStore[blocKey][subjectId] = progressStore[blocKey][subjectId] || {};
+            progressStore[blocKey][subjectId][resourceType] = !progressStore[blocKey][subjectId][resourceType];
             localStorage.setItem('progressStore', JSON.stringify(progressStore));
-            renderSubjectRow(blocKey, idx);
-        }
-
-        function renderSubjectRow(blocKey, idx) {
-            let source = blocKey.startsWith('CDO') ? resourcesCDO : resources;
-            let key = blocKey.startsWith('CDO') ? blocKey.replace('CDO_', '') : blocKey;
-            const subj = Object.values(source[key].modules).flat()[idx];
-            if (!subj) return;
-            const id = `${blocKey}_${idx}`;
-            const progress = getSubjectProgress(blocKey, idx);
-            const isDone = progress === 100;
-            const target = document.getElementById(`row-${id}`);
             
-            let miniCardsHtml = linkCategories.map(cat => {
-                const link = subj.links[cat.id];
-                const checked = progressStore[blocKey]?.[id]?.[cat.id];
-                const isActive = link !== null && link !== "" && link.toString().startsWith("http");
-                return `
-                <div class="res-box ${isActive ? 'full' : 'empty'}">
-                    <span class="res-label">${cat.title}</span>
-                    <div class="flex items-center gap-2">
-                        ${isActive ? `<a href="${link}" target="_blank" class="text-xl">${cat.icon}</a>` : `<span class="text-xl">${cat.icon}</span>`}
-                        <button onclick="toggleResource('${blocKey}','${id}','${cat.id}')" class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] ${checked ? 'bg-[#00D2BE]' : 'bg-gray-600'} shadow-sm">
-                            <i class="fas ${checked ? 'fa-check' : 'fa-plus'}"></i>
-                        </button>
-                    </div>
-                </div>`;
-            }).join('');
+            const targetElement = document.getElementById(`subject-row-${subjectId}`);
+            if (targetElement) { renderSingleSubjectRow(blocKey, subjectId, targetElement); }
+            if (currentTab === 'accueil') { renderAccueil(); }
+        }
 
-            const html = `
-                <div id="row-${id}" class="subject-card-3d ${isDone ? 'done' : ''}">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="jp-text font-mono text-[10px] opacity-40">${subj.fullCode}</span>
-                        <div class="flex items-center gap-3">
-                            <button onclick="validateRow('${blocKey}', ${idx})" class="btn-neo btn-neo-check ${isDone ? 'done' : ''}"><i class="fas fa-check"></i></button>
-                            <button onclick="showPlanningModal('${blocKey}', ${idx})" class="btn-neo btn-neo-cal" title="Planifier la relecture"><i class="fas fa-calendar-day"></i></button>
+        function validateSubjectLine(blocKey, subjectIndex) {
+            const subjectId = `${blocKey}_${subjectIndex}`;
+            const subject = getSubjectById(blocKey, subjectIndex);
+            
+            let allChecked = true;
+            for (const type in subject.links) {
+                if (subject.links[type] !== null && linkCategories.includes(type) && !isResourceCompleted(blocKey, subjectId, type)) {
+                    allChecked = false;
+                    break;
+                }
+            }
+            const newState = !allChecked; 
+            for (const type in subject.links) {
+                if (subject.links[type] !== null && linkCategories.includes(type)) {
+                    progressStore[blocKey][subjectId] = progressStore[blocKey][subjectId] || {};
+                    progressStore[blocKey][subjectId][type] = newState;
+                }
+            }
+            localStorage.setItem('progressStore', JSON.stringify(progressStore));
+            const targetElement = document.getElementById(`subject-row-${subjectId}`);
+            if (targetElement) { renderSingleSubjectRow(blocKey, subjectId, targetElement); }
+            if (currentTab === 'accueil') { renderAccueil(); }
+        }
+
+        function getSubjectProgress(blocKey, subjectIndex) {
+            const subjectId = `${blocKey}_${subjectIndex}`;
+            const subject = getSubjectById(blocKey, subjectIndex);
+            if (!subject) return 0;
+            let totalAvailable = 0;
+            let completedCount = 0;
+            for (const type in subject.links) {
+                if (subject.links[type] !== null && linkCategories.includes(type)) {
+                    totalAvailable++;
+                    if (isResourceCompleted(blocKey, subjectId, type)) { completedCount++; }
+                }
+            }
+            return totalAvailable > 0 ? Math.round((completedCount / totalAvailable) * 100) : 0;
+        }
+
+        function isResourceCompleted(blocKey, subjectId, resourceType) {
+            return progressStore[blocKey] && progressStore[blocKey][subjectId] && progressStore[blocKey][subjectId][resourceType];
+        }
+        
+        function getSubjectById(blocKey, index) {
+            const moduleKeys = Object.keys(resources[blocKey].modules);
+            let globalIndex = 0;
+            for(let i = 0; i < moduleKeys.length; i++) {
+                const sessions = resources[blocKey].modules[moduleKeys[i]];
+                for(let j = 0; j < sessions.length; j++) {
+                    if (globalIndex === index) { return sessions[j]; }
+                    globalIndex++;
+                }
+            }
+            return null;
+        }
+
+        function renderSingleSubjectRow(blocKey, subjectId, targetElement) {
+            const globalIndex = parseInt(subjectId.split('_')[1]);
+            const session = getSubjectById(blocKey, globalIndex);
+            
+            const progressPercent = getSubjectProgress(blocKey, globalIndex);
+            const isFullyCompleted = progressPercent === 100;
+            
+            let linksHtml = '';
+            
+            linkCategories.forEach(catKey => {
+                const link = session.links && session.links[catKey] ? session.links[catKey] : null;
+                const meta = linkIcons[catKey];
+                const isAvailable = link !== null && link !== ""; 
+                const isChecked = isResourceCompleted(blocKey, subjectId, catKey);
+                
+                let linkButton;
+                if (isAvailable) {
+                    linkButton = `
+                        <a href="${link}" title="${meta.title} (Lien)" target="_blank"
+                           class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">
+                           ${meta.icon}
+                        </a>`;
+                } else {
+                    linkButton = `
+                        <span title="${meta.title} (En attente)" 
+                              class="inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} empty-link-button text-lg">
+                           ${meta.icon}
+                        </span>`;
+                }
+                
+                const checkButton = `
+                    <button title="${meta.title} (Marquer comme lu)" 
+                            onclick="toggleResourceCompletion('${blocKey}', '${subjectId}', '${catKey}')" 
+                            class="progress-check-btn inline-flex items-center justify-center w-6 h-6 rounded-full text-white text-sm transition duration-150 
+                            ${isChecked ? 'bg-progress hover:bg-red-500' : 'bg-gray-300 hover:bg-gray-400'}" 
+                            ${!isAvailable ? 'disabled' : ''}>
+                        <i class="fas ${isChecked ? 'fa-check' : 'fa-plus'}"></i>
+                    </button>`;
+                
+                linksHtml += `<div class="flex items-center space-x-1">${linkButton}${checkButton}</div>`;
+            });
+
+            let resourceCount = 0;
+            linkCategories.forEach(k => { if(session.links && session.links[k]) resourceCount++; });
+            const isAwaitingAll = resourceCount === 0;
+            const lineClass = isAwaitingAll ? 'awaiting-subject' : 'text-gray-700';
+            
+            const accentColorClassInner = (blocKey === 'B1') ? 'text-b1' : (blocKey === 'B2') ? 'text-b2' : 'text-title';
+            const isCompletedLineClass = isFullyCompleted ? 'border-l-4 border-progress' : 'border-l-4 border-gray-100';
+
+            // --- AFFICHAGE : CODE COMPLET + TITRE ---
+            targetElement.outerHTML = `
+                <div id="subject-row-${subjectId}" class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100 ${isCompletedLineClass}">
+                    <div class="flex items-center flex-grow min-w-0 mb-2 sm:mb-0">
+                        <label for="check_${subjectId}" class="text-base font-medium cursor-pointer ${lineClass} flex items-center min-w-0">
+                            <!-- Code complet en gras (B1_M01_S001) -->
+                            <span class="font-mono ${accentColorClassInner} mr-2 font-bold flex-shrink-0 text-sm tracking-tight">${session.fullCode}</span>
+                            <span class="truncate" title="${session.title}"> - ${session.title}</span>
+                            ${isAwaitingAll ? `<i class="fas fa-triangle-exclamation text-alert ml-3 awaiting-indicator" title="Sujet en attente de ressources"></i>` : ''}
+                        </label>
+                    </div>
+                    <div class="flex items-center space-x-2 flex-shrink-0 mt-2 sm:mt-0 flex-wrap justify-end gap-y-2">
+                        <div class="link-icon-container flex space-x-2 flex-shrink-0">
+                            ${linksHtml}
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button title="${progressPercent}% d'avancement des ressources" class="w-16 bg-gray-200 text-title py-1 rounded-lg text-xs font-bold text-progress">${progressPercent}%</button>
+                            <button onclick="validateSubjectLine('${blocKey}', ${globalIndex})" title="${isFullyCompleted ? 'Décocher tout' : 'Valider toute la ligne'}" class="w-8 h-8 rounded-full text-white transition duration-150 flex items-center justify-center ${isFullyCompleted ? 'bg-progress hover:bg-red-500' : 'bg-gray-400 hover:bg-progress'}"><i class="fas ${isFullyCompleted ? 'fa-check' : 'fa-plus'}"></i></button>
+                            <button onclick="showPlanningOptions('${blocKey}', ${globalIndex}, '${session.title.replace(/'/g, "\\'")}')" title="Planifier la relecture (Google Agenda)" class="w-8 h-8 rounded-full bg-title hover:bg-gray-600 text-white transition duration-150 flex items-center justify-center"><i class="fas fa-clock"></i></button>
                         </div>
                     </div>
-                    <h4 class="subject-title border-l-2 border-[var(--neon-gold)] pl-3">${subj.title}</h4>
-                    <div class="flex flex-wrap gap-2.5 pt-4 border-t border-white/5">
-                        ${miniCardsHtml}
-                    </div>
-                    <div class="mt-auto text-right pt-2">
-                        <span class="text-[9px] font-bold text-white px-2 py-0.5 bg-[#FF2E63] rounded-full">${progress}%</span>
-                    </div>
                 </div>`;
-            if(target) target.outerHTML = html;
-            return html;
         }
 
-        let currentTab = 'accueil';
-        function showTab(t) {
-            currentTab = t;
-            const cont = document.getElementById('resources-container');
-            const titleElem = document.getElementById('page-main-title');
-            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-            document.getElementById(`nav-${t}`).classList.add('active');
+        function generateGoogleCalendarLink(title, daysFromNow, subjectTitle) {
+            const date = new Date();
+            date.setDate(date.getDate() + daysFromNow);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const start = `${year}${month}${day}T100000`; 
+            const end = `${year}${month}${day}T120000`; 
+            const details = encodeURIComponent(`Relecture planifiée (Alerte 2h avant) pour la montée en compétence. Sujet: ${subjectTitle}`);
+            const text = encodeURIComponent(`[RELECTURE] ${subjectTitle}`);
+            return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}&sf=true&output=xml`;
+        }
+        
+        function showPlanningOptions(blocKey, subjectIndex, subjectTitle) {
+            const modalContent = document.getElementById('planningModalContent');
+            const options = [ { days: 3, label: "Relire dans 3 jours" }, { days: 7, label: "Relire dans 7 jours (J+7)" }, { days: 10, label: "Relire dans 10 jours" }, { days: 30, label: "Relire dans 30 jours (J+30)" }, { days: 60, label: "Relecture approfondie (J+60)" }, { days: 90, label: "Relecture Finale (J+90)" } ];
+            const optionsHtml = options.map(opt => { const link = generateGoogleCalendarLink(blocKey, opt.days, subjectTitle); return `<a href="${link}" onclick="closeModal('planningModal')" class="w-full bg-title text-white py-2 px-4 rounded-lg hover:opacity-90 transition duration-150 text-center font-semibold mb-2 flex justify-between items-center">${opt.label} <i class="fas fa-external-link-alt ml-2 text-cta"></i></a>`; }).join('');
+            modalContent.innerHTML = `<h3 class="text-xl font-bold text-title mb-4">Planifier la Relecture du Sujet</h3><p class="text-sm text-gray-600 mb-4 font-code truncate">${subjectTitle}</p><div class="space-y-2">${optionsHtml}</div><button onclick="closeModal('planningModal')" class="mt-4 w-full text-title border border-gray-300 py-2 rounded-lg hover:bg-gray-100">Fermer</button>`;
+            document.getElementById('planningModal').classList.remove('hidden');
+        }
 
-            cont.innerHTML = '';
-            if (t === 'accueil') { titleElem.innerText = "Tableau de Bord"; renderAccueil(); }
-            else if (t === 'CDO') { titleElem.innerText = "Expert Stratégie Digitale"; renderBlocData('CDO', true); }
-            else { titleElem.innerText = `Bloc ${t}`; renderBlocData(t, false); }
-            window.scrollTo(0, 0);
+        function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
+
+        let currentTab = 'accueil';
+
+        function showTab(tabName) {
+            currentTab = tabName;
+            document.getElementById('resources-container').innerHTML = '';
+            document.querySelectorAll('.tab-button').forEach(btn => { btn.classList.remove('active-tab', 'text-title', 'border-cta'); btn.classList.add('text-gray-600'); btn.classList.remove('bg-gray-100'); });
+            const activeTabButton = document.getElementById(`tab-${tabName}`);
+            activeTabButton.classList.add('active-tab', 'text-title');
+            activeTabButton.classList.remove('text-gray-600');
+            if (tabName === 'accueil') { renderAccueil(); } else { renderBloc(tabName); }
         }
 
         function renderAccueil() {
-            const cont = document.getElementById('resources-container');
-            let html = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">`;
-            ['B1', 'B2', 'B3'].forEach(k => {
-                html += `
-                <div class="module-entry p-8 flex flex-col items-start gap-4">
-                    <div class="text-5xl">🐍</div>
-                    <h3 class="font-bold text-xl text-white">Python ${k}</h3>
-                    <div class="jp-text text-[10px] font-mono opacity-50 uppercase">トレーニングブロック</div>
-                    <button onclick="showTab('${k}')" class="mt-4 w-full bg-[var(--neon-gold)] text-[#0F2C48] py-3 rounded-xl font-bold text-xs">Ouvrir 🔥</button>
-                </div>`;
-            });
-            html += `
-            <div class="module-entry p-8 border-indigo-500/30 flex flex-col items-start gap-4">
-                <div class="text-5xl">🦾</div>
-                <h3 class="font-bold text-xl text-indigo-200">Expert CDO</h3>
-                <div class="text-indigo-400 text-[10px] font-mono opacity-50 uppercase">専門知識</div>
-                <button onclick="showTab('CDO')" class="mt-4 w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-xs shadow-lg">Lancer 🚀</button>
-            </div>`;
-            html += `</div>`;
-            cont.innerHTML = html;
+            const container = document.getElementById('resources-container');
+            
+            const blocksHtml = Object.keys(resources).map(key => {
+                let blocTotal = 0;
+                let blocCompleted = 0;
+                let tempCounter = 0;
+                
+                for (const module in resources[key].modules) {
+                    resources[key].modules[module].forEach(subj => {
+                        const progress = getSubjectProgress(key, tempCounter);
+                        if (progress === 100) blocCompleted++;
+                        blocTotal++;
+                        tempCounter++;
+                    });
+                }
+
+                const percentage = blocTotal > 0 ? Math.round((blocCompleted / blocTotal) * 100) : 0;
+                const blocTitle = resources[key].title.split(':')[0];
+                let blocColorClass, accentColorClass;
+                if (key === 'B1') { blocColorClass = 'border-b1'; accentColorClass = 'text-b1'; } else if (key === 'B2') { blocColorClass = 'border-b2'; accentColorClass = 'text-b2'; } else { blocColorClass = 'border-title'; accentColorClass = 'text-title'; }
+                const planningSteps = [ { label: "1ère Lecture (Aujourd'hui)", days: 0 }, { label: "2ème Lecture (J+7)", days: 7 }, { label: "3ème Lecture (J+30)", days: 30 }, { label: "Relecture (J+60)", days: 60 }, { label: "Relecture (J+90)", days: 90 }, { label: "Relecture (J+180 - 6 mois)", days: 180 } ];
+                const planningHtml = planningSteps.map(step => `<div class="flex items-center justify-between p-3 border-b border-gray-100 last:border-b-0"><span class="text-sm text-gray-700">${step.label}</span><a href="${generateGoogleCalendarLink(blocTitle, step.days, `[BLOC ${key}] Relecture ${step.label}`)}" class="bg-cta hover-bg-cta text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center"><i class="fas fa-calendar-plus mr-1"></i> Planifier</a></div>`).join('');
+                return `<div class="p-6 rounded-xl shadow-lg bg-white space-y-4 home-card ${blocColorClass}" style="border-top: 4px solid var(--color-cta);"><h3 class="text-xl font-semibold flex items-center mb-4 text-title"><i class="fas fa-cubes mr-3 ${accentColorClass}"></i> ${blocTitle} (${blocCompleted}/${blocTotal} sujets validés)</h3><div class="relative pt-1"><div class="flex mb-2 items-center justify-between"><div class="text-right"><span class="text-xs font-semibold inline-block text-progress">${percentage}% Sujets Terminés</span></div></div><div class="flex h-2 mb-4 overflow-hidden text-xs bg-gray-200 rounded"><div style="width:${percentage}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-progress"></div></div></div><div class="bg-surface text-title p-4 rounded-lg border border-gray-200"><h4 class="font-semibold mb-2 flex items-center text-title"><i class="fas fa-clock mr-2 ${accentColorClass}"></i> Horloge de Relecture du Bloc</h4>${planningHtml}</div><button onclick="showTab('${key}')" class="w-full bg-cta text-title py-2 rounded-lg hover-bg-cta transition duration-150 font-semibold">Accéder aux sujets détaillés</button></div>`;
+            }).join('');
+            container.innerHTML = `<div class="bg-surface p-8 rounded-xl shadow-lg border-l-4 border-cta"><h2 class="text-3xl font-bold text-title mb-4">Synthèse de la Progression 📊</h2><p class="mt-2 text-lg text-gray-700 mb-6">Utilisez l'horloge pour planifier vos relectures de blocs ou validez les sujets dans les onglets B1, B2, B3 pour suivre votre avancement.</p><div class="grid grid-cols-1 md:grid-cols-3 gap-6">${blocksHtml}</div></div>`;
         }
 
-        function renderBlocData(blocId, isCDO) {
-            const cont = document.getElementById('resources-container');
-            let html = "";
-            let source = isCDO ? resourcesCDO : {[blocId]: resources[blocId]};
+        function renderBloc(blocKey) {
+            const container = document.getElementById('resources-container');
+            const bloc = resources[blocKey];
+            let html = '';
+            let sessionCounter = 0;
+            let accentColorClass, blocBorderColorClass;
+            if (blocKey === 'B1') { accentColorClass = 'text-b1'; blocBorderColorClass = 'border-b1'; } else if (blocKey === 'B2') { accentColorClass = 'text-b2'; blocBorderColorClass = 'border-b2'; } else { accentColorClass = 'text-title'; blocBorderColorClass = 'border-title'; }
+            html += `<section class="bloc-section bg-surface p-6 sm:p-8 rounded-xl shadow-lg border-l-4 ${blocBorderColorClass} space-y-6"><h2 class="2xl sm:text-3xl font-bold text-title border-b border-gray-300 pb-3 mb-4 flex items-center"><i class="fas fa-layer-group mr-3 ${accentColorClass}"></i> ${bloc.title}</h2><div class="space-y-4">`;
+            
+            let globalSubjectIndex = 0;
 
-            Object.keys(source).forEach(bk => {
-                const currentBlocKey = isCDO ? `CDO_${bk}` : blocId;
-                const blocTitle = isCDO ? resourcesCDO[bk].title : resources[blocId].title;
+            for (const moduleTitle in bloc.modules) {
+                const sessions = bloc.modules[moduleTitle];
+                // ID unique pour l'accordéon (pas d'espace)
+                const moduleId = blocKey + "_" + moduleTitle.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
                 
-                html += `
-                <div class="mb-12">
-                    <h2 class="bloc-title">
-                        <i class="fas fa-layer-group text-sm"></i> ${bk}: ${blocTitle}
-                    </h2>
-                    <div class="space-y-4">`;
-
-                let globalIdx = 0;
-                const modGroup = isCDO ? resourcesCDO[bk].modules : resources[blocId].modules;
-                const modKeys = Object.keys(modGroup);
+                // --- TITRE MODULE ---
+                html += `<div class="module-card rounded-lg border border-gray-200 overflow-hidden shadow-md"><button id="btn-${moduleId}" onclick="toggleAccordion('${moduleId}')" class="accordion-button flex justify-between items-center w-full p-4 bg-white hover:bg-gray-50 transition duration-150"><h3 class="text-xl font-semibold text-title flex items-center"><i class="fas fa-folder-open accordion-icon mr-2 ${accentColorClass}"></i> ${moduleTitle}</h3><i class="fas fa-chevron-right accordion-icon text-gray-500"></i></button><div id="content-${moduleId}" class="accordion-content p-0"><div class="space-y-2 p-4 pt-0 border-t border-gray-100">`;
                 
-                modKeys.forEach((modTitle, mIdx) => {
-                    const mid = `${currentBlocKey}_${mIdx}`;
-                    const sessions = modGroup[modTitle];
+                sessions.forEach((session, index) => {
+                    sessionCounter++;
+                    const currentSubjectIndex = globalSubjectIndex;
+                    globalSubjectIndex++;
 
-                    html += `
-                    <div class="module-entry">
-                        <div id="header-${mid}" onclick="toggleModule('${mid}')" class="module-trigger">
-                            <div class="flex items-center gap-6">
-                                <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/30"><i class="fas fa-folder-open"></i></div>
-                                <div class="module-title-text">${modTitle}</div>
-                            </div>
-                            <i class="fas fa-chevron-down text-white/10 transition-transform" id="icon-${mid}"></i>
-                        </div>
-                        <div id="content-${mid}" class="subjects-pane">
-                            <div class="subjects-grid">`;
+                    const subjectId = `${blocKey}_${currentSubjectIndex}`;
+                    const progressPercent = getSubjectProgress(blocKey, currentSubjectIndex);
+                    const isFullyCompleted = progressPercent === 100;
                     
-                    sessions.forEach(() => {
-                        html += `<div id="row-${currentBlocKey}_${globalIdx}"></div>`;
-                        globalIdx++;
+                    let linksHtml = '';
+                    linkCategories.forEach(catKey => {
+                        const link = session.links && session.links[catKey] ? session.links[catKey] : null;
+                        const meta = linkIcons[catKey];
+                        const isAvailable = link !== null && link !== "";
+                        const isChecked = isResourceCompleted(blocKey, subjectId, catKey);
+                        
+                        let linkButton;
+                        if (isAvailable) {
+                            linkButton = `<a href="${link}" title="${meta.title} (Lien)" target="_blank" class="resource-link-btn inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} text-lg">${meta.icon}</a>`;
+                        } else {
+                            linkButton = `<span title="${meta.title} (En attente)" class="inline-flex items-center justify-center w-8 h-8 rounded-full text-white ${meta.linkClass} empty-link-button text-lg">${meta.icon}</span>`;
+                        }
+                        const checkButton = `<button title="${meta.title} (Marquer comme lu)" onclick="toggleResourceCompletion('${blocKey}', '${subjectId}', '${catKey}')" class="progress-check-btn inline-flex items-center justify-center w-6 h-6 rounded-full text-white text-sm transition duration-150 ${isChecked ? 'bg-progress hover:bg-red-500' : 'bg-gray-300 hover:bg-gray-400'}" ${!isAvailable ? 'disabled' : ''}><i class="fas ${isChecked ? 'fa-check' : 'fa-plus'}"></i></button>`;
+                        linksHtml += `<div class="flex items-center space-x-1">${linkButton}${checkButton}</div>`;
                     });
 
-                    html += `</div></div></div>`;
+                    let resourceCount = 0;
+                    linkCategories.forEach(k => { if(session.links && session.links[k]) resourceCount++; });
+                    const isAwaitingAll = resourceCount === 0;
+                    const lineClass = isAwaitingAll ? 'awaiting-subject' : 'text-gray-700';
+                    
+                    const accentColorClassInner = (blocKey === 'B1') ? 'text-b1' : (blocKey === 'B2') ? 'text-b2' : 'text-title';
+                    const isCompletedLineClass = isFullyCompleted ? 'border-l-4 border-progress' : 'border-l-4 border-gray-100';
+                    
+                    // AFFICHAGE SUJET
+                    html += `<div id="subject-row-${subjectId}" class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100 ${isCompletedLineClass}"><div class="flex items-center flex-grow min-w-0 mb-2 sm:mb-0"><label for="check_${blocKey}_${currentSubjectIndex}" class="text-base font-medium cursor-pointer ${lineClass} flex items-center min-w-0"><span class="font-mono ${accentColorClassInner} mr-2 font-bold flex-shrink-0 text-sm tracking-tight">${session.fullCode}</span><span class="truncate" title="${session.title}"> - ${session.title}</span>${isAwaitingAll ? `<i class="fas fa-triangle-exclamation text-alert ml-3 awaiting-indicator" title="Sujet en attente de ressources"></i>` : ''}</label></div><div class="flex items-center space-x-2 flex-shrink-0 mt-2 sm:mt-0 flex-wrap justify-end gap-y-2"><div class="link-icon-container flex space-x-2 flex-shrink-0">${linksHtml}</div><div class="flex items-center space-x-2"><button title="${progressPercent}% d'avancement des ressources" class="w-16 bg-gray-200 text-title py-1 rounded-lg text-xs font-bold text-progress">${progressPercent}%</button><button onclick="validateSubjectLine('${blocKey}', ${currentSubjectIndex})" title="${isFullyCompleted ? 'Décocher tout' : 'Valider toute la ligne'}" class="w-8 h-8 rounded-full text-white transition duration-150 flex items-center justify-center ${isFullyCompleted ? 'bg-progress hover:bg-red-500' : 'bg-gray-400 hover:bg-progress'}"><i class="fas ${isFullyCompleted ? 'fa-check' : 'fa-plus'}"></i></button><button onclick="showPlanningOptions('${blocKey}', ${currentSubjectIndex}, '${session.title.replace(/'/g, "\\'")}')" title="Planifier la relecture (Google Agenda)" class="w-8 h-8 rounded-full bg-title hover:bg-gray-600 text-white transition duration-150 flex items-center justify-center"><i class="fas fa-clock"></i></button></div></div></div>`;
                 });
-                html += `</div></div>`;
-            });
-            cont.innerHTML = html;
-
-            Object.keys(source).forEach(bk => {
-                let i = 0; 
-                const modGroup = isCDO ? resourcesCDO[bk].modules : resources[blocId].modules;
-                Object.values(modGroup).flat().forEach(() => { 
-                    renderSubjectRow(isCDO ? `CDO_${bk}` : blocId, i); 
-                    i++; 
-                });
-            });
+                html += `</div></div></div>`;
+            }
+            html += `</div></section><div class="text-right text-sm text-gray-500 mt-4 p-4 rounded-xl shadow-lg bg-white">Total sujets pour le Bloc ${blocKey}: ${sessionCounter}</div>`;
+            container.innerHTML = html;
         }
 
-        function toggleModule(id) {
-            const content = document.getElementById(`content-${id}`);
-            const icon = document.getElementById(`icon-${id}`);
-            const header = document.getElementById(`header-${id}`);
-            content.classList.toggle('open');
-            header.classList.toggle('active');
-            icon.style.transform = content.classList.contains('open') ? "rotate(180deg)" : "rotate(0deg)";
-        }
-
-        function showPlanningModal(blocKey, idx) {
-            let source = blocKey.startsWith('CDO') ? resourcesCDO : resources;
-            let key = blocKey.startsWith('CDO') ? blocKey.replace('CDO_', '') : blocKey;
-            const subj = Object.values(source[key].modules).flat()[idx];
-            
-            const modal = document.getElementById('planningModal');
-            const cont = document.getElementById('planningModalContent');
-            
-            let docLinks = "";
-            linkCategories.forEach(cat => {
-                if(subj.links[cat.id]) docLinks += `- ${cat.title} : ${subj.links[cat.id]}%0A`;
-            });
-
-            const generateLink = (days) => {
-                const date = new Date();
-                date.setDate(date.getDate() + days);
-                const isoDate = date.toISOString().replace(/-|:|\.\d\d\d/g, "").slice(0, 8);
-                const title = encodeURIComponent(`[RELECTURE ELITE] ${subj.title}`);
-                const details = encodeURIComponent(`Sujet : ${subj.title}\n\nDocuments à réviser :\n${docLinks.replace(/%0A/g, '\n')}`);
-                return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${isoDate}T100000/${isoDate}T110000&details=${details}&sf=true&output=xml`;
-            };
-
-            cont.innerHTML = `
-                <div class="text-5xl mb-6">📅</div>
-                <h3 class="text-white text-xl font-bold mb-2 uppercase tracking-tighter">Planifier Relecture</h3>
-                <p class="text-slate-400 text-xs mb-8 italic">"${subj.title}"</p>
-                <div class="space-y-3">
-                    <a href="${generateLink(7)}" target="_blank" onclick="closeModal()" class="modal-planning-btn"><span>Dans 7 jours</span> <i class="fas fa-arrow-right"></i></a>
-                    <a href="${generateLink(30)}" target="_blank" onclick="closeModal()" class="modal-planning-btn"><span>Dans 30 jours</span> <i class="fas fa-arrow-right"></i></a>
-                    <a href="${generateLink(60)}" target="_blank" onclick="closeModal()" class="modal-planning-btn"><span>Dans 60 jours</span> <i class="fas fa-arrow-right"></i></a>
-                    <a href="${generateLink(90)}" target="_blank" onclick="closeModal()" class="modal-planning-btn"><span>Dans 90 jours</span> <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <button onclick="closeModal()" class="mt-8 text-slate-500 font-bold text-[10px] uppercase tracking-widest">Fermer</button>
-            `;
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal() { document.getElementById('planningModal').classList.add('hidden'); }
-
-        document.addEventListener('DOMContentLoaded', fetchDataAndRender);
+        function updateAllProgressBars() { if (currentTab === 'accueil') { renderAccueil(); } else { renderBloc(currentTab); } }
+        function toggleAccordion(moduleId) { const content = document.getElementById(`content-${moduleId}`); const button = document.getElementById(`btn-${moduleId}`); if (content.style.maxHeight) { content.style.maxHeight = null; button.querySelector('.accordion-icon').style.transform = 'rotate(0deg)'; button.classList.remove('active'); } else { content.style.maxHeight = content.scrollHeight + "px"; button.classList.add('active'); } }
+        
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        window.onscroll = function() { scrollFunction() };
+        function scrollFunction() { if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { scrollToTopBtn.classList.add('show'); } else { scrollToTopBtn.classList.remove('show'); } }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        
+        // Initialisation : Lancer le chargement des données CSV
+        document.addEventListener('DOMContentLoaded', () => { 
+            fetchDataAndRender();
+        });
     </script>
+    
+    <div id="planningModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50"><div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full"><div id="planningModalContent"></div></div></div>
+
 </body>
 </html>
