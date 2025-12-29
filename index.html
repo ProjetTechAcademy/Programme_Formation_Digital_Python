@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAIA - Accueil Hub</title>
+    <title>PAIA - Hub Accueil V2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -15,106 +15,102 @@
         }
         body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; }
         .top-bar { background: var(--brand-main); padding: 12px 0; position: sticky; top: 0; z-index: 9999; border-bottom: 4px solid var(--brandGold); width: 100%; }
-        .top-bar-container { width: 100%; max-width: 100%; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-        .logo-top { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--brandGold); background: white; transition: transform 0.3s; }
+        .top-bar-container { width: 100%; max-width: 100%; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-top { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--brandGold); background: white; transition: transform 0.3s; }
         .logo-top:hover { transform: rotate(10deg) scale(1.1); }
-        .nav-emoji { font-size: 1.5rem; transition: all 0.2s; padding: 4px 8px; border-radius: 8px; }
-        .nav-emoji:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
-        .btn-portfolio { padding: 8px 16px; border-radius: 8px; background: var(--brandGold); color: white; font-weight: 700; font-family: 'Fira Code', monospace; transition: all 0.3s; }
-        .btn-portfolio:hover { background: white; color: var(--brand-main); }
-        .main-footer { background: var(--footer-bg); color: var(--footer-text); padding: 40px 40px 20px 40px; margin-top: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; }
-        .footer-logo-img { width: 60px; height: 60px; border-radius: 8px; border: 2px solid var(--brandGold); overflow: hidden; }
-        .footer-logo-img img { width: 100%; height: 100%; object-fit: cover; }
+        .nav-emoji { font-size: 1.5rem; transition: transform 0.2s; padding: 4px; border-radius: 8px; }
+        .nav-emoji:hover { transform: translateY(-2px); background: rgba(255,255,255,0.1); }
+        .btn-portfolio { padding: 8px 16px; border-radius: 8px; background: var(--brandGold); color: white; font-weight: 700; font-family: 'Fira Code', monospace; }
+        
+        .main-footer { background: var(--footer-bg); color: var(--footer-text); padding: 40px 0 0 0; margin-top: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; }
+        .footer-container { width: 100%; max-width: 1200px; padding: 0 40px; margin: 0 auto; display: flex; gap: 40px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+        .footer-logo-img { width: 60px; height: 60px; border-radius: 8px; border: 2px solid var(--brandGold); background: white; overflow: hidden; }
         .footer-contact-link { color: var(--brandGold); text-decoration: none; transition: color 0.2s; }
         .footer-contact-link:hover { color: #fff; text-decoration: underline; }
+        .footer-section-title { font-size: 1rem; font-weight: 700; color: var(--brandGold); margin-bottom: 10px; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px; }
+        .icon-btn { width: 36px; height: 36px; border-radius: 6px; background: rgba(255, 255, 255, 0.06); display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .icon-btn:hover { background: var(--brandGold); transform: scale(1.1); }
+        .copyright-single-line { text-align: center; margin-top: 30px; padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.70rem; color: rgba(255,255,255,0.6); }
+
         .card-home { transition: all 0.3s ease; border-top: 5px solid var(--brandGold); background: white; }
         .card-home:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <!-- HEADER HUB -->
     <div class="top-bar">
         <div class="top-bar-container">
-            <div class="flex items-center gap-4">
-                <img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png">
-                <div class="hidden sm:block">
-                    <div class="text-white font-bold text-lg font-code">💫 PAIA ✨ By Mathilde Martine PAISLEY</div>
-                    <div class="text-[#D9A526] text-xs font-semibold uppercase tracking-widest">Payroll Automation & Intelligent Architecture</div>
+            <div class="flex items-center gap-3">
+                <a href="index.html"><img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo PAIA"></a>
+                <div class="hidden lg:block">
+                    <span class="text-white font-bold text-sm font-code">💫 PAIA ✨ By Mathilde Martine PAISLEY</span>
                 </div>
             </div>
-            <div class="flex items-center gap-4 sm:gap-6">
-                <nav class="flex gap-2 sm:gap-4">
+            <div class="flex items-center gap-4">
+                <nav class="flex gap-2">
                     <a href="python.html" class="nav-emoji" title="Formation Python">🐍</a>
                     <a href="digitale.html" class="nav-emoji" title="Transformation Digitale">🚀</a>
                     <a href="paie.html" class="nav-emoji" title="Expertise Paie">💰</a>
                     <a href="rh.html" class="nav-emoji" title="Ressources Humaines">🤝</a>
                 </nav>
-                <a class="btn-portfolio text-sm sm:text-base" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/">Portfolio 💫</a>
+                <a class="btn-portfolio" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/">Portfolio 💫</a>
             </div>
         </div>
     </div>
 
-    <main class="flex-grow p-6 sm:p-12">
-        <div class="max-w-6xl mx-auto">
-            <header class="text-center mb-16">
-                <h1 class="text-4xl sm:text-6xl font-extrabold text-[#0F2C48] mb-6" style="font-family: 'Playfair Display', serif;">Espace de Formation PAIA</h1>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto font-light leading-relaxed">Bienvenue sur votre plateforme d'apprentissage intelligente. Sélectionnez votre cursus pour accéder aux ressources synchronisées.</p>
+    <main class="flex-grow p-6 flex flex-col justify-center">
+        <div class="max-w-6xl mx-auto w-full text-center">
+            <header class="mb-12">
+                <h1 class="text-5xl sm:text-7xl font-extrabold text-[#0F2C48] mb-4" style="font-family: 'Playfair Display', serif;">Espace PAIA V2.0</h1>
+                <p class="text-lg text-gray-600 font-light italic">"L'innovation digitale au service de l'architecture intelligente"</p>
             </header>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Python -->
-                <a href="python.html" class="card-home p-8 rounded-2xl flex flex-col items-center text-center group">
-                    <div class="text-7xl mb-6 transition-transform group-hover:scale-110">🐍</div>
-                    <h2 class="text-2xl font-bold text-[#0F2C48] mb-2">Python</h2>
-                    <p class="text-sm text-gray-500 font-code">Dév. Web & Automatisation</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="python.html" class="card-home p-10 rounded-2xl flex flex-col items-center group">
+                    <div class="text-7xl mb-4 group-hover:scale-110 transition">🐍</div>
+                    <h2 class="text-xl font-bold text-[#0F2C48]">Python</h2>
                 </a>
-                <!-- Digitale -->
-                <a href="digitale.html" class="card-home p-8 rounded-2xl flex flex-col items-center text-center group">
-                    <div class="text-7xl mb-6 transition-transform group-hover:scale-110">🚀</div>
-                    <h2 class="text-2xl font-bold text-[#0F2C48] mb-2">Digitale</h2>
-                    <p class="text-sm text-gray-500 font-code">Transformation Numérique</p>
+                <a href="digitale.html" class="card-home p-10 rounded-2xl flex flex-col items-center group">
+                    <div class="text-7xl mb-4 group-hover:scale-110 transition">🚀</div>
+                    <h2 class="text-xl font-bold text-[#0F2C48]">Digitale</h2>
                 </a>
-                <!-- Paie -->
-                <a href="paie.html" class="card-home p-8 rounded-2xl flex flex-col items-center text-center group">
-                    <div class="text-7xl mb-6 transition-transform group-hover:scale-110">💰</div>
-                    <h2 class="text-2xl font-bold text-[#0F2C48] mb-2">Paie</h2>
-                    <p class="text-sm text-gray-500 font-code">Gestion & Architecture</p>
+                <a href="paie.html" class="card-home p-10 rounded-2xl flex flex-col items-center group">
+                    <div class="text-7xl mb-4 group-hover:scale-110 transition">💰</div>
+                    <h2 class="text-xl font-bold text-[#0F2C48]">Paie</h2>
                 </a>
-                <!-- RH -->
-                <a href="rh.html" class="card-home p-8 rounded-2xl flex flex-col items-center text-center group">
-                    <div class="text-7xl mb-6 transition-transform group-hover:scale-110">🤝</div>
-                    <h2 class="text-2xl font-bold text-[#0F2C48] mb-2">RH</h2>
-                    <p class="text-sm text-gray-500 font-code">Management Stratégique</p>
+                <a href="rh.html" class="card-home p-10 rounded-2xl flex flex-col items-center group">
+                    <div class="text-7xl mb-4 group-hover:scale-110 transition">🤝</div>
+                    <h2 class="text-xl font-bold text-[#0F2C48]">RH</h2>
                 </a>
             </div>
         </div>
     </main>
 
-    <!-- FOOTER CLIQUEABLE -->
     <footer class="main-footer">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-start gap-12">
-            <div class="flex gap-4 items-center">
-                <div class="footer-logo-img"><img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg" alt="Logo Mathilde"></div>
-                <div class="flex flex-col gap-1">
+        <div class="footer-container">
+            <div class="flex items-center gap-4">
+                <div class="footer-logo-img"><img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg" class="w-full h-full object-cover"></div>
+                <div class="flex flex-col">
                     <div class="font-bold text-lg text-[#D9A526]">Mathilde Martine PAISLEY</div>
                     <a href="mailto:Mathilde.martine.paisley@gmail.com" class="footer-contact-link text-sm">📧 Mathilde.martine.paisley@gmail.com</a>
                     <a href="tel:+33685900887" class="footer-contact-link text-sm">📲 06 85 90 08 87</a>
                 </div>
             </div>
-            <div>
-                <div class="font-bold mb-4 text-[#D9A526] uppercase text-xs tracking-widest">Suivez-moi</div>
-                <div class="flex gap-3">
-                    <a class="icon-btn text-[#25D366]" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a class="icon-btn text-[#5865F2]" href="https://discord.gg/redT9wEE6T" title="Discord"><i class="fab fa-discord"></i></a>
-                    <a class="icon-btn text-[#0077b5]" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a class="icon-btn text-[#E1306C]" href="https://www.instagram.com/enervyx/" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <div class="flex flex-col gap-2 text-center sm:text-left">
+                <div class="footer-section-title">Réseaux Sociaux</div>
+                <div class="flex gap-3 justify-center sm:justify-start">
+                    <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" class="icon-btn text-[#25D366]" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://discord.gg/redT9wEE6T" class="icon-btn text-[#5865F2]" title="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" class="icon-btn text-[#0077b5]" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.instagram.com/enervyx/" class="icon-btn text-[#C13584]" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@enervyx" class="icon-btn text-white" title="TikTok"><i class="fab fa-tiktok"></i></a>
                 </div>
             </div>
+            <div class="max-w-xs hidden md:block">
+                <div class="footer-section-title">Slogan</div>
+                <p class="text-xs italic opacity-60">"L'automatisation intelligente pour une architecture de paie performante."</p>
+            </div>
         </div>
-        <div class="text-center mt-12 pt-6 border-t border-white/10 opacity-60 text-xs">
-            💫 PAIA ✨ By Mathilde Martine PAISLEY <br>
-            Payroll Automation & Intelligent Architecture <br>
-            © 2025 Tous droits réservés
+        <div class="copyright-single-line">
+            💫 PAIA ✨ By Mathilde Martine PAISLEY | V2.0 | Payroll Automation & Intelligent Architecture | © 2025 Tous droits réservés
         </div>
     </footer>
 </body>
