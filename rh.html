@@ -17,9 +17,11 @@
         body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; }
         .top-bar { background: var(--brand-main); padding: 12px 0; position: sticky; top: 0; z-index: 9999; border-bottom: 4px solid var(--brandGold); width: 100%; }
         .top-bar-container { width: 100%; max-width: 100%; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
-        .logo-top { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--brandGold); background: white; }
-        .btn-portfolio { padding: 6px 14px; border-radius: 8px; background: var(--brandGold); color: white; font-weight: 700; }
-        .main-footer { background: var(--footer-bg); color: var(--footer-text); padding: 40px 40px 20px 40px; margin-top: auto; font-family: 'Fira Code', monospace; }
+        .logo-top { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--brandGold); background: white; }
+        .nav-emoji { font-size: 1.5rem; transition: transform 0.2s; padding: 4px 8px; border-radius: 8px; }
+        .nav-emoji:hover { transform: translateY(-2px); background: rgba(255,255,255,0.1); }
+        .btn-portfolio { padding: 8px 16px; border-radius: 8px; background: var(--brandGold); color: white; font-weight: 700; }
+        .main-footer { background: var(--footer-bg); color: var(--footer-text); padding: 40px 40px 20px 40px; margin-top: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; }
         .footer-logo-img { width: 60px; height: 60px; border-radius: 8px; border: 2px solid var(--brandGold); overflow: hidden; }
         .icon-btn { width: 40px; height: 40px; border-radius: 8px; background: rgba(255, 255, 255, 0.06); display: inline-flex; align-items: center; justify-content: center; }
         .tab-button.active-tab { border-bottom: 3px solid var(--color-cta); color: var(--color-cta); }
@@ -31,15 +33,24 @@
     <div class="top-bar">
         <div class="top-bar-container">
             <div class="flex items-center gap-4">
-                <img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png">
-                <div>
+                <a href="index.html"><img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png"></a>
+                <div class="hidden sm:block">
                     <div class="text-white font-bold text-lg font-code">💫 PAIA ✨ By Mathilde Martine PAISLEY</div>
-                    <div class="text-[#F472B6] text-sm font-semibold">Payroll Automation & Intelligent Architecture</div>
+                    <div class="text-[#F472B6] text-xs font-semibold uppercase">Payroll Automation & Intelligent Architecture</div>
                 </div>
             </div>
-            <a class="btn-portfolio" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/">Portfolio 💫</a>
+            <div class="flex items-center gap-6">
+                <nav class="flex gap-4">
+                    <a href="python.html" class="nav-emoji opacity-50 hover:opacity-100" title="Formation Python">🐍</a>
+                    <a href="digitale.html" class="nav-emoji opacity-50 hover:opacity-100" title="Transformation Digitale">🚀</a>
+                    <a href="paie.html" class="nav-emoji opacity-50 hover:opacity-100" title="Expertise Paie">💰</a>
+                    <a href="rh.html" class="nav-emoji" style="box-shadow: 0 4px 0 var(--brandGold)" title="Ressources Humaines">🤝</a>
+                </nav>
+                <a class="btn-portfolio hidden md:block" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/">Portfolio 💫</a>
+            </div>
         </div>
     </div>
+
     <main class="flex-grow p-8">
         <div class="max-w-7xl mx-auto">
             <header class="text-center mb-8 p-6 bg-white rounded-xl shadow-lg border-b-4 border-cta">
@@ -52,16 +63,29 @@
             <div id="resources-container" class="space-y-8"></div>
         </div>
     </main>
+
     <footer class="main-footer">
-        <div class="flex flex-wrap justify-between gap-8">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-start gap-8">
             <div class="flex gap-4 items-center">
                 <div class="footer-logo-img"><img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg"></div>
-                <div><div class="font-bold">Mathilde Martine PAISLEY</div><div class="text-sm opacity-80">📧 Mathilde.martine.paisley@gmail.com</div></div>
+                <div class="flex flex-col">
+                    <div class="font-bold">Mathilde Martine PAISLEY</div>
+                    <a href="mailto:Mathilde.martine.paisley@gmail.com" class="text-sm hover:text-[#F472B6]">📧 Mathilde.martine.paisley@gmail.com</a>
+                    <a href="tel:+33685900887" class="text-sm hover:text-[#F472B6]">📲 06 85 90 08 87</a>
+                </div>
             </div>
-            <div><div class="font-bold mb-2">Réseaux Sociaux</div><div class="flex gap-2"><a class="icon-btn" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b"><i class="fab fa-whatsapp" style="color:#25D366;"></i></a><a class="icon-btn" href="https://discord.gg/redT9wEE6T"><i class="fab fa-discord" style="color:#5865F2;"></i></a><a class="icon-btn" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/"><i class="fab fa-linkedin" style="color:#0077b5;"></i></a></div></div>
+            <div>
+                <div class="font-bold mb-4 uppercase text-xs opacity-60 tracking-widest">Réseaux Sociaux</div>
+                <div class="flex gap-2">
+                    <a class="icon-btn" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b"><i class="fab fa-whatsapp" style="color:#25D366;"></i></a>
+                    <a class="icon-btn" href="https://discord.gg/redT9wEE6T"><i class="fab fa-discord" style="color:#5865F2;"></i></a>
+                    <a class="icon-btn" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/"><i class="fab fa-linkedin" style="color:#0077b5;"></i></a>
+                </div>
+            </div>
         </div>
         <div class="text-center mt-8 pt-4 border-t border-white/10 opacity-50">💫 PAIA ✨ By Mathilde Martine PAISLEY | © 2025</div>
     </footer>
+
     <script>
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1RgrBexz7gO2DjolXKWWppnBaEnvRdbu84eQNMNl1BSM/export?format=csv&gid=1517235338";
         let resources = { "B1": { title: "B1: Gestion Sociale", modules: {} }, "B2": { title: "B2: Management RH", modules: {} }, "B3": { title: "B3: RH & Digital", modules: {} } };
@@ -70,8 +94,8 @@
         function fetchDataAndRender() { Papa.parse(GOOGLE_SHEET_CSV_URL, { download: true, header: true, skipEmptyLines: true, complete: function(results) { processCSVData(results.data); document.getElementById('loading-status').style.display = 'none'; showTab('accueil'); } }); }
         function processCSVData(data) { let currentBloc = null; let currentModuleKey = null; data.forEach(row => { let titleRaw = row['Titres des catégories']; if (!titleRaw) return; if (/^B[1-3]_/.test(titleRaw) && !titleRaw.includes('_M')) { currentBloc = titleRaw.split('_')[0]; } else if (titleRaw.includes('_M') && !titleRaw.includes('_S')) { if (currentBloc) { currentModuleKey = titleRaw.replace(/^B\d+_/, '').replace(/_/g, ' - '); if (!resources[currentBloc].modules[currentModuleKey]) resources[currentBloc].modules[currentModuleKey] = []; } } else if (titleRaw.includes('_S')) { if (currentBloc && currentModuleKey) { let matchCode = titleRaw.match(/^(B\d+_M\d+_S\d+)/); let fullCode = matchCode ? matchCode[1] : "CODE?"; let cleanTitle = titleRaw.substring(fullCode.length).replace(/^[-_\s]+/, ''); resources[currentBloc].modules[currentModuleKey].push({ title: cleanTitle, fullCode: fullCode, links: { "Intro_Python_Gamma": row['Intro_Python_Gamma'], "Cours_Python": row['Cours_Python'], "Audio": row['Audio'], "Excel": row['Excel'], "Infographie": row['Infographie'], "Présentation": row['Présentation'], "Video": row['Video'] } }); } } }); }
         function showTab(tabName) { document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active-tab', 'text-cta')); document.getElementById(`tab-${tabName}`).classList.add('active-tab', 'text-cta'); if (tabName === 'accueil') renderAccueil(); else renderBloc(tabName); }
-        function renderAccueil() { let html = `<div class="bg-white p-8 rounded-xl shadow-lg border-l-8 border-cta"><h2 class="text-3xl font-bold text-title mb-6">Écosystème RH PAIA</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6">`; Object.keys(resources).forEach(key => { html += `<div class="p-6 border rounded-xl hover:shadow-md transition"><h3 class="font-bold text-xl mb-4">${resources[key].title}</h3><button onclick="showTab('${key}')" class="w-full bg-title text-white py-2 rounded-lg font-bold">Découvrir</button></div>`; }); html += `</div></div>`; document.getElementById('resources-container').innerHTML = html; }
-        function renderBloc(blocKey) { const bloc = resources[blocKey]; let html = `<div class="bg-white p-6 rounded-xl shadow-lg border-l-8 border-title"><h2 class="text-2xl font-bold mb-6">${bloc.title}</h2>`; for (const mod in bloc.modules) { html += `<div class="mb-6 border rounded-xl overflow-hidden"><div class="bg-pink-50 p-4 font-bold border-b text-title">${mod}</div><div class="p-4 space-y-3">`; bloc.modules[mod].forEach(session => { html += `<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border-b last:border-0"><span class="text-sm"><b class="font-mono text-cta">${session.fullCode}</b> - ${session.title}</span><div class="flex gap-2">`; linkCategories.forEach(cat => { let link = session.links[cat]; let icon = linkIcons[cat]; if (link && link.trim() !== "") html += `<a href="${link}" target="_blank" class="${icon.linkClass} text-white w-9 h-9 rounded-full flex items-center justify-center shadow-sm" title="${cat}">${icon.icon}</a>`; else html += `<span class="bg-gray-100 text-gray-300 w-9 h-9 rounded-full flex items-center justify-center opacity-40">${icon.icon}</span>`; }); html += `</div></div>`; }); html += `</div></div>`; } html += `</div>`; document.getElementById('resources-container').innerHTML = html; }
+        function renderAccueil() { let html = `<div class="bg-white p-8 rounded-xl shadow-lg border-l-8 border-cta"><h2 class="text-3xl font-bold text-title mb-6">Formation RH PAIA 🤝</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6">`; Object.keys(resources).forEach(key => { html += `<div class="p-6 border rounded-xl hover:shadow-md transition"><h3 class="font-bold text-xl mb-4 text-title">${resources[key].title}</h3><button onclick="showTab('${key}')" class="w-full bg-title text-white py-2 rounded-lg font-bold hover:bg-[#F472B6] transition-colors">Découvrir</button></div>`; }); html += `</div></div>`; document.getElementById('resources-container').innerHTML = html; }
+        function renderBloc(blocKey) { const bloc = resources[blocKey]; let html = `<div class="bg-white p-6 rounded-xl shadow-lg border-l-8 border-title"><h2 class="text-2xl font-bold mb-6 text-title uppercase tracking-widest">${bloc.title}</h2>`; for (const mod in bloc.modules) { html += `<div class="mb-6 border rounded-xl overflow-hidden"><div class="bg-pink-50 p-4 font-bold border-b text-title">${mod}</div><div class="p-4 space-y-3">`; bloc.modules[mod].forEach(session => { html += `<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border-b last:border-0 hover:bg-pink-50 transition rounded-lg"><span class="text-sm"><b class="font-mono text-cta">${session.fullCode}</b> - ${session.title}</span><div class="flex gap-2">`; linkCategories.forEach(cat => { let link = session.links[cat]; let icon = linkIcons[cat]; if (link && link.trim() !== "") html += `<a href="${link}" target="_blank" class="${icon.linkClass} text-white w-9 h-9 rounded-full flex items-center justify-center shadow-md hover:scale-110 transition" title="${cat}">${icon.icon}</a>`; else html += `<span class="bg-gray-100 text-gray-300 w-9 h-9 rounded-full flex items-center justify-center opacity-40">${icon.icon}</span>`; }); html += `</div></div>`; }); html += `</div></div>`; } html += `</div>`; document.getElementById('resources-container').innerHTML = html; }
         document.addEventListener('DOMContentLoaded', fetchDataAndRender);
     </script>
 </body>
