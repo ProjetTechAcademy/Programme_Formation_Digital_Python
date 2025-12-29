@@ -3,122 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAIA - Formation Python V2.0</title>
+    <title>PAIA - Formation Python Elite V2.6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --color-cta: #D9A526; --color-title: #0F2C48; --color-surface: #F6F2E8; --brandGold: #D9A526; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; }
-        .top-bar { background: var(--color-title); padding: 8px 0; border-bottom: 3px solid var(--color-cta); width: 100%; position: sticky; top: 0; z-index: 999; }
-        .logo-top { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--color-cta); background: white; }
-        .nav-emoji { font-size: 1.4rem; padding: 4px; border-radius: 6px; }
-        .active-nav { border-bottom: 2px solid var(--color-cta); background: rgba(255,255,255,0.1); }
-        .main-footer { background: var(--color-title); color: white; padding: 40px 0 0 0; margin-top: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; }
-        .footer-container { width: 100%; max-width: 1200px; padding: 0 40px; margin: 0 auto; display: flex; gap: 30px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
-        .footer-contact-link { color: var(--brandGold); text-decoration: none; }
-        .icon-btn { width: 36px; height: 36px; border-radius: 6px; background: rgba(255, 255, 255, 0.06); display: inline-flex; align-items: center; justify-content: center; }
-        .copyright-single-line { text-align: center; margin-top: 30px; padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.70rem; color: rgba(255,255,255,0.7); }
-        .tab-button { transition: all 0.2s; border-bottom: 3px solid transparent; }
-        .tab-button.active-tab { border-bottom-color: var(--color-cta); color: var(--color-title); font-weight: bold; }
-        .loading-spinner { border: 3px solid rgba(217, 165, 38, 0.1); width: 30px; height: 30px; border-radius: 50%; border-left-color: var(--color-cta); animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        :root { 
+            --color-cta: #D9A526; 
+            --color-title: #0F2C48; 
+            --color-surface: #F6F2E8; 
+            --color-done: #10b981;
+            /* Couleurs Acidulées Douces pour validation */
+            --bg-gamma: #f3e8ff; --bg-python: #fff7ed; --bg-audio: #e0f2fe; 
+            --bg-excel: #f0fdf4; --bg-info: #fff1f2; --bg-pres: #fdf2f8; --bg-video: #fff7ed;
+        }
+
+        body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; color: #334155; }
+        
+        /* HEADER */
+        .top-bar { background: var(--color-title); padding: 12px 0; border-bottom: 3px solid var(--color-cta); position: sticky; top: 0; z-index: 1000; }
+        .logo-top { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--color-cta); object-fit: cover; }
+        .nav-link { color: white; font-weight: 500; padding: 8px 12px; border-radius: 8px; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
+        .nav-link:hover { color: var(--color-cta); background: rgba(255,255,255,0.05); }
+        .btn-portfolio { background: var(--color-cta); color: var(--color-title) !important; font-weight: 700; border: 1px solid white; }
+
+        /* MODULES */
+        .module-card { background: white; border-radius: 20px; margin-bottom: 18px; box-shadow: 0 4px 20px rgba(15, 44, 72, 0.04); overflow: hidden; border: 1px solid rgba(15, 44, 72, 0.05); }
+        .module-header { width: 100%; text-align: left; padding: 22px 28px; background: #fff; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
+        .module-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--color-title); }
+        
+        /* SESSION ROW - Layout Aligné */
+        .session-row { padding: 22px 28px; border-bottom: 1px solid #f8fafc; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s ease; }
+        .session-row.fully-complete { background: #f0fdf4; }
+
+        .session-header-line { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .title-block { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
+        .session-code { font-family: 'Fira Code', monospace; color: var(--color-cta); font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
+        .session-title-text { font-weight: 600; font-size: 1.05rem; color: #475569; }
+
+        /* ACTIONS */
+        .action-controls { display: flex; align-items: center; gap: 10px; }
+        
+        .btn-pill-sexy { 
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); 
+            color: white; font-size: 0.7rem; font-weight: 700; padding: 6px 14px; 
+            border-radius: 50px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 4px 12px rgba(217, 165, 38, 0.25); text-transform: uppercase; border: none; cursor: pointer;
+        }
+        .btn-pill-sexy.active { background: linear-gradient(135deg, #34d399 0%, #10b981 100%); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); }
+        .btn-pill-sexy:hover { transform: translateY(-2px) scale(1.05); }
+
+        .btn-agenda-sexy {
+            width: 34px; height: 34px; border-radius: 50%; 
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            display: flex; align-items: center; justify-content: center; 
+            color: #3b82f6; border: 1px solid #e2e8f0; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.3s ease; cursor: pointer;
+        }
+        .btn-agenda-sexy:hover { background: #3b82f6; color: white; transform: rotate(10deg); border-color: #3b82f6; }
+
+        /* RESSOURCES */
+        .resource-list { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 5px; }
+        .resource-dot { width: 4px; height: 4px; background: #cbd5e1; border-radius: 50%; }
+        
+        .icon-box { position: relative; }
+        .icon-btn-elite { 
+            width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.3s ease; font-size: 1.6rem; 
+            background: #fdfdfd; border: 1.5px solid #f1f5f9; cursor: pointer;
+        }
+        .icon-btn-elite:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.05); border-color: var(--color-cta); }
+        
+        /* Validation Couleurs Fun */
+        .icon-btn-elite.done[data-cat="Intro_Python_Gamma"] { background: #fae8ff; border-color: #d946ef; }
+        .icon-btn-elite.done[data-cat="Cours_Python"] { background: #fff7ed; border-color: #f97316; }
+        .icon-btn-elite.done[data-cat="Audio"] { background: #e0f2fe; border-color: #0ea5e9; }
+        .icon-btn-elite.done[data-cat="Excel"] { background: #f0fdf4; border-color: #22c55e; }
+        .icon-btn-elite.done[data-cat="Infographie"] { background: #fff1f2; border-color: #f43f5e; }
+        .icon-btn-elite.done[data-cat="Présentation"] { background: #fdf2f8; border-color: #ec4899; }
+        .icon-btn-elite.done[data-cat="Video"] { background: #fff7ed; border-color: #fb8c00; }
+
+        .valid-check { position: absolute; top: -5px; right: -5px; background: var(--color-done); color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 9px; display: flex; align-items: center; justify-content: center; border: 2px solid white; opacity: 0; transform: scale(0); transition: all 0.3s ease; }
+        .icon-btn-elite.done + .valid-check { opacity: 1; transform: scale(1); }
+
+        .manual-plus { position: absolute; bottom: -4px; right: -4px; background: white; border: 1px solid #e2e8f0; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #94a3b8; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 5; cursor: pointer; }
+        .manual-plus:hover { color: var(--color-done); border-color: var(--color-done); transform: scale(1.1); }
+
+        /* PROGRESSION */
+        .prog-track { width: 100%; height: 5px; background: #f1f5f9; border-radius: 10px; overflow: hidden; }
+        .prog-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #f43f5e); transition: width 0.7s cubic-bezier(0.1, 0.7, 1.0, 0.1); width: 0%; }
+
+        /* CALENDAR POPOVER */
+        .cal-popover { display: none; position: absolute; right: 0; top: 42px; background: white; border: 1px solid #e2e8f0; padding: 14px; border-radius: 18px; box-shadow: 0 15px 40px rgba(15, 44, 72, 0.12); z-index: 100; min-width: 220px; }
+        .btn-agenda-sexy:hover + .cal-popover, .cal-popover:hover { display: block; }
+        .cal-link { display: block; padding: 10px; font-size: 0.8rem; font-weight: 600; color: #475569; border-radius: 10px; background: #f8fafc; margin-bottom: 5px; text-align: center; transition: all 0.2s; border: 1px solid transparent; text-decoration: none; }
+        .cal-link:hover { background: #eff6ff; color: #3b82f6; border-color: #dbeafe; }
+
+        /* FOOTER */
+        footer { background: var(--color-title); color: white; padding: 50px 20px; border-top: 4px solid var(--color-cta); margin-top: auto; }
+        .footer-link { color: #cbd5e1; font-family: 'Fira Code', monospace; font-size: 0.9rem; transition: color 0.2s; text-decoration: none; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .footer-link:hover { color: var(--color-cta); }
+        .social-circle { font-size: 1.7rem; transition: transform 0.3s; color: white; }
+        .social-circle:hover { transform: scale(1.2) translateY(-3px); }
+        .color-whatsapp { color: #25D366; } .color-discord { color: #5865F2; } .color-linkedin { color: #0077b5; } .color-instagram { color: #E1306C; } .color-tiktok { color: #FFFFFF; }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="max-w-full px-6 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="index.html"><img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png"></a>
-                <span class="text-white font-bold text-sm hidden md:inline">PAIA Python V2.0</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <nav class="flex gap-2">
-                    <a href="python.html" class="nav-emoji active-nav" title="Python">🐍</a>
-                    <a href="digitale.html" class="nav-emoji opacity-50" title="Digitale">🚀</a>
-                    <a href="paie.html" class="nav-emoji opacity-50" title="Paie">💰</a>
-                    <a href="rh.html" class="nav-emoji opacity-50" title="RH">🤝</a>
-                </nav>
-                <a class="btn-portfolio" style="background:#D9A526; color:white; padding:6px 12px; border-radius:6px; font-weight:bold; font-size:0.8rem;" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/">Portfolio</a>
-            </div>
-        </div>
-    </div>
 
-    <main class="flex-grow p-6">
-        <div class="max-w-7xl mx-auto">
-            <header class="text-center mb-6 bg-white p-6 rounded-xl shadow-md border-b-4 border-cta">
-                <h1 class="text-3xl font-extrabold text-[#0F2C48]" style="font-family: 'Playfair Display', serif;">Formation Python</h1>
-                <div id="loading-status" class="mt-2"><div class="loading-spinner"></div></div>
-            </header>
-            <div class="bg-white rounded-xl p-4 mb-6 shadow-sm overflow-x-auto">
-                <nav class="flex space-x-6 border-b" id="tab-nav">
-                    <button onclick="showTab('accueil')" id="tab-accueil" class="tab-button active-tab px-4 py-2">🏠 Synthèse</button>
-                    <button onclick="showTab('B1')" id="tab-B1" class="tab-button px-4 py-2 text-gray-500">Bloc B1</button>
-                    <button onclick="showTab('B2')" id="tab-B2" class="tab-button px-4 py-2 text-gray-500">Bloc B2</button>
-                    <button onclick="showTab('B3')" id="tab-B3" class="tab-button px-4 py-2 text-gray-500">Bloc B3</button>
-                </nav>
+    <header class="top-bar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="index.html"><img class="logo-top shadow-md" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo"></a>
+                <div class="hidden sm:block">
+                    <h1 class="text-lg font-bold text-white leading-tight">💫 PAIA ✨ By Mathilde Martine PAISLEY</h1>
+                    <p class="text-[9px] text-[#D9A526] font-semibold uppercase tracking-widest">Payroll Automation & Intelligent Architecture</p>
+                </div>
             </div>
-            <div id="resources-container" class="space-y-4"></div>
+            <nav class="flex items-center gap-1 sm:gap-2">
+                <a href="index.html" class="nav-link" title="Accueil">🏠</a>
+                <a href="python.html" class="nav-link text-[#D9A526]" title="Python">🐍</a>
+                <a href="paie.html" class="nav-link opacity-60" title="Paie">📊</a>
+                <a href="rh.html" class="nav-link opacity-60" title="RH">⚖️</a>
+                <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" class="nav-link btn-portfolio ml-2 shadow-sm">💼 Portfolio</a>
+            </nav>
         </div>
+    </header>
+
+    <main class="flex-grow p-4 sm:p-10 max-w-6xl mx-auto w-full">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-[#0F2C48] uppercase tracking-tight">Formation Développeur Python</h2>
+            <p class="text-slate-400 font-medium text-sm mt-3">L'art de la répétition est le secret de la maîtrise. 🧠</p>
+            <div id="loading" class="mt-6 flex justify-center"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-cta"></div></div>
+        </div>
+
+        <!-- TABS -->
+        <div class="flex justify-center mb-10 overflow-x-auto">
+            <nav class="bg-white p-2 rounded-2xl shadow-sm flex gap-2">
+                <button onclick="switchTab('accueil')" id="tab-accueil" class="px-8 py-3 rounded-xl font-bold text-[#0F2C48] bg-slate-50 border border-slate-100 transition shadow-sm">🏠 Synthèse</button>
+                <button onclick="switchTab('B1')" id="tab-B1" class="px-8 py-3 rounded-xl font-bold text-slate-400 hover:text-[#0F2C48] transition">B1</button>
+                <button onclick="switchTab('B2')" id="tab-B2" class="px-8 py-3 rounded-xl font-bold text-slate-400 hover:text-[#0F2C48] transition">B2</button>
+                <button onclick="switchTab('B3')" id="tab-B3" class="px-8 py-3 rounded-xl font-bold text-slate-400 hover:text-[#0F2C48] transition">B3</button>
+            </nav>
+        </div>
+
+        <div id="container" class="space-y-6"></div>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="flex items-center gap-4 text-left">
-                <div class="w-14 h-14 rounded-md overflow-hidden border border-white/20"><img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg"></div>
+    <footer>
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-12">
+            <div class="text-center md:text-left space-y-4">
+                <h3 class="text-2xl font-bold">Mathilde Martine PAISLEY</h3>
                 <div class="flex flex-col">
-                    <div class="font-bold text-[#D9A526]">Mathilde Martine PAISLEY</div>
-                    <a href="mailto:Mathilde.martine.paisley@gmail.com" class="footer-contact-link">📧 Email</a>
-                    <a href="tel:+33685900887" class="footer-contact-link">📲 06 85 90 08 87</a>
+                    <a href="mailto:mathilde.martine.paisley@gmail.com" class="footer-link">
+                        <i class="fas fa-envelope text-cta"></i> mathilde.martine.paisley@gmail.com
+                    </a>
+                    <a href="tel:+33685900887" class="footer-link">
+                        <i class="fas fa-phone-alt text-cta"></i> 06 85 90 08 87
+                    </a>
                 </div>
             </div>
-            <div class="flex flex-col gap-2">
-                <div class="text-[#D9A526] font-bold">Réseaux Sociaux</div>
-                <div class="flex gap-3">
-                    <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" class="icon-btn text-[#25D366]"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://discord.gg/redT9wEE6T" class="icon-btn text-[#5865F2]"><i class="fab fa-discord"></i></a>
-                    <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" class="icon-btn text-[#0077b5]"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://www.instagram.com/enervyx/" class="icon-btn text-[#C13584]"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@enervyx" class="icon-btn text-white"><i class="fab fa-tiktok"></i></a>
-                </div>
+            
+            <div class="flex gap-8 items-center">
+                <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" class="social-circle color-whatsapp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://discord.gg/redT9wEE6T" class="social-circle color-discord"><i class="fab fa-discord"></i></a>
+                <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" class="social-circle color-linkedin"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/enervyx/" class="social-circle color-instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@enervyx" class="social-circle color-tiktok"><i class="fab fa-tiktok"></i></a>
             </div>
-        </div>
-        <div class="copyright-single-line">
-            💫 PAIA ✨ By Mathilde Martine PAISLEY | V2.0 | Payroll Automation & Intelligent Architecture | © 2025 Tous droits réservés
         </div>
     </footer>
 
     <script>
-        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK_tBmpTFXHK-e-U-cy_XbjLY2cx4FVbP7X0fhLs34B8DLzIr6yUP_eYo4ueAIzFBABopTCQdd-TK/pub?gid=0&single=true&output=csv";
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK_tBmpTFXHK-e-U-cy_XbjLY2cx4FVbP7X0fhLs34B8DLzIr6yUP_eYo4ueAIzFBABopTCQdd-TK/pub?gid=0&single=true&output=csv";
         let resources = { "B1": { modules: {} }, "B2": { modules: {} }, "B3": { modules: {} } };
-        const linkIcons = { "Intro_Python_Gamma": { icon: "☝️", linkClass: "bg-indigo-600" }, "Cours_Python": { icon: "🐍", linkClass: "bg-cta" }, "Audio": { icon: "🎧", linkClass: "bg-teal-600" }, "Excel": { icon: "📊", linkClass: "bg-green-600" }, "Infographie": { icon: "🖼️", linkClass: "bg-orange-600" }, "Présentation": { icon: "📽️", linkClass: "bg-slate-700" }, "Video": { icon: "📹", linkClass: "bg-red-500" } };
+        let progress = JSON.parse(localStorage.getItem('paia_elite_v2_progress') || '{}');
 
-        function fetchDataAndRender() {
-            Papa.parse(GOOGLE_SHEET_CSV_URL, {
+        const catKeys = ["Intro_Python_Gamma", "Cours_Python", "Audio", "Excel", "Infographie", "Présentation", "Video"];
+        const catEmojis = { "Intro_Python_Gamma": "☝️", "Cours_Python": "🐍", "Audio": "🎧", "Excel": "📊", "Infographie": "🖼️", "Présentation": "📽️", "Video": "📹" };
+
+        function init() {
+            Papa.parse(CSV_URL, {
                 download: true, header: true, skipEmptyLines: true,
-                complete: function(results) { processCSVData(results.data); document.getElementById('loading-status').style.display = 'none'; showTab('accueil'); }
+                complete: (results) => {
+                    parseData(results.data);
+                    document.getElementById('loading').style.display = 'none';
+                    switchTab('accueil');
+                }
             });
         }
 
-        function processCSVData(data) {
-            let currentBloc = null; let currentModuleKey = null;
+        function parseData(data) {
+            let curBloc = null; let curMod = null;
             data.forEach(row => {
-                let titleRaw = row['Titres des catégories']; if (!titleRaw) return;
-                if (/^B[1-3]_/.test(titleRaw) && !titleRaw.includes('_M')) { currentBloc = titleRaw.split('_')[0]; }
-                else if (titleRaw.includes('_M') && !titleRaw.includes('_S')) {
-                    if (currentBloc && resources[currentBloc]) {
-                        currentModuleKey = titleRaw.replace(/^B\d+_/, '').replace(/_/g, ' - ');
-                        if (!resources[currentBloc].modules[currentModuleKey]) resources[currentBloc].modules[currentModuleKey] = [];
+                let title = row['Titres des catégories']?.trim(); if (!title) return;
+                if (/^B[1-3]_/.test(title) && !title.includes('_M')) curBloc = title.split('_')[0];
+                else if (title.includes('_M') && !title.includes('_S')) {
+                    if (curBloc) {
+                        curMod = title.replace(/^B\d+_/, '').replace(/_/g, ' ');
+                        if (!resources[curBloc].modules[curMod]) resources[curBloc].modules[curMod] = [];
                     }
-                }
-                else if (titleRaw.includes('_S')) {
-                    if (currentBloc && currentModuleKey && resources[currentBloc]) {
-                        let matchCode = titleRaw.match(/^(B\d+_M\d+_S\d+)/);
-                        let fullCode = matchCode ? matchCode[1] : "CODE?";
-                        let cleanTitle = titleRaw.substring(fullCode.length).replace(/^[-_\s]+/, '');
-                        resources[currentBloc].modules[currentModuleKey].push({
-                            title: cleanTitle, fullCode: fullCode,
+                } else if (title.includes('_S')) {
+                    if (curBloc && curMod) {
+                        let codeMatch = title.match(/^(B\d+_M\d+_S\d+)/);
+                        let code = codeMatch ? codeMatch[1] : "??";
+                        let label = title.substring(code.length).replace(/^[-_\s]+/, '');
+                        resources[curBloc].modules[curMod].push({
+                            code, label,
                             links: { "Intro_Python_Gamma": row['Intro_Python_Gamma'], "Cours_Python": row['Cours_Python'], "Audio": row['Audio'], "Excel": row['Excel'], "Infographie": row['Infographie'], "Présentation": row['Présentation'], "Video": row['Video'] }
                         });
                     }
@@ -126,42 +217,142 @@
             });
         }
 
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-button').forEach(btn => { btn.classList.remove('active-tab', 'text-title'); btn.classList.add('text-gray-500'); });
-            const activeBtn = document.getElementById(`tab-${tabName}`);
-            if(activeBtn) { activeBtn.classList.add('active-tab', 'text-title'); activeBtn.classList.remove('text-gray-500'); }
-            if (tabName === 'accueil') renderAccueil(); else renderBloc(tabName);
+        function updateProgress(code, cat) {
+            const key = `${code}_${cat}`;
+            progress[key] = !progress[key];
+            localStorage.setItem('paia_elite_v2_progress', JSON.stringify(progress));
+            refreshLine(code);
+            if(window.curTab === 'accueil') renderAccueil();
+        }
+
+        function validateLine(code) {
+            let allOn = catKeys.every(k => progress[`${code}_${k}`]);
+            catKeys.forEach(k => progress[`${code}_${k}`] = !allOn);
+            localStorage.setItem('paia_elite_v2_progress', JSON.stringify(progress));
+            refreshLine(code);
+            if(window.curTab === 'accueil') renderAccueil();
+        }
+
+        function refreshLine(code) {
+            const row = document.querySelector(`[data-code="${code}"]`); if (!row) return;
+            let count = 0;
+            catKeys.forEach(k => {
+                const el = row.querySelector(`[data-cat="${k}"]`);
+                if (progress[`${code}_${k}`]) { el.classList.add('done'); count++; }
+                else el.classList.remove('done');
+            });
+            const percent = Math.round((count / catKeys.length) * 100);
+            row.querySelector('.prog-fill').style.width = percent + '%';
+            const vBtn = row.querySelector('.btn-pill-sexy');
+            if (percent === 100) { vBtn.classList.add('active'); vBtn.innerText = "Terminé"; row.classList.add('fully-complete'); }
+            else { vBtn.classList.remove('active'); vBtn.innerText = "Valider"; row.classList.remove('fully-complete'); }
+        }
+
+        function createCal(title, url, days) {
+            const d = new Date(); d.setDate(d.getDate() + days);
+            const iso = d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+            return `https://www.google.com/calendar/render?action=TEMPLATE&text=RELECTURE : ${encodeURIComponent(title)}&dates=${iso}/${iso}&details=Document : ${title}%0ALien : ${url}&sf=true&output=xml`;
+        }
+
+        function switchTab(t) {
+            window.curTab = t;
+            document.querySelectorAll('[id^="tab-"]').forEach(b => { 
+                b.classList.remove('text-[#0F2C48]', 'bg-slate-50', 'border-slate-100', 'shadow-sm'); 
+                b.classList.add('text-slate-400'); 
+            });
+            const active = document.getElementById('tab-' + t);
+            active.classList.add('text-[#0F2C48]', 'bg-slate-50', 'border-slate-100', 'shadow-sm');
+            active.classList.remove('text-slate-400');
+            if (t === 'accueil') renderAccueil(); else renderBloc(t);
         }
 
         function renderAccueil() {
-            let html = `<div class="bg-white p-6 rounded-xl shadow-md border-l-8 border-cta text-center"><h2 class="text-2xl font-bold mb-4">Écosystème Python 🐍</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-4">`;
-            Object.keys(resources).forEach(key => {
-                html += `<div class="p-4 border rounded-lg"><h3 class="font-bold mb-2">Bloc ${key}</h3><button onclick="showTab('${key}')" class="w-full bg-[#0F2C48] text-white py-2 rounded-md text-sm font-bold">Consulter</button></div>`;
+            let html = `<div class="bg-white p-10 rounded-3xl shadow-sm border-l-8 border-cta"><h3 class="text-2xl font-bold mb-8 text-center text-slate-800">Synthèse de Progression 📊</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-8">`;
+            Object.keys(resources).forEach(b => {
+                let total = 0; let done = 0;
+                for (let m in resources[b].modules) {
+                    resources[b].modules[m].forEach(s => {
+                        catKeys.forEach(k => { total++; if (progress[`${s.code}_${k}`]) done++; });
+                    });
+                }
+                const p = total > 0 ? Math.round((done / total) * 100) : 0;
+                html += `<div class="p-8 border border-slate-100 rounded-3xl text-center bg-slate-50/50">
+                    <h4 class="text-xl font-bold mb-3 text-slate-700">Bloc ${b}</h4>
+                    <div class="h-3 bg-white border border-slate-100 rounded-full overflow-hidden shadow-inner"><div class="h-full bg-cta transition-all duration-1000" style="width:${p}%"></div></div>
+                    <p class="mt-3 font-bold text-cta text-lg">${p}%</p>
+                    <button onclick="switchTab('${b}')" class="mt-5 w-full bg-[#0F2C48] text-white py-3 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition">Détails</button>
+                </div>`;
             });
             html += `</div></div>`;
-            document.getElementById('resources-container').innerHTML = html;
+            document.getElementById('container').innerHTML = html;
         }
 
-        function renderBloc(blocKey) {
-            const bloc = resources[blocKey];
-            let html = `<div class="bg-white p-6 rounded-xl shadow-md border-l-8 border-[#0F2C48]"><h2 class="text-xl font-bold mb-6 text-[#0F2C48] uppercase tracking-wider">Formation : Bloc ${blocKey}</h2>`;
-            for (const mod in bloc.modules) {
-                html += `<div class="mb-6 border rounded-xl overflow-hidden shadow-sm"><div class="bg-gray-50 p-4 font-bold border-b text-[#0F2C48] text-sm">${mod}</div><div class="p-4 space-y-3">`;
-                bloc.modules[mod].forEach(session => {
-                    html += `<div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 border-b last:border-0 hover:bg-gray-50 transition rounded-lg"><span class="text-sm mb-2 sm:mb-0"><b class="font-mono text-cta">${session.fullCode}</b> - ${session.title}</span><div class="flex gap-2">`;
-                    Object.keys(linkIcons).forEach(cat => {
-                        let link = session.links[cat]; let icon = linkIcons[cat];
-                        if (link && link.trim() !== "" && link !== "null") html += `<a href="${link}" target="_blank" class="${icon.linkClass} text-white w-9 h-9 rounded-full flex items-center justify-center text-[10px] shadow-sm hover:scale-110 transition" title="${cat}">${icon.icon}</a>`;
-                        else html += `<span class="bg-gray-100 text-gray-300 w-9 h-9 rounded-full flex items-center justify-center opacity-40 text-[10px]">${icon.icon}</span>`;
+        function renderBloc(b) {
+            let html = `<div class="bg-white p-6 rounded-3xl shadow-sm border-l-8 border-[#0F2C48]"><h3 class="text-2xl font-bold mb-8 uppercase flex justify-between items-center text-slate-700">Bloc ${b} <span class="text-xs font-bold text-cta bg-amber-50 px-3 py-1 rounded-full">${calculateBlocPercent(b)}%</span></h3>`;
+            let idx = 0;
+            for (let m in resources[b].modules) {
+                const mid = `mod-${b}-${idx++}`;
+                html += `<div class="module-card"><div class="module-header" onclick="document.getElementById('${mid}').classList.toggle('hidden')"><h3 class="font-bold">${m}</h3><i class="fas fa-chevron-down text-slate-300 transition-transform"></i></div><div id="${mid}" class="hidden">`;
+                resources[b].modules[m].forEach(s => {
+                    const firstUrl = Object.values(s.links).find(l => l && l !== "null" && l.trim() !== "") || "#";
+                    html += `<div class="session-row" data-code="${s.code}">
+                        <div class="session-header-line">
+                            <div class="title-block">
+                                <span class="session-code">${s.code}</span>
+                                <span class="session-title-text">- ${s.label}</span>
+                            </div>
+                            <div class="action-controls">
+                                <button onclick="validateLine('${s.code}')" class="btn-pill-sexy">Valider</button>
+                                <div class="relative">
+                                    <div class="btn-agenda-sexy" title="Programmer un rappel"><i class="fas fa-calendar-day"></i></div>
+                                    <div class="cal-popover">
+                                        <p class="text-[9px] font-bold text-slate-400 mb-3 uppercase tracking-tighter border-b pb-2">Art de la répétition 🧠</p>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            ${[3, 10, 30, 60, 90, 120].map(d => `<a href="${createCal(s.label, firstUrl, d)}" target="_blank" class="cal-link">J+${d}</a>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="prog-track"><div class="prog-fill"></div></div>
+                        <div class="resource-list">`;
+                    catKeys.forEach((k, i) => {
+                        const l = s.links[k]; const av = l && l !== "null" && l.trim() !== "";
+                        html += `
+                        <div class="icon-box">
+                            <div class="icon-btn-elite ${av ? '' : 'opacity-10 pointer-events-none'}" 
+                                 data-cat="${k}" 
+                                 onclick="${av ? `window.open('${l}', '_blank');` : ''} event.stopPropagation();"
+                                 title="${av ? 'Clic: Ouvrir / Bouton + : Valider' : 'Indisponible'}">
+                                ${catEmojis[k]}
+                            </div>
+                            <div class="valid-check"><i class="fas fa-check"></i></div>
+                            <button onclick="updateProgress('${s.code}', '${k}'); event.stopPropagation();" 
+                                    class="manual-plus ${av ? '' : 'hidden'}" title="Valider la lecture">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>`;
+                        if (i < catKeys.length - 1) html += `<div class="resource-dot"></div>`;
                     });
                     html += `</div></div>`;
                 });
                 html += `</div></div>`;
             }
-            html += `</div>`;
-            document.getElementById('resources-container').innerHTML = html;
+            document.getElementById('container').innerHTML = html;
+            resources[b].modules[Object.keys(resources[b].modules)[0]]?.forEach(s => refreshLine(s.code));
         }
-        document.addEventListener('DOMContentLoaded', fetchDataAndRender);
+
+        function calculateBlocPercent(b) {
+            let t = 0; let d = 0;
+            for (let m in resources[b].modules) {
+                resources[b].modules[m].forEach(s => {
+                    catKeys.forEach(k => { t++; if (progress[`${s.code}_${k}`]) d++; });
+                });
+            }
+            return t > 0 ? Math.round((d/t)*100) : 0;
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>
