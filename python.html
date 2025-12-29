@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAIA - Formation Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-cta: #D9A526; --color-title: #0F2C48; --color-surface: #F6F2E8;
+            --color-progress: #E91E63; --color-b1: #B91C1C; --color-b2: #f59e0b; --color-b3: #0F2C48;
+            --brand-main: var(--color-title); --brandGold: var(--color-cta); --ivory: var(--color-surface);
+            --footer-bg: var(--color-title); --footer-text: var(--color-surface);
+        }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; }
+        .top-bar { background: var(--brand-main); padding: 12px 0; position: sticky; top: 0; z-index: 9999; border-bottom: 4px solid var(--brandGold); width: 100%; }
+        .top-bar-container { width: 100%; max-width: 100%; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-top { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--brandGold); background: white; }
+        .btn-portfolio { padding: 6px 14px; border-radius: 8px; background: var(--brandGold); color: white; font-weight: 700; }
+        .main-footer { background: var(--footer-bg); color: var(--footer-text); padding: 40px 40px 20px 40px; margin-top: auto; font-family: 'Fira Code', monospace; }
+        .footer-logo-img { width: 60px; height: 60px; border-radius: 8px; border: 2px solid var(--brandGold); overflow: hidden; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 8px; background: rgba(255, 255, 255, 0.06); display: inline-flex; align-items: center; justify-content: center; }
+        .tab-button.active-tab { border-bottom: 3px solid var(--color-cta); color: var(--color-title); }
+        .loading-spinner { border: 4px solid rgba(217, 165, 38, 0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: var(--color-cta); animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="flex items-center gap-4">
+                <img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png">
+                <div>
+                    <div class="text-white font-bold text-lg font-code">💫 PAIA ✨ By Mathilde Martine PAISLEY</div>
+                    <div class="text-[#D9A526] text-sm font-semibold">Payroll Automation & Intelligent Architecture</div>
+                </div>
+            </div>
+            <a class="btn-portfolio" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/">Portfolio 💫</a>
+        </div>
+    </div>
+    <main class="flex-grow p-8">
+        <div class="max-w-7xl mx-auto">
+            <header class="text-center mb-8 p-6 bg-white rounded-xl shadow-lg border-b-4 border-cta">
+                <h1 class="text-4xl font-extrabold text-title" style="font-family: 'Playfair Display', serif;">Formation Développeur Web Python</h1>
+                <div id="loading-status" class="mt-4"><div class="loading-spinner"></div></div>
+            </header>
+            <div class="bg-white rounded-xl shadow-lg mb-8 p-4">
+                <nav class="flex space-x-4 border-b"><button onclick="showTab('accueil')" id="tab-accueil" class="tab-button active-tab px-4 py-2 font-medium">🏠 Accueil</button><button onclick="showTab('B1')" id="tab-B1" class="tab-button px-4 py-2 font-medium text-gray-600">Bloc B1</button><button onclick="showTab('B2')" id="tab-B2" class="tab-button px-4 py-2 font-medium text-gray-600">Bloc B2</button><button onclick="showTab('B3')" id="tab-B3" class="tab-button px-4 py-2 font-medium text-gray-600">Bloc B3</button></nav>
+            </div>
+            <div id="resources-container" class="space-y-8"></div>
+        </div>
+    </main>
+    <footer class="main-footer">
+        <div class="flex flex-wrap justify-between gap-8">
+            <div class="flex gap-4 items-center">
+                <div class="footer-logo-img"><img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg"></div>
+                <div><div class="font-bold">Mathilde Martine PAISLEY</div><div class="text-sm opacity-80">📧 Mathilde.martine.paisley@gmail.com</div></div>
+            </div>
+            <div><div class="font-bold mb-2">Réseaux Sociaux</div><div class="flex gap-2"><a class="icon-btn" href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b"><i class="fab fa-whatsapp" style="color:#25D366;"></i></a><a class="icon-btn" href="https://discord.gg/redT9wEE6T"><i class="fab fa-discord" style="color:#5865F2;"></i></a><a class="icon-btn" href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/"><i class="fab fa-linkedin" style="color:#0077b5;"></i></a></div></div>
+        </div>
+        <div class="text-center mt-8 pt-4 border-t border-white/10 opacity-50">💫 PAIA ✨ By Mathilde Martine PAISLEY | © 2025</div>
+    </footer>
+    <script>
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1RgrBexz7gO2DjolXKWWppnBaEnvRdbu84eQNMNl1BSM/export?format=csv&gid=0";
+        let resources = { "B1": { title: "B1: Conception", modules: {} }, "B2": { title: "B2: Gestion", modules: {} }, "B3": { title: "B3: Data", modules: {} } };
+        const linkCategories = ['Intro_Python_Gamma', 'Cours_Python', 'Audio', 'Excel', 'Infographie', 'Présentation', 'Video'];
+        const linkIcons = { "Intro_Python_Gamma": { icon: "☝️", linkClass: "bg-indigo-600" }, "Cours_Python": { icon: "🐍", linkClass: "bg-cta" }, "Audio": { icon: "🎧", linkClass: "bg-teal-600" }, "Excel": { icon: "📊", linkClass: "bg-green-600" }, "Infographie": { icon: "🖼️", linkClass: "bg-orange-600" }, "Présentation": { icon: "📽️", linkClass: "bg-slate-700" }, "Video": { icon: "📹", linkClass: "bg-red-500" } };
+        function fetchDataAndRender() { Papa.parse(GOOGLE_SHEET_CSV_URL, { download: true, header: true, skipEmptyLines: true, complete: function(results) { processCSVData(results.data); document.getElementById('loading-status').style.display = 'none'; showTab('accueil'); } }); }
+        function processCSVData(data) { let currentBloc = null; let currentModuleKey = null; data.forEach(row => { let titleRaw = row['Titres des catégories']; if (!titleRaw) return; if (/^B[1-3]_/.test(titleRaw) && !titleRaw.includes('_M')) { currentBloc = titleRaw.split('_')[0]; } else if (titleRaw.includes('_M') && !titleRaw.includes('_S')) { if (currentBloc) { currentModuleKey = titleRaw.replace(/^B\d+_/, '').replace(/_/g, ' - '); if (!resources[currentBloc].modules[currentModuleKey]) resources[currentBloc].modules[currentModuleKey] = []; } } else if (titleRaw.includes('_S')) { if (currentBloc && currentModuleKey) { let matchCode = titleRaw.match(/^(B\d+_M\d+_S\d+)/); let fullCode = matchCode ? matchCode[1] : "CODE?"; let cleanTitle = titleRaw.substring(fullCode.length).replace(/^[-_\s]+/, ''); resources[currentBloc].modules[currentModuleKey].push({ title: cleanTitle, fullCode: fullCode, links: { "Intro_Python_Gamma": row['Intro_Python_Gamma'], "Cours_Python": row['Cours_Python'], "Audio": row['Audio'], "Excel": row['Excel'], "Infographie": row['Infographie'], "Présentation": row['Présentation'], "Video": row['Video'] } }); } } }); }
+        function showTab(tabName) { document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active-tab', 'text-title')); document.getElementById(`tab-${tabName}`).classList.add('active-tab', 'text-title'); if (tabName === 'accueil') renderAccueil(); else renderBloc(tabName); }
+        function renderAccueil() { let html = `<div class="bg-white p-8 rounded-xl shadow-lg border-l-8 border-cta"><h2 class="text-3xl font-bold text-title mb-6">Écosystème PAIA Python</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6">`; Object.keys(resources).forEach(key => { html += `<div class="p-6 border rounded-xl hover:shadow-md transition"><h3 class="font-bold text-xl mb-4">${resources[key].title}</h3><button onclick="showTab('${key}')" class="w-full bg-title text-white py-2 rounded-lg font-bold">Consulter</button></div>`; }); html += `</div></div>`; document.getElementById('resources-container').innerHTML = html; }
+        function renderBloc(blocKey) { const bloc = resources[blocKey]; let html = `<div class="bg-white p-6 rounded-xl shadow-lg border-l-8 border-title"><h2 class="text-2xl font-bold mb-6">${bloc.title}</h2>`; for (const mod in bloc.modules) { html += `<div class="mb-6 border rounded-xl overflow-hidden"><div class="bg-gray-50 p-4 font-bold border-b text-title">${mod}</div><div class="p-4 space-y-3">`; bloc.modules[mod].forEach(session => { html += `<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border-b last:border-0"><span class="text-sm"><b class="font-mono text-cta">${session.fullCode}</b> - ${session.title}</span><div class="flex gap-2">`; linkCategories.forEach(cat => { let link = session.links[cat]; let icon = linkIcons[cat]; if (link && link.trim() !== "") html += `<a href="${link}" target="_blank" class="${icon.linkClass} text-white w-9 h-9 rounded-full flex items-center justify-center shadow-sm" title="${cat}">${icon.icon}</a>`; else html += `<span class="bg-gray-100 text-gray-300 w-9 h-9 rounded-full flex items-center justify-center opacity-40">${icon.icon}</span>`; }); html += `</div></div>`; }); html += `</div></div>`; } html += `</div>`; document.getElementById('resources-container').innerHTML = html; }
+        document.addEventListener('DOMContentLoaded', fetchDataAndRender);
+    </script>
+</body>
+</html>
