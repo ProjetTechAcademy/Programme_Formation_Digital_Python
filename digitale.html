@@ -3,102 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAIA - Digitale Elite V3.8</title>
+    <title>PAIA - Expertise Digitale Elite Plus V5.6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --color-cta: #D9A526; /* Or */
-            --color-title: #0F2C48; /* Bleu Nuit */
-            --color-surface: #F6F2E8; /* Votre Beige de fond */
-            --color-card: #FDFBF7; /* Beige très clair pour remplacer le blanc */
+            --color-cta: #D9A526; /* Jaune Or */
+            --color-blue: #0F2C48; /* Bleu Nuit */
+            --color-surface: #F6F2E8; /* Ivoire */
+            --color-card: #FDFBF7; /* Crème */
+            --color-bronze: #B4792A; /* Bronze */
             --color-done: #10b981;
-            --glass: rgba(15, 44, 72, 0.95);
         }
 
         body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; color: #334155; }
         
-        /* NAVIGATION GLASSMORPHISM AVEC ÉCRITURE BEIGE */
-        .top-bar { 
-            background: var(--glass); 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 10px 0; border-bottom: 3px solid var(--color-cta); 
-            position: sticky; top: 0; z-index: 1000; 
-        }
-        .logo-top { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--color-cta); object-fit: cover; }
-        .nav-link { color: var(--color-surface); padding: 6px 10px; border-radius: 8px; transition: 0.3s; font-size: 1.2rem; }
-        .nav-link:hover { color: var(--color-cta); background: rgba(255,255,255,0.05); }
-        .nav-link.active { border-bottom: 2px solid var(--color-cta); border-radius: 0; color: var(--color-cta); }
-        .top-title { color: var(--color-surface); }
+        /* HEADER MPa AUTHENTIQUE */
+        .top-bar { background: var(--color-blue); border-bottom: 4px solid var(--color-cta); position: sticky; top: 0; z-index: 1000; padding: 10px 0; }
+        .logo-header { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--color-cta); object-fit: cover; }
+        .nav-link { color: white; opacity: 0.8; padding: 8px 12px; border-radius: 8px; transition: 0.3s; font-weight: 700; font-size: 0.95rem; }
+        .nav-link:hover { opacity: 1; color: var(--color-cta); }
+        .nav-link.active { opacity: 1; border-bottom: 3px solid var(--color-cta); border-radius: 0; }
+        .btn-portfolio-head { background: var(--color-cta); color: var(--color-blue); padding: 6px 16px; border-radius: 8px; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; transition: 0.3s; }
 
-        /* CARTES AVEC CONTOURS BLEU/OR ET FOND BEIGE CLAIR */
-        .module-card { 
-            background: var(--color-card); border-radius: 18px; margin-bottom: 20px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04); overflow: hidden; 
-            border: 2px solid var(--color-title); 
-            transition: 0.3s ease;
-        }
-        .module-card:hover { border-color: var(--color-cta); transform: translateY(-2px); }
+        /* CARDS & SESSIONS */
+        .module-card { background: var(--color-card); border-radius: 18px; margin-bottom: 18px; border: 2px solid var(--color-blue); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .module-header { width: 100%; text-align: left; padding: 16px 22px; background: white; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 2px solid var(--color-cta); }
+        .module-header h3 { font-size: 0.9rem; font-weight: 800; color: var(--color-blue); text-transform: uppercase; }
         
-        .module-header { 
-            width: 100%; text-align: left; padding: 18px 24px; 
-            background: var(--color-card); display: flex; justify-content: space-between; 
-            align-items: center; cursor: pointer; border-bottom: 2px solid var(--color-cta);
-        }
-        .module-header h3 { font-size: 0.95rem; font-weight: 800; color: var(--color-title); text-transform: uppercase; }
-        
-        .session-row { padding: 18px 24px; border-bottom: 1px solid rgba(15, 44, 72, 0.08); display: flex; flex-direction: column; gap: 12px; }
-        .session-row:last-child { border-bottom: none; }
-        
-        .session-code { font-family: 'Fira Code', monospace; color: var(--color-cta); font-weight: 700; font-size: 0.85rem; }
-        .session-title-text { font-weight: 600; font-size: 0.95rem; color: #475569; }
+        .session-row { padding: 14px 22px; border-bottom: 1px solid rgba(15, 44, 72, 0.1); transition: background 0.3s; }
+        .session-code { font-family: 'Fira Code', monospace; color: var(--color-bronze); font-weight: 800; font-size: 0.8rem; }
+        .session-title-text { font-weight: 600; font-size: 0.95rem; color: var(--color-blue); }
 
-        /* BOUTONS ACTIONS */
-        .btn-pill-elite { 
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); 
-            color: var(--color-title); /* Texte foncé sur bouton or pour moins d'agression */
-            font-size: 0.65rem; font-weight: 800; padding: 6px 14px; 
-            border-radius: 50px; text-transform: uppercase; border: none; cursor: pointer; transition: 0.2s;
+        /* AGENDA MULTI-CHOIX DROPDOWN */
+        .agenda-container { position: relative; }
+        .agenda-menu { 
+            position: absolute; right: 0; top: 110%; background: white; border: 2px solid var(--color-blue);
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 100;
+            display: none; min-width: 160px; padding: 6px;
         }
-        .btn-pill-elite.active { background: linear-gradient(135deg, #34d399 0%, #10b981 100%); color: white; }
-        .btn-agenda { width: 34px; height: 34px; border-radius: 50%; background: var(--color-card); display: flex; align-items: center; justify-content: center; color: #3b82f6; border: 1.5px solid #e2e8f0; cursor: pointer; }
+        .agenda-item { padding: 8px 12px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; cursor: pointer; color: var(--color-blue); transition: 0.2s; }
+        .agenda-item:hover { background: var(--color-surface); color: var(--color-cta); }
 
-        /* ICONS RESSOURCES */
-        .resource-list { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .icon-box { position: relative; }
+        /* ICONS - 30% OPACITY WHEN EMPTY */
+        .resource-list { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
         .icon-btn-elite { 
-            width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; 
-            transition: 0.2s; font-size: 1.5rem; background: var(--color-card); border: 1.5px solid #e2e8f0; cursor: pointer;
+            width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.5rem; background: white; border: 1.5px solid #e2e8f0; position: relative; transition: 0.3s;
         }
-        .icon-btn-elite.done { border-color: var(--color-done); border-width: 2.5px; }
-        
-        /* SEARCH & FILTERS */
-        .search-input { width: 100%; padding: 12px 20px 12px 40px; border-radius: 50px; background: var(--color-card); border: 2px solid var(--color-title); outline: none; transition: 0.3s; color: var(--color-title); }
-        .search-input::placeholder { color: #94a3b8; }
-        .search-input:focus { border-color: var(--color-cta); box-shadow: 0 0 15px rgba(217, 165, 38, 0.1); }
-        
-        .filter-btn { padding: 6px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; background: var(--color-card); border: 1.5px solid var(--color-title); transition: 0.2s; color: var(--color-title); }
-        .filter-btn.active { background: var(--color-cta); color: var(--color-title); border-color: var(--color-cta); }
+        .icon-btn-elite.empty { opacity: 0.3; } /* Toujours coloré mais translucide */
+        .icon-btn-elite.done { border-color: var(--color-done); border-width: 3px; opacity: 1; }
+        .valid-check { position: absolute; top: -5px; right: -5px; background: var(--color-done); color: white; width: 16px; height: 16px; border-radius: 50%; font-size: 8px; display: none; align-items: center; justify-content: center; border: 2px solid white; z-index: 10; }
+        .icon-btn-elite.done + .valid-check { display: flex; }
 
-        /* TABS NAVIGATION */
-        #tabs { border: 2px solid var(--color-title); background: var(--color-card); }
-        #tabs button.active-tab-style { background: var(--color-title); color: var(--color-surface); }
-
-        /* FOOTER COMPACT & DISCRET */
-        .compact-footer { 
-            background: var(--color-title); color: var(--color-surface); 
-            padding: 12px 20px; border-top: 3px solid var(--color-cta); margin-top: auto;
-        }
-        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .footer-info a { color: var(--color-surface); transition: 0.2s; }
-        .footer-info a:hover { color: var(--color-cta); }
-
-        .copyright-line { text-align: center; font-size: 9px; opacity: 0.6; margin-top: 5px; text-transform: uppercase; color: var(--color-surface); }
-
-        .sticky-prog-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 5px; background: rgba(0,0,0,0.1); z-index: 1100; }
-        .sticky-prog-fill { height: 100%; background: var(--color-cta); width: 0%; transition: width 0.8s; }
+        /* FOOTER MPa RESTAURÉ */
+        footer { background: var(--color-blue); color: white; padding: 35px 20px; border-top: 5px solid var(--color-cta); margin-top: auto; }
+        .footer-logo-box { display: flex; align-items: center; gap: 12px; }
+        .footer-logo-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--color-cta); object-fit: cover; }
+        .footer-photo-img { width: 60px; height: 60px; border-radius: 12px; border: 2px solid var(--color-cta); object-fit: cover; }
+        .footer-link { color: white; text-decoration: none; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.95rem; font-weight: 500; margin-bottom: 2px; }
+        .footer-link:hover { color: var(--color-cta); transform: translateX(5px); }
+        .social-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: 0.3s; background: rgba(255,255,255,0.1); }
+        .social-icon:hover { transform: translateY(-4px); filter: brightness(1.2); }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
@@ -108,246 +76,229 @@
     <header class="top-bar">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <a href="index.html"><img class="logo-top shadow-md" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo"></a>
-                <h1 class="text-lg font-extrabold top-title leading-tight">💫 PAIA <span class="text-[#D9A526]">Digitale</span></h1>
+                <img class="logo-header shadow-md" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Header Logo">
+                <div class="hidden sm:block">
+                    <h1 class="text-xl font-black text-white leading-none">💫 PAIA ✨ <span class="text-[#D9A526]">Digital</span></h1>
+                    <p class="text-[8px] text-white/60 font-bold uppercase tracking-widest mt-1">Payroll Automation & Intelligent Architecture</p>
+                </div>
             </div>
-            <nav class="flex items-center gap-4">
-                <a href="index.html" class="nav-link" title="Accueil">🏠</a>
-                <a href="python.html" class="nav-link opacity-40">🐍</a>
-                <a href="digitale.html" class="nav-link active">🚀</a>
-                <a href="paie.html" class="nav-link opacity-40">📊</a>
-                <a href="rh.html" class="nav-link opacity-40">⚖️</a>
+            <nav class="flex items-center gap-2">
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/" class="nav-link">🏠</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/python.html" class="nav-link">🐍</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/digitale.html" class="nav-link active">🚀</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/paie.html" class="nav-link">💰</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/rh.html" class="nav-link">⚖️</a>
+                <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" class="btn-portfolio-head ml-3">Portfolio</a>
             </nav>
         </div>
     </header>
 
-    <main class="flex-grow p-4 sm:p-8 max-w-6xl mx-auto w-full">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-extrabold text-[#0F2C48] uppercase mb-6">Expertise Digitale</h2>
-            
+    <main class="flex-grow p-4 sm:p-10 max-w-6xl mx-auto w-full">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black text-[#0F2C48] uppercase tracking-tighter mb-4">Expertise Stratégique Digital</h2>
             <div class="relative max-w-md mx-auto mb-6">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un sujet ou un code..." oninput="handleSearch()">
+                <input type="text" id="searchInput" class="w-full pl-12 pr-4 py-2.5 rounded-full border-2 border-[#0F2C48] outline-none shadow-sm focus:ring-4 focus:ring-blue-50" placeholder="Rechercher une session..." oninput="handleSearch()">
             </div>
-
-            <div class="flex flex-wrap justify-center gap-2 mb-6">
-                <button class="filter-btn active" onclick="setFilter('all', this)">Tous</button>
-                <button class="filter-btn" onclick="setFilter('Video', this)">📹 Vidéos</button>
-                <button class="filter-btn" onclick="setFilter('Excel', this)">📊 Excel</button>
-                <button class="filter-btn" onclick="setFilter('Cours_Python', this)">💻 Cours</button>
-            </div>
-
-            <div id="loading" class="mt-4 flex justify-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-cta"></div></div>
+            <div id="loading" class="flex justify-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-cta"></div></div>
         </div>
 
         <div class="flex justify-center mb-8 overflow-x-auto no-scrollbar">
-            <nav id="tabs" class="p-1.5 rounded-2xl shadow-md flex gap-1.5"></nav>
+            <nav id="tabs" class="bg-white p-1.5 rounded-2xl shadow-md border-2 border-[#0F2C48] flex gap-1"></nav>
         </div>
 
         <div id="container" class="space-y-4 pb-12"></div>
     </main>
 
-    <div class="sticky-prog-bar"><div id="global-prog-fill" class="sticky-prog-fill"></div></div>
-
-    <footer class="compact-footer">
-        <div class="footer-content">
-            <div class="font-bold text-sm tracking-tight">Mathilde Martine PAISLEY</div>
-            <div class="footer-info">
-                <a href="mailto:mathilde.martine.paisley@gmail.com"><i class="fas fa-envelope text-cta"></i> Email</a>
-                <a href="tel:+33685900887"><i class="fas fa-phone-alt text-cta"></i> 06 85 90 08 87</a>
+    <footer id="main-footer">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-5 flex-1">
+                <div class="footer-logo-box">
+                    <img class="footer-logo-img shadow-lg" src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg" alt="Logo MPa">
+                    <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank">
+                        <img class="footer-photo-img shadow-lg hover:scale-105 transition" src="https://projettechacademy.github.io/Projet_Python/Asset/Photo_Mathilde_Martine_PAISLEY.jpeg" alt="Mathilde Martine PAISLEY">
+                    </a>
+                </div>
+                <div>
+                    <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" class="text-lg font-black hover:text-cta transition">Mathilde Martine PAISLEY</a>
+                    <p class="text-[9px] text-white/50 font-bold uppercase tracking-widest">Payroll Automation & Intelligent Architecture</p>
+                </div>
             </div>
-            <div class="footer-socials">
-                <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" style="color:#25D366"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" style="color:#0077b5"><i class="fab fa-linkedin"></i></a>
-                <a href="https://www.tiktok.com/@enervyx" style="color:var(--color-surface)"><i class="fab fa-tiktok"></i></a>
+
+            <div class="flex flex-col md:items-end gap-1 flex-1">
+                <a href="mailto:Mathilde.martine.paisley@gmail.com" class="footer-link"><i class="fas fa-envelope text-cta"></i> Mathilde.martine.paisley@gmail.com</a>
+                <a href="tel:+33685900887" class="footer-link"><i class="fas fa-phone-alt text-cta"></i> 06 85 90 08 87</a>
+            </div>
+
+            <div class="flex gap-2.5 flex-1 justify-end">
+                <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" class="social-icon" style="color:#25D366" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://discord.gg/redT9wEE6T" class="social-icon" style="color:#ED4245" title="Discord Red"><i class="fab fa-discord"></i></a>
+                <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" class="social-icon" style="color:#0077b5" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.tiktok.com/@enervyx" class="social-icon" style="color:#FFFFFF" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.instagram.com/enervyx/" class="social-icon" style="color:#E4405F" title="Instagram"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
-        <div class="copyright-line">© 30, décembre, 2025 | PAIA | Digitale Elite Plus</div>
+        <div class="text-center mt-10 opacity-20 text-[8px] uppercase tracking-[0.4em] font-bold">
+            © 31, décembre, 2025 | PAIA by MPa
+        </div>
     </footer>
 
     <script>
-        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cQoVFW8twSADbAWg6C_dHPMnzHc0Y1X6BfHYAKFGwXOOZU1kSDp_dotUkc20fzp8vsSEvuhyMzGh/pub?gid=0&single=true&output=csv";
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1VKl4B0GzwQwCgTyu3i7E-5cuZhdRARKVE4dizA87keDFdeKYdfdF5AmqcgiJcSWMaqihkr7iuOTA/pub?gid=0&single=true&output=csv";
         
         let resources = {};
         let currentTab = 'accueil';
-        let currentFilter = 'all';
         let currentSearch = '';
-        let progress = JSON.parse(localStorage.getItem('paia_digitale_v3.8_progress') || '{}');
+        let progress = JSON.parse(localStorage.getItem('paia_digital_v5.6_progress') || '{}');
         
-        const catKeys = ["Intro_Python_Gamma", "Cours_Python", "Audio", "Excel", "Infographie", "Présentation", "Video"];
-        const catEmojis = { "Intro_Python_Gamma":"☝️", "Cours_Python":"💻", "Audio":"🎧", "Excel":"📊", "Infographie":"🖼️", "Présentation":"📽️", "Video":"📹" };
+        const catKeys = ["Intro_Gamma", "Cours_Paie", "Audio", "Excel", "Infographie", "Présentation", "Video"];
+        const catEmojis = { "Intro_Gamma":"☝️", "Cours_Paie":"📁", "Audio":"🎧", "Excel":"📊", "Infographie":"🖼️", "Présentation":"📽️", "Video":"📹" };
 
         function init() {
-            Papa.parse(CSV_URL, {
-                download: true, header: true, skipEmptyLines: true,
-                complete: (results) => {
-                    processData(results.data);
-                    document.getElementById('loading').style.display='none';
-                    renderTabs(); switchTab('accueil'); updateGlobalProg();
-                }
+            Papa.parse(CSV_URL, { download: true, header: true, skipEmptyLines: true,
+                complete: (res) => { parseData(res.data); document.getElementById('loading').style.display='none'; renderTabs(); switchTab('accueil'); }
             });
         }
 
-        function processData(data) {
+        function parseData(data) {
             let curB = null; let curM = "Général";
             data.forEach(row => {
                 let t = row['Titres des catégories']?.trim(); 
-                if(!t) return;
+                if(!t || t === "Emoji" || t === "Titres des catégories" || t === "Calendrier") return;
                 
-                const codeSessionMatch = t.match(/^(B\d+_M\d+_S?\d+)/);
-                const codeModMatch = t.match(/^(B\d+_M\d+)/);
-                const codeBlocMatch = t.match(/^(B\d+)/);
+                const blocMatch = t.match(/^(Bloc_\d+)(?!_\d+)/i);
+                if (blocMatch) {
+                    curB = blocMatch[1].replace('Bloc_', 'B');
+                    const fullTitle = t.replace(blocMatch[1], '').replace(/^[ _-]+/, '').trim() || t;
+                    if(!resources[curB]) resources[curB] = { id: curB, fullTitle, mods: {} };
+                    curM = "Général"; return;
+                }
 
-                if (codeSessionMatch) {
-                    const code = codeSessionMatch[1];
-                    const label = t.replace(code, '').replace(/^[ _-]+/, '').trim();
+                const modMatch = t.match(/^(M\d+_Bloc_\d+)/i);
+                if (modMatch) {
+                    curM = t.replace(modMatch[1], '').replace(/^[. _-]+/, '').trim() || t;
+                    if(curB && !resources[curB].mods[curM]) resources[curB].mods[curM] = []; return;
+                }
+
+                const sessionMatch = t.match(/^(Bloc_\d+_\d+)/i);
+                if (sessionMatch) {
+                    const code = sessionMatch[1];
+                    const label = t.replace(code, '').replace(/^[ _-]+/, '').replace(/\.pdf$/i, '').trim();
                     if(curB) {
                         if(!resources[curB].mods[curM]) resources[curB].mods[curM] = [];
                         resources[curB].mods[curM].push({ code, label, links: row });
                     }
-                } else if (codeModMatch) {
-                    curM = t.replace(codeModMatch[1], '').replace(/^[. _-]+/, '').trim() || t;
-                    if(curB && !resources[curB].mods[curM]) resources[curB].mods[curM] = [];
-                } else if (codeBlocMatch) {
-                    curB = codeBlocMatch[1];
-                    const fullTitle = t.replace(curB, '').replace(/^[ _-]+/, '').trim() || t;
-                    if(!resources[curB]) resources[curB] = { id: curB, fullTitle, mods: {} };
-                    curM = "Général";
                 }
             });
         }
 
         function renderTabs() {
             let h = `<button onclick="switchTab('accueil')" id="tab-accueil" class="px-5 py-1.5 rounded-xl font-bold">🏠 Accueil</button>`;
-            Object.keys(resources).sort((a,b) => a.localeCompare(b, undefined, {numeric: true})).forEach(b => {
-                h += `<button onclick="switchTab('${b}')" id="tab-${b}" class="px-5 py-1.5 rounded-xl font-bold text-slate-400">${b}</button>`;
+            Object.keys(resources).sort().forEach(b => {
+                h += `<button onclick="switchTab('${b}')" id="tab-${b}" class="px-5 py-1.5 rounded-xl font-bold text-slate-400">Bloc ${b.replace('B','')}</button>`;
             });
             document.getElementById('tabs').innerHTML = h;
         }
 
         function switchTab(t) {
             currentTab = t;
-            document.querySelectorAll('#tabs button').forEach(b => {
-                b.classList.remove('active-tab-style', 'text-[#0F2C48]');
-                b.classList.add('text-slate-400');
-            });
+            document.querySelectorAll('#tabs button').forEach(b => { b.classList.remove('bg-[#0F2C48]', 'text-white'); b.classList.add('text-slate-400'); });
             const activeTab = document.getElementById('tab-'+t);
-            if(activeTab) {
-                activeTab.classList.add('active-tab-style');
-                activeTab.classList.remove('text-slate-400');
-            }
+            if(activeTab) { activeTab.classList.add('bg-[#0F2C48]', 'text-white'); activeTab.classList.remove('text-slate-400'); }
             refreshView();
         }
 
         function handleSearch() { currentSearch = document.getElementById('searchInput').value.toLowerCase(); refreshView(); }
-        function setFilter(type, btn) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active'); refreshView();
-        }
-
         function refreshView() { if(currentTab === 'accueil') renderAccueil(); else renderBloc(currentTab); }
 
         function renderAccueil() {
-            let h = `<div class="p-8 rounded-3xl border-2 border-[#0F2C48] text-center" style="background:rgba(255,255,255,0.2)">
-                <h3 class="text-xl font-bold mb-6 text-slate-800 tracking-tight uppercase">Tableau de bord des Blocs 🚀</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">`;
-            
-            Object.keys(resources).sort((a,b) => a.localeCompare(b, undefined, {numeric: true})).forEach(b => {
-                let total = 0; let done = 0;
-                for (let m in resources[b].mods) {
-                    resources[b].mods[m].forEach(s => { 
-                        catKeys.forEach(k => { total++; if (progress[s.code+'_'+k]) done++; }); 
-                    });
-                }
-                const p = total > 0 ? Math.round((done / total) * 100) : 0;
-                h += `<div class="p-4 border-2 border-[#0F2C48] rounded-2xl bg-white hover:border-cta transition-all cursor-pointer shadow-sm" onclick="switchTab('${b}')">
-                    <h4 class="font-bold mb-1 text-[#0F2C48]">Bloc ${b}</h4>
-                    <p class="text-[9px] text-slate-400 mb-2 uppercase truncate px-2">${resources[b].fullTitle}</p>
-                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-cta transition-all duration-1000" style="width:${p}%"></div></div>
-                    <p class="mt-2 text-xs font-bold text-cta">${p}%</p>
+            let h = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">`;
+            Object.keys(resources).sort().forEach(b => {
+                h += `<div class="p-8 border-2 border-[#0F2C48] rounded-3xl bg-white hover:border-cta transition-all cursor-pointer text-center group shadow-sm" onclick="switchTab('${b}')">
+                    <h4 class="font-black text-2xl mb-1 text-[#0F2C48] group-hover:text-cta transition-colors">Bloc ${b.replace('B','')}</h4>
+                    <p class="text-[10px] text-slate-400 mb-6 uppercase truncate font-bold">${resources[b].fullTitle}</p>
+                    <button class="bg-[#0F2C48] text-white w-full py-2.5 rounded-xl text-xs font-black uppercase group-hover:bg-cta transition-all">Consulter</button>
                 </div>`;
             });
-            document.getElementById('container').innerHTML = h + `</div></div>`;
+            document.getElementById('container').innerHTML = h + `</div>`;
         }
 
         function renderBloc(b) {
             const bloc = resources[b];
-            let h = `<div class="p-6 rounded-3xl border-l-8 border-[#0F2C48]" style="background:rgba(255,255,255,0.2)">
-                <h3 class="text-xl font-extrabold mb-1 uppercase text-slate-700">Bloc ${b}</h3>
-                <p class="text-xs text-slate-400 mb-6 italic">${bloc.fullTitle}</p>`;
+            let h = `<div class="p-6 rounded-3xl border-l-[10px] border-[#0F2C48] bg-white/40">
+                <h3 class="text-xl font-black mb-1 uppercase text-slate-700">Bloc ${b.replace('B','')}</h3>
+                <p class="text-[11px] text-slate-400 mb-8 italic font-medium">${bloc.fullTitle}</p>`;
             
-            let found = false;
             for(let m in bloc.mods) {
-                const sessions = bloc.mods[m].filter(s => {
-                    const matchText = s.label.toLowerCase().includes(currentSearch) || s.code.toLowerCase().includes(currentSearch);
-                    const matchFilter = currentFilter === 'all' || (s.links[currentFilter] && s.links[currentFilter] !== "null" && s.links[currentFilter] !== "");
-                    return matchText && matchFilter;
-                });
-
+                const sessions = bloc.mods[m].filter(s => s.label.toLowerCase().includes(currentSearch) || s.code.toLowerCase().includes(currentSearch));
                 if(sessions.length === 0) continue;
-                found = true;
                 const mid = `mod-${b}-${m.replace(/[^a-zA-Z0-9]/g,'')}`;
                 h += `<div class="module-card">
                     <div class="module-header" onclick="document.getElementById('${mid}').classList.toggle('hidden')">
                         <h3>Module : ${m}</h3><i class="fas fa-chevron-down text-cta"></i>
                     </div>
-                    <div id="${mid}" class="bg-[#FDFBF7]">`;
+                    <div id="${mid}" class="">`;
                 sessions.forEach(s => {
                     const firstUrl = Object.values(s.links).find(l => l && l !== "null" && l.trim() !== "") || "#";
                     h += `<div class="session-row" data-code="${s.code}">
-                        <div class="flex justify-between items-center flex-wrap gap-4 mb-1">
-                            <div><span class="session-code">${s.code}</span><span class="session-title-text ml-2">- ${s.label}</span></div>
+                        <div class="flex justify-between items-center flex-wrap gap-4">
+                            <div><span class="session-code">${s.code.replace(/_/g,' ')}</span><span class="session-title-text ml-3 font-bold">${s.label}</span></div>
                             <div class="flex items-center gap-3">
-                                <button onclick="validateLine('${s.code}')" class="btn-pill-elite">Valider</button>
-                                <a href="${createCal(s.label, firstUrl)}" target="_blank" class="btn-agenda"><i class="fas fa-calendar-day"></i></a>
+                                <button onclick="validateLine('${s.code}')" class="bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase transition-all hover:scale-105 shadow-sm">Valider</button>
+                                <div class="agenda-container">
+                                    <button onclick="toggleAgendaMenu('${s.code}')" class="w-9 h-9 rounded-full bg-white border-2 border-blue-300 text-blue-500 flex items-center justify-center hover:bg-blue-50 transition-all shadow-sm"><i class="fas fa-calendar-alt"></i></button>
+                                    <div id="agenda-menu-${s.code}" class="agenda-menu">
+                                        <div class="text-[9px] uppercase font-black text-slate-400 p-2 border-b">Relecture prévue :</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 3)">3 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 10)">10 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 30)">30 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 60)">60 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 90)">90 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 120)">120 jours</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="h-1 bg-slate-200/50 rounded-full overflow-hidden"><div class="prog-fill h-full bg-cta transition-all" style="width:0%"></div></div>
-                        <div class="resource-list mt-3">`;
+                        <div class="resource-list">`;
                     catKeys.forEach(k => {
                         let url = s.links[k]; let av = url && url !== "" && url !== "null";
-                        h += `<div class="icon-box">
-                                <div class="icon-btn-elite ${av?'':'opacity-10 pointer-events-none'}" data-cat="${k}" onclick="window.open('${url}','_blank')">${catEmojis[k]}</div>
-                                <div class="valid-check"><i class="fas fa-check"></i></div>
-                                <button onclick="toggleProg('${s.code}','${k}')" class="manual-plus ${av?'':'hidden'}"><i class="fas fa-plus"></i></button>
+                        h += `<div class="icon-box relative">
+                                <div class="icon-btn-elite ${av ? '' : 'empty'}" data-cat="${k}" onclick="${av ? `window.open('${url}','_blank')` : ''}">${catEmojis[k]}<div class="valid-check"><i class="fas fa-check"></i></div></div>
+                                <button onclick="toggleProg('${s.code}','${k}')" class="absolute bottom-[-4px] right-[-4px] bg-white border border-slate-200 rounded-full w-5 h-5 flex items-center justify-center text-[8px] text-slate-400 hover:text-cta ${av?'':'hidden'} shadow-sm"><i class="fas fa-plus"></i></button>
                             </div>`;
                     });
                     h += `</div></div>`;
                 });
                 h += `</div></div>`;
             }
-            if(!found) h += `<p class="text-center py-10 text-slate-400">Aucun résultat trouvé pour votre recherche.</p>`;
             document.getElementById('container').innerHTML = h + `</div>`;
             Object.values(bloc.mods).flat().forEach(s => refreshLine(s.code));
         }
 
-        function toggleProg(c,k){ let key = c+'_'+k; progress[key]=!progress[key]; localStorage.setItem('paia_digitale_v3.8_progress', JSON.stringify(progress)); refreshLine(c); updateGlobalProg(); }
-        function validateLine(c){ catKeys.forEach(k => progress[c+'_'+k]=true); localStorage.setItem('paia_digitale_v3.8_progress', JSON.stringify(progress)); refreshLine(c); updateGlobalProg(); }
-        
+        function toggleAgendaMenu(code) {
+            document.querySelectorAll('.agenda-menu').forEach(m => { if(m.id !== `agenda-menu-${code}`) m.style.display = 'none'; });
+            const m = document.getElementById(`agenda-menu-${code}`);
+            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function plan(title, url, days) {
+            const d = new Date(); d.setDate(d.getDate() + days);
+            const iso = d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+            const calUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=RELECTURE DIGITAL : ${encodeURIComponent(title)}&dates=${iso}/${iso}&details=Lien vers la ressource : ${url}&sf=true&output=xml`;
+            window.open(calUrl, '_blank');
+        }
+
+        function toggleProg(c,k){ let key = c+'_'+k; progress[key]=!progress[key]; localStorage.setItem('paia_digital_v5.6_progress', JSON.stringify(progress)); refreshLine(c); }
+        function validateLine(c){ catKeys.forEach(k => progress[c+'_'+k]=true); localStorage.setItem('paia_digital_v5.6_progress', JSON.stringify(progress)); refreshLine(c); }
         function refreshLine(c) {
             const row = document.querySelector(`[data-code="${c}"]`); if(!row) return;
-            let count = 0; 
             catKeys.forEach(k => { 
                 const icon = row.querySelector(`[data-cat="${k}"]`);
-                if(progress[c+'_'+k]) { icon.classList.add('done'); count++; } else icon.classList.remove('done');
+                if(progress[c+'_'+k]) icon.classList.add('done'); else icon.classList.remove('done');
             });
-            const pf = row.querySelector('.prog-fill'); if(pf) pf.style.width = (count/catKeys.length*100)+'%';
         }
 
-        function updateGlobalProg() {
-            let total = 0; let done = 0;
-            for(let b in resources) { for(let m in resources[b].mods) { resources[b].mods[m].forEach(s => { catKeys.forEach(k => { total++; if(progress[s.code+'_'+k]) done++; }); }); } }
-            const p = total > 0 ? (done / total * 100) : 0;
-            const el = document.getElementById('global-prog-fill'); if(el) el.style.width = p + '%';
-        }
-
-        function createCal(title, url) { 
-            const d = new Date(); d.setDate(d.getDate() + 7); 
-            const iso = d.toISOString().replace(/-|:|\.\d\d\d/g, ""); 
-            return `https://www.google.com/calendar/render?action=TEMPLATE&text=RELECTURE : ${encodeURIComponent(title)}&dates=${iso}/${iso}&details=Lien : ${url}&sf=true&output=xml`; 
-        }
-
+        window.onclick = (e) => { if (!e.target.closest('.agenda-container')) document.querySelectorAll('.agenda-menu').forEach(m => m.style.display = 'none'); };
         window.onload = init;
     </script>
 </body>
