@@ -3,98 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAIA - Expertise Paie V2.0</title>
+    <title>PAIA - Expertise Paie Elite Plus V5.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --color-cta: #FF9F1C; --color-title: #C2185B; --color-surface: #FFF9FB; --brandGold: #D9A526; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; }
-        .top-bar { background: var(--color-title); padding: 8px 0; border-bottom: 3px solid #D9A526; width: 100%; position: sticky; top: 0; z-index: 999; }
-        .logo-top { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #D9A526; background: white; }
-        .nav-emoji { font-size: 1.4rem; padding: 4px; border-radius: 6px; }
-        .active-nav { border-bottom: 2px solid #FF9F1C; background: rgba(255,255,255,0.1); }
-        .main-footer { background: #2D0A15; color: white; padding: 40px 0 0 0; margin-top: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; }
-        .footer-container { width: 100%; max-width: 1200px; padding: 0 40px; margin: 0 auto; display: flex; gap: 30px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
-        .footer-contact-link { color: #FF9F1C; text-decoration: none; }
-        .copyright-single-line { text-align: center; margin-top: 30px; padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.70rem; color: rgba(255,255,255,0.7); }
-        .tab-button { transition: all 0.2s; border-bottom: 3px solid transparent; }
-        .tab-button.active-tab { border-bottom-color: var(--color-cta); color: var(--color-title); font-weight: bold; }
-        .loading-spinner { border: 3px solid rgba(255, 159, 28, 0.1); width: 30px; height: 30px; border-radius: 50%; border-left-color: var(--color-cta); animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        :root { 
+            --color-cta: #D9A526; /* Jaune Or */
+            --color-title: #0F2C48; /* Bleu Nuit */
+            --color-surface: #F6F2E8; /* Ivoire / Beige Sable */
+            --color-card: #FDFBF7; /* Crème Clair */
+            --color-done: #10b981;
+            --color-alert: #B4792A; /* Bronze */
+        }
+
+        body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; color: #334155; }
+        
+        /* HEADER AUTHENTIQUE */
+        .top-bar { background: var(--color-title); border-bottom: 4px solid var(--color-cta); position: sticky; top: 0; z-index: 1000; padding: 10px 0; }
+        .logo-header { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--color-cta); object-fit: cover; }
+        .nav-link { color: white; opacity: 0.8; padding: 8px 12px; border-radius: 8px; transition: 0.3s; font-weight: 700; font-size: 0.95rem; }
+        .nav-link:hover { opacity: 1; color: var(--color-cta); }
+        .nav-link.active { opacity: 1; border-bottom: 3px solid var(--color-cta); border-radius: 0; color: var(--color-cta); }
+        .btn-portfolio-head { background: var(--color-cta); color: var(--color-title); padding: 6px 16px; border-radius: 8px; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; transition: 0.3s; }
+        .btn-portfolio-head:hover { transform: scale(1.05); filter: brightness(1.1); }
+
+        /* CARDS & TITRES */
+        .module-card { background: var(--color-card); border-radius: 18px; margin-bottom: 18px; border: 2px solid var(--color-title); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .module-header { width: 100%; text-align: left; padding: 16px 22px; background: white; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 2px solid var(--color-cta); }
+        .module-header h3 { font-size: 0.9rem; font-weight: 800; color: var(--color-title); text-transform: uppercase; }
+        
+        .session-row { padding: 14px 22px; border-bottom: 1px solid rgba(15, 44, 72, 0.1); }
+        .session-code { font-family: 'Fira Code', monospace; color: var(--color-cta); font-weight: 800; font-size: 0.8rem; }
+        .session-title-text { font-weight: 600; font-size: 0.95rem; color: #475569; }
+
+        /* DROPDOWN AGENDA */
+        .agenda-container { position: relative; }
+        .agenda-menu { 
+            position: absolute; right: 0; top: 110%; background: white; border: 2px solid var(--color-title);
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 100;
+            display: none; min-width: 160px; padding: 6px;
+        }
+        .agenda-item { padding: 8px 12px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; cursor: pointer; color: var(--color-title); transition: 0.2s; }
+        .agenda-item:hover { background: var(--color-surface); color: var(--color-cta); }
+
+        /* ICONS - 30% OPACITY WHEN EMPTY */
+        .resource-list { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .icon-btn-elite { 
+            width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.5rem; background: white; border: 1.5px solid #e2e8f0; position: relative; transition: 0.3s;
+        }
+        .icon-btn-elite.empty { opacity: 0.3; } /* Visible à 30% en couleur */
+        .icon-btn-elite.done { border-color: var(--color-done); border-width: 3px; opacity: 1; }
+        .valid-check { position: absolute; top: -5px; right: -5px; background: var(--color-done); color: white; width: 16px; height: 16px; border-radius: 50%; font-size: 8px; display: none; align-items: center; justify-content: center; border: 2px solid white; z-index: 10; }
+        .icon-btn-elite.done + .valid-check { display: flex; }
+
+        /* FOOTER MPa RESTAURÉ */
+        footer { background: var(--color-title); color: white; padding: 40px 20px; border-top: 6px solid var(--color-cta); margin-top: auto; }
+        .footer-logo-box { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .footer-logo-img { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--color-cta); object-fit: cover; }
+        .footer-link { color: white; text-decoration: none; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 1rem; margin-bottom: 8px; font-weight: 500; }
+        .footer-link:hover { color: var(--color-cta); transform: translateX(5px); }
+        .social-grid { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
+        .social-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: 0.3s; background: rgba(255,255,255,0.1); }
+        .social-icon:hover { transform: translateY(-4px); filter: brightness(1.2); }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="max-w-full px-6 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="index.html"><img class="logo-top" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png"></a>
-                <span class="text-white font-bold text-sm hidden md:inline">PAIA Paie V2.0</span>
-            </div>
+
+    <header class="top-bar">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <nav class="flex gap-2">
-                    <a href="python.html" class="nav-emoji opacity-50" title="Python">🐍</a>
-                    <a href="digitale.html" class="nav-emoji opacity-50" title="Digitale">🚀</a>
-                    <a href="paie.html" class="nav-emoji active-nav" title="Paie">💰</a>
-                    <a href="rh.html" class="nav-emoji opacity-50" title="RH">🤝</a>
-                </nav>
-                <a class="btn-portfolio" style="background:#D9A526; color:white; padding:6px 12px; border-radius:6px; font-weight:bold; font-size:0.8rem;" href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/">Portfolio</a>
+                <img class="logo-header shadow-md" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Header Logo">
+                <div class="hidden sm:block">
+                    <h1 class="text-xl font-black text-white leading-none">💫 PAIA ✨ <span class="text-[#D9A526]">Paie</span></h1>
+                    <p class="text-[8px] text-white/60 font-bold uppercase tracking-widest mt-1">Payroll Automation & Intelligent Architecture</p>
+                </div>
             </div>
+            <nav class="flex items-center gap-2">
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/" class="nav-link">🏠</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/python.html" class="nav-link">🐍</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/digitale.html" class="nav-link">🚀</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/paie.html" class="nav-link active">💰</a>
+                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/rh.html" class="nav-link">⚖️</a>
+                <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" class="btn-portfolio-head ml-3">Portfolio</a>
+            </nav>
         </div>
-    </div>
-    <main class="flex-grow p-6">
-        <div class="max-w-7xl mx-auto">
-            <header class="text-center mb-6 bg-white p-6 rounded-xl shadow-md border-b-4 border-cta">
-                <h1 class="text-3xl font-extrabold text-[#C2185B]" style="font-family: 'Playfair Display', serif;">Expertise Paie</h1>
-                <div id="loading-status" class="mt-2"><div class="loading-spinner"></div></div>
-            </header>
-            <div class="bg-white rounded-xl p-4 mb-6 shadow-sm overflow-x-auto">
-                <nav class="flex space-x-6 border-b">
-                    <button onclick="showTab('accueil')" id="tab-accueil" class="tab-button active-tab px-4 py-2">🏠 Synthèse</button>
-                    <button onclick="showTab('B1')" id="tab-B1" class="tab-button px-4 py-2 text-gray-500">Bloc B1</button>
-                    <button onclick="showTab('B2')" id="tab-B2" class="tab-button px-4 py-2 text-gray-500">Bloc B2</button>
-                    <button onclick="showTab('B3')" id="tab-B3" class="tab-button px-4 py-2 text-gray-500">Bloc B3</button>
-                </nav>
+    </header>
+
+    <main class="flex-grow p-4 sm:p-10 max-w-6xl mx-auto w-full">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black text-[#0F2C48] uppercase tracking-tighter mb-4">Expertise Paie & Automatisation</h2>
+            <div class="relative max-w-md mx-auto">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="searchInput" class="w-full pl-12 pr-4 py-3 rounded-full border-2 border-[#0F2C48] outline-none shadow-sm focus:ring-4 focus:ring-blue-100" placeholder="Rechercher une session (ex: Bloc_1)..." oninput="handleSearch()">
             </div>
-            <div id="resources-container"></div>
+            <div id="loading" class="mt-6 flex justify-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-cta"></div></div>
         </div>
+
+        <div class="flex justify-center mb-8 overflow-x-auto no-scrollbar">
+            <nav id="tabs" class="bg-white p-1.5 rounded-2xl shadow-md border-2 border-[#0F2C48] flex gap-1"></nav>
+        </div>
+
+        <div id="container" class="space-y-4 pb-12"></div>
     </main>
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="flex items-center gap-4 text-left">
-                <div class="w-14 h-14 rounded-md overflow-hidden border border-white/20"><img src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg"></div>
-                <div class="flex flex-col">
-                    <div class="font-bold text-[#FF9F1C]">Mathilde Martine PAISLEY</div>
-                    <a href="mailto:Mathilde.martine.paisley@gmail.com" class="text-sm text-white">📧 Email</a>
-                    <a href="tel:+33685900887" class="text-sm text-white">📲 06 85 90 08 87</a>
+
+    <footer>
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start gap-12">
+            <div class="flex-1">
+                <div class="footer-logo-box">
+                    <img class="footer-logo-img shadow-lg" src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg" alt="Logo MPa">
+                    <img class="w-14 h-14 rounded-xl border-2 border-cta shadow-md" src="https://projettechacademy.github.io/Projet_Python/Asset/Photo_Mathilde_Martine_PAISLEY.jpeg" alt="MMPA Photo">
+                </div>
+                <h3 class="text-2xl font-black mb-1 tracking-tight">💫 PAIA ✨</h3>
+                <p class="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-6">Payroll Automation & Intelligent Architecture</p>
+                <p class="text-sm italic opacity-70 leading-relaxed max-w-xs">
+                    "L'architecture intelligente au service de l'expertise Paie et de la performance sociale."
+                </p>
+            </div>
+
+            <div class="flex-1">
+                <h4 class="text-xs font-bold mb-6 text-cta uppercase tracking-[0.2em]">Contact Mathilde Martine</h4>
+                <div class="flex flex-col gap-3">
+                    <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" class="footer-link">
+                        <i class="fas fa-user-circle text-cta"></i> Mathilde Martine PAISLEY
+                    </a>
+                    <a href="mailto:Mathilde.martine.paisley@gmail.com" class="footer-link">
+                        <i class="fas fa-envelope text-cta"></i> Mathilde.martine.paisley@gmail.com
+                    </a>
+                    <a href="tel:+33685900887" class="footer-link">
+                        <i class="fas fa-phone-alt text-cta"></i> 06 85 90 08 87
+                    </a>
                 </div>
             </div>
-            <div class="flex flex-col gap-2">
-                <div class="text-[#FF9F1C] font-bold text-center">Social</div>
-                <div class="flex gap-4">
-                    <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://discord.gg/redT9wEE6T"><i class="fab fa-discord"></i></a>
-                    <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://www.instagram.com/enervyx/"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@enervyx"><i class="fab fa-tiktok"></i></a>
+
+            <div class="flex-1">
+                <h4 class="text-xs font-bold mb-6 text-cta uppercase tracking-[0.2em]">Réseaux Sociaux Officiels</h4>
+                <div class="social-grid">
+                    <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" class="social-icon" style="color:#25D366" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://discord.gg/redT9wEE6T" class="social-icon" style="color:#ED4245" title="Discord Red"><i class="fab fa-discord"></i></a>
+                    <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" class="social-icon" style="color:#0077b5" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.tiktok.com/@enervyx" class="social-icon" style="color:#FFFFFF" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/enervyx/" class="social-icon" style="color:#E4405F" title="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
-        <div class="copyright-single-line">
-            💫 PAIA ✨ By Mathilde Martine PAISLEY | V2.0 | Payroll Automation & Intelligent Architecture | © 2025 Tous droits réservés
+        <div class="text-center mt-12 pt-8 border-t border-white/10 text-[10px] opacity-30 uppercase tracking-[0.5em] font-bold">
+            © 31, décembre, 2025 | PAIA by Mathilde Martine PAISLEY
         </div>
     </footer>
+
     <script>
-        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK_tBmpTFXHK-e-U-cy_XbjLY2cx4FVbP7X0fhLs34B8DLzIr6yUP_eYo4ueAIzFBABopTCQdd-TK/pub?gid=1464718975&single=true&output=csv";
-        let resources = { "B1": { modules: {} }, "B2": { modules: {} }, "B3": { modules: {} } };
-        const linkIcons = { "Intro_Python_Gamma": { icon: "☝️", linkClass: "bg-pink-600" }, "Cours_Python": { icon: "📁", linkClass: "bg-orange-500" }, "Audio": { icon: "🎧", linkClass: "bg-fuchsia-500" }, "Excel": { icon: "📊", linkClass: "bg-amber-600" }, "Infographie": { icon: "🖼️", linkClass: "bg-pink-400" }, "Présentation": { icon: "📽️", linkClass: "bg-fuchsia-700" }, "Video": { icon: "📹", linkClass: "bg-orange-600" } };
-        function fetchDataAndRender() { Papa.parse(GOOGLE_SHEET_CSV_URL, { download: true, header: true, complete: function(results) { processCSVData(results.data); document.getElementById('loading-status').style.display = 'none'; showTab('accueil'); } }); }
-        function processCSVData(data) { let currentBloc = null; let currentModuleKey = null; data.forEach(row => { let titleRaw = row['Titres des catégories']; if (!titleRaw) return; if (/^B[1-3]_/.test(titleRaw) && !titleRaw.includes('_M')) { currentBloc = titleRaw.split('_')[0]; } else if (titleRaw.includes('_M') && !titleRaw.includes('_S')) { if (currentBloc && resources[currentBloc]) { currentModuleKey = titleRaw.replace(/^B\d+_/, '').replace(/_/g, ' - '); if (!resources[currentBloc].modules[currentModuleKey]) resources[currentBloc].modules[currentModuleKey] = []; } } else if (titleRaw.includes('_S')) { if (currentBloc && currentModuleKey && resources[currentBloc]) { let matchCode = titleRaw.match(/^(B\d+_M\d+_S\d+)/); let fullCode = matchCode ? matchCode[1] : "CODE?"; let cleanTitle = titleRaw.substring(fullCode.length).replace(/^[-_\s]+/, ''); resources[currentBloc].modules[currentModuleKey].push({ title: cleanTitle, fullCode: fullCode, links: { "Intro_Python_Gamma": row['Intro_Python_Gamma'], "Cours_Python": row['Cours_Python'], "Audio": row['Audio'], "Excel": row['Excel'], "Infographie": row['Infographie'], "Présentation": row['Présentation'], "Video": row['Video'] } }); } } }); }
-        function showTab(tabName) { document.querySelectorAll('.tab-button').forEach(btn => { btn.classList.remove('active-tab', 'text-title'); btn.classList.add('text-gray-500'); }); const activeBtn = document.getElementById(`tab-${tabName}`); if(activeBtn) { activeBtn.classList.add('active-tab', 'text-title'); activeBtn.classList.remove('text-gray-500'); } if (tabName === 'accueil') renderAccueil(); else renderBloc(tabName); }
-        function renderAccueil() { let html = `<div class="bg-white p-6 rounded-xl shadow-md border-l-8 border-cta text-center"><h2 class="text-2xl font-bold mb-4 text-[#C2185B]">Expertise Paie 💰</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-4">`; Object.keys(resources).forEach(key => { html += `<div class="p-4 border rounded-lg"><h3 class="font-bold mb-2">Bloc ${key}</h3><button onclick="showTab('${key}')" class="w-full bg-[#C2185B] text-white py-2 rounded-md text-sm font-bold">Ouvrir</button></div>`; }); html += `</div></div>`; document.getElementById('resources-container').innerHTML = html; }
-        function renderBloc(blocKey) { const bloc = resources[blocKey]; let html = `<div class="bg-white p-6 rounded-xl shadow-md border-l-8 border-[#C2185B]"><h2 class="text-xl font-bold mb-4 uppercase">Bloc ${blocKey}</h2>`; for (const mod in bloc.modules) { html += `<div class="mb-4 border rounded-lg overflow-hidden"><div class="bg-pink-50 p-3 font-bold border-b text-sm">${mod}</div><div class="p-3 space-y-2">`; bloc.modules[mod].forEach(session => { html += `<div class="flex items-center justify-between p-2 border-b last:border-0 hover:bg-pink-50 transition rounded-lg"><span class="text-xs"><b>${session.fullCode}</b> - ${session.title}</span><div class="flex gap-1">`; Object.keys(linkIcons).forEach(cat => { let link = session.links[cat]; let icon = linkIcons[cat]; if (link && link.trim() !== "" && link !== "null") html += `<a href="${link}" target="_blank" class="${icon.linkClass} text-white w-7 h-7 rounded-full flex items-center justify-center text-[10px] shadow-sm hover:scale-110 transition" title="${cat}">${icon.icon}</a>`; else html += `<span class="bg-gray-100 text-gray-300 w-7 h-7 rounded-full flex items-center justify-center opacity-30 text-[10px]">${icon.icon}</span>`; }); html += `</div></div>`; }); html += `</div></div>`; } html += `</div>`; document.getElementById('resources-container').innerHTML = html; }
-        document.addEventListener('DOMContentLoaded', fetchDataAndRender);
+        // LIEN CSV PUBLIÉ DE VOTRE FICHIER PAIE RÉEL
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1VKl4B0GzwQwCgTyu3i7E-5cuZhdRARKVE4dizA87keDFdeKYdfdF5AmqcgiJcSWMaqihkr7iuOTA/pub?gid=0&single=true&output=csv";
+        
+        let resources = {};
+        let currentTab = 'accueil';
+        let currentSearch = '';
+        let progress = JSON.parse(localStorage.getItem('paia_paie_v5.5_progress') || '{}');
+        
+        // Mapping sur les colonnes réelles : Intro_Gamma, Cours_Paie, Audio, Excel, Infographie, Présentation, Video
+        const catKeys = ["Intro_Gamma", "Cours_Paie", "Audio", "Excel", "Infographie", "Présentation", "Video"];
+        const catEmojis = { "Intro_Gamma":"☝️", "Cours_Paie":"📁", "Audio":"🎧", "Excel":"📊", "Infographie":"🖼️", "Présentation":"📽️", "Video":"📹" };
+
+        function init() {
+            Papa.parse(CSV_URL, { download: true, header: true, skipEmptyLines: true,
+                complete: (res) => { parseData(res.data); document.getElementById('loading').style.display='none'; renderTabs(); switchTab('accueil'); }
+            });
+        }
+
+        function parseData(data) {
+            let curB = null; let curM = "Général";
+            data.forEach(row => {
+                let t = row['Titres des catégories']?.trim(); 
+                if(!t || t === "Emoji" || t === "Titres des catégories" || t === "Calendrier") return;
+                
+                const blocMatch = t.match(/^(Bloc_\d+)(?!_\d+)/i);
+                if (blocMatch) {
+                    curB = blocMatch[1].replace('Bloc_', 'B');
+                    const fullTitle = t.replace(blocMatch[1], '').replace(/^[ _-]+/, '').trim() || t;
+                    if(!resources[curB]) resources[curB] = { id: curB, fullTitle, mods: {} };
+                    curM = "Général";
+                    return;
+                }
+
+                const modMatch = t.match(/^(M\d+_Bloc_\d+)/i);
+                if (modMatch) {
+                    curM = t.replace(modMatch[1], '').replace(/^[. _-]+/, '').trim() || t;
+                    if(curB && !resources[curB].mods[curM]) resources[curB].mods[curM] = [];
+                    return;
+                }
+
+                const sessionMatch = t.match(/^(Bloc_\d+_\d+)/i);
+                if (sessionMatch) {
+                    const code = sessionMatch[1];
+                    const label = t.replace(code, '').replace(/^[ _-]+/, '').replace(/\.pdf$/i, '').trim();
+                    if(curB) {
+                        if(!resources[curB].mods[curM]) resources[curB].mods[curM] = [];
+                        resources[curB].mods[curM].push({ code, label, links: row });
+                    }
+                }
+            });
+        }
+
+        function renderTabs() {
+            let h = `<button onclick="switchTab('accueil')" id="tab-accueil" class="px-5 py-1.5 rounded-xl font-bold">🏠 Accueil</button>`;
+            Object.keys(resources).sort().forEach(b => {
+                h += `<button onclick="switchTab('${b}')" id="tab-${b}" class="px-5 py-1.5 rounded-xl font-bold text-slate-400">Bloc ${b.replace('B','')}</button>`;
+            });
+            document.getElementById('tabs').innerHTML = h;
+        }
+
+        function switchTab(t) {
+            currentTab = t;
+            document.querySelectorAll('#tabs button').forEach(b => { b.classList.remove('bg-[#0F2C48]', 'text-white'); b.classList.add('text-slate-400'); });
+            const activeTab = document.getElementById('tab-'+t);
+            if(activeTab) { activeTab.classList.add('bg-[#0F2C48]', 'text-white'); activeTab.classList.remove('text-slate-400'); }
+            refreshView();
+        }
+
+        function handleSearch() { currentSearch = document.getElementById('searchInput').value.toLowerCase(); refreshView(); }
+        function refreshView() { if(currentTab === 'accueil') renderAccueil(); else renderBloc(currentTab); }
+
+        function renderAccueil() {
+            let h = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">`;
+            Object.keys(resources).sort().forEach(b => {
+                h += `<div class="p-8 border-2 border-[#0F2C48] rounded-3xl bg-white hover:border-cta transition-all cursor-pointer text-center group shadow-sm" onclick="switchTab('${b}')">
+                    <h4 class="font-black text-2xl mb-1 text-[#0F2C48] group-hover:text-cta">Bloc ${b.replace('B','')}</h4>
+                    <p class="text-[10px] text-slate-400 mb-6 uppercase truncate font-bold">${resources[b].fullTitle}</p>
+                    <button class="bg-[#0F2C48] text-white w-full py-2.5 rounded-xl text-xs font-black uppercase group-hover:bg-cta transition-all">Consulter</button>
+                </div>`;
+            });
+            document.getElementById('container').innerHTML = h + `</div>`;
+        }
+
+        function renderBloc(b) {
+            const bloc = resources[b];
+            let h = `<div class="p-6 rounded-3xl border-l-[10px] border-[#0F2C48] bg-white/40">
+                <h3 class="text-xl font-black mb-1 uppercase text-slate-700">Bloc ${b.replace('B','')}</h3>
+                <p class="text-[11px] text-slate-400 mb-8 italic font-medium">${bloc.fullTitle}</p>`;
+            
+            for(let m in bloc.mods) {
+                const sessions = bloc.mods[m].filter(s => s.label.toLowerCase().includes(currentSearch) || s.code.toLowerCase().includes(currentSearch));
+                if(sessions.length === 0) continue;
+                const mid = `mod-${b}-${m.replace(/[^a-zA-Z0-9]/g,'')}`;
+                h += `<div class="module-card">
+                    <div class="module-header" onclick="document.getElementById('${mid}').classList.toggle('hidden')">
+                        <h3>Module : ${m}</h3><i class="fas fa-chevron-down text-cta"></i>
+                    </div>
+                    <div id="${mid}" class="">`;
+                sessions.forEach(s => {
+                    const firstUrl = Object.values(s.links).find(l => l && l !== "null" && l.trim() !== "") || "#";
+                    h += `<div class="session-row" data-code="${s.code}">
+                        <div class="flex justify-between items-center flex-wrap gap-4">
+                            <div><span class="session-code">${s.code.replace(/_/g,' ')}</span><span class="session-title-text ml-3 font-bold">${s.label}</span></div>
+                            <div class="flex items-center gap-3">
+                                <button onclick="validateLine('${s.code}')" class="bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase transition-all hover:scale-105">Valider</button>
+                                <div class="agenda-container">
+                                    <button onclick="toggleAgendaMenu('${s.code}')" class="w-9 h-9 rounded-full bg-white border-2 border-blue-300 text-blue-500 flex items-center justify-center hover:bg-blue-50 transition-all"><i class="fas fa-calendar-alt"></i></button>
+                                    <div id="agenda-menu-${s.code}" class="agenda-menu">
+                                        <div class="text-[9px] uppercase font-black text-slate-400 p-2 border-b">Relecture prévue :</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 3)">3 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 10)">10 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 30)">30 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 60)">60 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 90)">90 jours</div>
+                                        <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', 120)">120 jours</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-list">`;
+                    catKeys.forEach(k => {
+                        let url = s.links[k]; let av = url && url !== "" && url !== "null";
+                        h += `<div class="icon-box relative">
+                                <div class="icon-btn-elite ${av ? '' : 'empty'}" data-cat="${k}" onclick="${av ? `window.open('${url}','_blank')` : ''}">${catEmojis[k]}<div class="valid-check"><i class="fas fa-check"></i></div></div>
+                                <button onclick="toggleProg('${s.code}','${k}')" class="absolute bottom-[-4px] right-[-4px] bg-white border border-slate-200 rounded-full w-5 h-5 flex items-center justify-center text-[8px] text-slate-400 hover:text-cta ${av?'':'hidden'}"><i class="fas fa-plus"></i></button>
+                            </div>`;
+                    });
+                    h += `</div></div>`;
+                });
+                h += `</div></div>`;
+            }
+            document.getElementById('container').innerHTML = h + `</div>`;
+            Object.values(bloc.mods).flat().forEach(s => refreshLine(s.code));
+        }
+
+        function toggleAgendaMenu(code) {
+            document.querySelectorAll('.agenda-menu').forEach(m => { if(m.id !== `agenda-menu-${code}`) m.style.display = 'none'; });
+            const m = document.getElementById(`agenda-menu-${code}`);
+            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function plan(title, url, days) {
+            const d = new Date(); d.setDate(d.getDate() + days);
+            const iso = d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+            const calUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=RELECTURE PAIE : ${encodeURIComponent(title)}&dates=${iso}/${iso}&details=Lien vers la ressource : ${url}&sf=true&output=xml`;
+            window.open(calUrl, '_blank');
+        }
+
+        function toggleProg(c,k){ let key = c+'_'+k; progress[key]=!progress[key]; localStorage.setItem('paia_paie_v5.5_progress', JSON.stringify(progress)); refreshLine(c); }
+        function validateLine(c){ catKeys.forEach(k => progress[c+'_'+k]=true); localStorage.setItem('paia_paie_v5.5_progress', JSON.stringify(progress)); refreshLine(c); }
+        function refreshLine(c) {
+            const row = document.querySelector(`[data-code="${c}"]`); if(!row) return;
+            catKeys.forEach(k => { 
+                const icon = row.querySelector(`[data-cat="${k}"]`);
+                if(progress[c+'_'+k]) icon.classList.add('done'); else icon.classList.remove('done');
+            });
+        }
+
+        window.onclick = (e) => { if (!e.target.closest('.agenda-container')) document.querySelectorAll('.agenda-menu').forEach(m => m.style.display = 'none'); };
+        window.onload = init;
     </script>
 </body>
 </html>
