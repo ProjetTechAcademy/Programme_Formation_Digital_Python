@@ -3,173 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAIA - Formation Python Elite V2.6</title>
+    <title>PAIA - Formation Python Cockpit V2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --color-cta: #D9A526; 
-            --color-title: #0F2C48; 
-            --color-surface: #F6F2E8; 
+        :root {
+            --color-gold: #D9A526;
+            --color-navy: #0F2C48;
+            --color-glow: rgba(217, 165, 38, 0.35);
             --color-done: #10b981;
-            /* Couleurs Acidulées Douces pour validation */
-            --bg-gamma: #f3e8ff; --bg-python: #fff7ed; --bg-audio: #e0f2fe; 
-            --bg-excel: #f0fdf4; --bg-info: #fff1f2; --bg-pres: #fdf2f8; --bg-video: #fff7ed;
+            --gradient-vibe: linear-gradient(135deg, #FFD700 0%, #D9A526 50%, #B4792A 100%);
         }
 
-        body { font-family: 'Outfit', sans-serif; background-color: var(--color-surface); min-height: 100vh; display: flex; flex-direction: column; color: #334155; }
-        
-        /* HEADER */
-        .top-bar { background: var(--color-title); padding: 12px 0; border-bottom: 3px solid var(--color-cta); position: sticky; top: 0; z-index: 1000; }
-        .logo-top { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--color-cta); object-fit: cover; }
-        .nav-link { color: white; font-weight: 500; padding: 8px 12px; border-radius: 8px; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
-        .nav-link:hover { color: var(--color-cta); background: rgba(255,255,255,0.05); }
-        .btn-portfolio { background: var(--color-cta); color: var(--color-title) !important; font-weight: 700; border: 1px solid white; }
-
-        /* MODULES */
-        .module-card { background: white; border-radius: 20px; margin-bottom: 18px; box-shadow: 0 4px 20px rgba(15, 44, 72, 0.04); overflow: hidden; border: 1px solid rgba(15, 44, 72, 0.05); }
-        .module-header { width: 100%; text-align: left; padding: 22px 28px; background: #fff; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
-        .module-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--color-title); }
-        
-        /* SESSION ROW - Layout Aligné */
-        .session-row { padding: 22px 28px; border-bottom: 1px solid #f8fafc; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s ease; }
-        .session-row.fully-complete { background: #f0fdf4; }
-
-        .session-header-line { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-        .title-block { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
-        .session-code { font-family: 'Fira Code', monospace; color: var(--color-cta); font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
-        .session-title-text { font-weight: 600; font-size: 1.05rem; color: #475569; }
-
-        /* ACTIONS */
-        .action-controls { display: flex; align-items: center; gap: 10px; }
-        
-        .btn-pill-sexy { 
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); 
-            color: white; font-size: 0.7rem; font-weight: 700; padding: 6px 14px; 
-            border-radius: 50px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: 0 4px 12px rgba(217, 165, 38, 0.25); text-transform: uppercase; border: none; cursor: pointer;
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
-        .btn-pill-sexy.active { background: linear-gradient(135deg, #34d399 0%, #10b981 100%); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); }
-        .btn-pill-sexy:hover { transform: translateY(-2px) scale(1.05); }
 
-        .btn-agenda-sexy {
-            width: 34px; height: 34px; border-radius: 50%; 
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-            display: flex; align-items: center; justify-content: center; 
-            color: #3b82f6; border: 1px solid #e2e8f0; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.3s ease; cursor: pointer;
+        h1, h2, h3, .font-space { font-family: 'Space Grotesk', sans-serif; }
+
+        /* Arrière-plan Cockpit */
+        .vibe-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);
+            z-index: -1;
         }
-        .btn-agenda-sexy:hover { background: #3b82f6; color: white; transform: rotate(10deg); border-color: #3b82f6; }
 
-        /* RESSOURCES */
-        .resource-list { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 5px; }
-        .resource-dot { width: 4px; height: 4px; background: #cbd5e1; border-radius: 50%; }
-        
-        .icon-box { position: relative; }
-        .icon-btn-elite { 
-            width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; 
-            transition: all 0.3s ease; font-size: 1.6rem; 
-            background: #fdfdfd; border: 1.5px solid #f1f5f9; cursor: pointer;
+        .blob {
+            position: absolute; width: 600px; height: 600px;
+            background: var(--color-glow); filter: blur(140px);
+            border-radius: 50%; z-index: -1; animation: move 25s infinite alternate;
         }
-        .icon-btn-elite:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.05); border-color: var(--color-cta); }
-        
-        /* Validation Couleurs Fun */
-        .icon-btn-elite.done[data-cat="Intro_Python_Gamma"] { background: #fae8ff; border-color: #d946ef; }
-        .icon-btn-elite.done[data-cat="Cours_Python"] { background: #fff7ed; border-color: #f97316; }
-        .icon-btn-elite.done[data-cat="Audio"] { background: #e0f2fe; border-color: #0ea5e9; }
-        .icon-btn-elite.done[data-cat="Excel"] { background: #f0fdf4; border-color: #22c55e; }
-        .icon-btn-elite.done[data-cat="Infographie"] { background: #fff1f2; border-color: #f43f5e; }
-        .icon-btn-elite.done[data-cat="Présentation"] { background: #fdf2f8; border-color: #ec4899; }
-        .icon-btn-elite.done[data-cat="Video"] { background: #fff7ed; border-color: #fb8c00; }
 
-        .valid-check { position: absolute; top: -5px; right: -5px; background: var(--color-done); color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 9px; display: flex; align-items: center; justify-content: center; border: 2px solid white; opacity: 0; transform: scale(0); transition: all 0.3s ease; }
-        .icon-btn-elite.done + .valid-check { opacity: 1; transform: scale(1); }
+        @keyframes move { from { transform: translate(-10%, -10%) scale(1); } to { transform: translate(20%, 20%) scale(1.3); } }
 
-        .manual-plus { position: absolute; bottom: -4px; right: -4px; background: white; border: 1px solid #e2e8f0; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #94a3b8; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 5; cursor: pointer; }
-        .manual-plus:hover { color: var(--color-done); border-color: var(--color-done); transform: scale(1.1); }
+        /* Effets de dégradés vibrants */
+        .text-gradient {
+            background: var(--gradient-vibe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
 
-        /* PROGRESSION */
-        .prog-track { width: 100%; height: 5px; background: #f1f5f9; border-radius: 10px; overflow: hidden; }
-        .prog-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #f43f5e); transition: width 0.7s cubic-bezier(0.1, 0.7, 1.0, 0.1); width: 0%; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        /* CALENDAR POPOVER */
-        .cal-popover { display: none; position: absolute; right: 0; top: 42px; background: white; border: 1px solid #e2e8f0; padding: 14px; border-radius: 18px; box-shadow: 0 15px 40px rgba(15, 44, 72, 0.12); z-index: 100; min-width: 220px; }
-        .btn-agenda-sexy:hover + .cal-popover, .cal-popover:hover { display: block; }
-        .cal-link { display: block; padding: 10px; font-size: 0.8rem; font-weight: 600; color: #475569; border-radius: 10px; background: #f8fafc; margin-bottom: 5px; text-align: center; transition: all 0.2s; border: 1px solid transparent; text-decoration: none; }
-        .cal-link:hover { background: #eff6ff; color: #3b82f6; border-color: #dbeafe; }
+        /* Accordéon Modules */
+        .module-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 22px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
 
-        /* FOOTER */
-        footer { background: var(--color-title); color: white; padding: 50px 20px; border-top: 4px solid var(--color-cta); margin-top: auto; }
-        .footer-link { color: #cbd5e1; font-family: 'Fira Code', monospace; font-size: 0.9rem; transition: color 0.2s; text-decoration: none; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .footer-link:hover { color: var(--color-cta); }
-        .social-circle { font-size: 1.7rem; transition: transform 0.3s; color: white; }
-        .social-circle:hover { transform: scale(1.2) translateY(-3px); }
-        .color-whatsapp { color: #25D366; } .color-discord { color: #5865F2; } .color-linkedin { color: #0077b5; } .color-instagram { color: #E1306C; } .color-tiktok { color: #FFFFFF; }
+        .module-header {
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 22px;
+            transition: 0.3s;
+        }
+        .module-header:hover { background: rgba(255, 255, 255, 0.05); }
+        .module-header h3 { font-size: 1rem; font-weight: 800; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .session-container { transition: max-height 0.5s ease-out; overflow: hidden; }
+
+        .session-row {
+            padding: 1.5rem 1.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background 0.3s;
+        }
+        .session-row:hover { background: rgba(255, 255, 255, 0.02); }
+
+        /* Navigation & Actions */
+        .icon-btn-vibe {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            font-size: 1.4rem; transition: all 0.3s;
+            position: relative; cursor: pointer;
+        }
+        .icon-btn-vibe:hover { border-color: var(--color-gold); transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(217, 165, 38, 0.2); }
+        .icon-btn-vibe.done { border-color: var(--color-done); color: var(--color-done); background: rgba(16, 185, 129, 0.15); border-width: 2.5px; }
+        .icon-btn-vibe.empty { opacity: 0.15; pointer-events: none; }
+
+        .valid-dot {
+            position: absolute; top: -5px; right: -5px;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--color-done); border: 2.5px solid #020617;
+            display: none; box-shadow: 0 0 12px var(--color-done);
+        }
+        .icon-btn-vibe.done .valid-dot { display: block; }
+
+        .btn-pill-action {
+            background: var(--gradient-vibe);
+            color: #020617; font-weight: 900; padding: 8px 20px;
+            border-radius: 50px; font-size: 0.75rem; text-transform: uppercase;
+            transition: all 0.3s; cursor: pointer; border: none;
+        }
+        .btn-pill-action:hover { transform: scale(1.08); box-shadow: 0 0 25px var(--color-glow); }
+
+        /* Floating Nav */
+        .floating-nav {
+            position: fixed; bottom: 30px; right: 30px;
+            display: flex; flex-direction: column; gap: 10px; z-index: 1000;
+        }
+        .nav-circle {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--gradient-vibe); color: #020617;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2);
+        }
+        .nav-circle:hover { transform: scale(1.1) rotate(10deg); }
+
+        /* Agenda Popover */
+        .agenda-menu {
+            position: absolute; right: 0; top: 110%;
+            background: #0f172a; border: 1.5px solid var(--color-gold);
+            border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            display: none; min-width: 240px; z-index: 100; padding: 12px;
+            backdrop-filter: blur(25px);
+        }
+        .agenda-item {
+            padding: 10px 14px; font-size: 0.8rem; font-weight: 700;
+            border-radius: 10px; cursor: pointer; color: #fff; transition: 0.2s;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 4px;
+        }
+        .agenda-item:hover { background: var(--color-gold); color: #020617; transform: translateX(5px); }
+
+        /* Tabs XL */
+        .tab-btn {
+            padding: 12px 32px; border-radius: 16px;
+            font-weight: 900; color: rgba(255, 255, 255, 0.4);
+            transition: 0.3s; font-size: 0.9rem; letter-spacing: 0.08em;
+        }
+        .tab-btn.active { background: var(--color-gold); color: #020617; box-shadow: 0 0 25px var(--color-glow); }
+
+        /* Header XL */
+        .header-main { height: 90px; }
+        .header-title { font-size: 1.25rem; font-weight: 900; }
+        .nav-link-xl { font-size: 1rem; font-weight: 800; color: rgba(255,255,255,0.6); }
+        .nav-link-xl:hover, .nav-link-xl.active { color: var(--color-gold); transform: translateY(-2px); }
+
+        footer { background: rgba(2, 6, 23, 0.95); border-top: 2px solid rgba(217, 165, 38, 0.1); }
+        .social-link { font-size: 1.8rem; transition: all 0.3s; color: rgba(255,255,255,0.3); }
+        .social-link:hover { transform: scale(1.2) translateY(-5px); color: var(--color-gold); }
+        .social-link.instagram:hover { color: #E4405F; }
     </style>
 </head>
 <body>
 
-    <header class="top-bar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <a href="index.html"><img class="logo-top shadow-md" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo"></a>
-                <div class="hidden sm:block">
-                    <h1 class="text-lg font-bold text-white leading-tight">💫 PAIA ✨ By Mathilde Martine PAISLEY</h1>
-                    <p class="text-[9px] text-[#D9A526] font-semibold uppercase tracking-widest">Payroll Automation & Intelligent Architecture</p>
+    <div class="vibe-bg">
+        <div class="blob" style="top: 5%; left: 5%;"></div>
+        <div class="blob" style="bottom: 5%; right: 5%; background: rgba(15, 44, 72, 0.4);"></div>
+    </div>
+
+    <!-- Header XL -->
+    <header class="fixed top-0 w-full z-50 backdrop-blur-2xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 header-main flex items-center justify-between">
+            <div class="flex items-center gap-5 group cursor-pointer" onclick="location.href='index.html'">
+                <div class="relative">
+                    <img class="w-16 h-16 rounded-full border-2 border-gold/60 shadow-2xl group-hover:rotate-12 transition-transform duration-500" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="PAIA Logo">
+                    <div class="absolute inset-0 rounded-full bg-gold/30 blur-xl group-hover:blur-2xl transition-all"></div>
+                </div>
+                <div>
+                    <h1 class="header-title text-white tracking-tight">💫 PAIA✨By Mathilde Martine PAISLEY</h1>
+                    <p class="text-[10px] text-gold font-black uppercase tracking-[0.4em]">Payroll Automation & Intelligent Architecture</p>
                 </div>
             </div>
-            <nav class="flex items-center gap-1 sm:gap-2">
-                <a href="index.html" class="nav-link" title="Accueil">🏠</a>
-                <a href="python.html" class="nav-link text-[#D9A526]" title="Python">🐍</a>
-                <a href="paie.html" class="nav-link opacity-60" title="Paie">📊</a>
-                <a href="rh.html" class="nav-link opacity-60" title="RH">⚖️</a>
-                <a href="https://projettechacademy.github.io/CV_MMPA-CV-Mathilde-Martine-PAISLEY/" target="_blank" class="nav-link btn-portfolio ml-2 shadow-sm">💼 Portfolio</a>
+
+            <nav class="hidden lg:flex items-center gap-10">
+                <a href="index.html" class="nav-link-xl">🏠</a>
+                <a href="python.html" class="nav-link-xl active">🐍 Python</a>
+                <a href="paie.html" class="nav-link-xl">📊 Paie</a>
+                <a href="rh.html" class="nav-link-xl">⚖️ RH</a>
+                <a href="digitale.html" class="nav-link-xl">🌐 Digital</a>
             </nav>
         </div>
     </header>
 
-    <main class="flex-grow p-4 sm:p-10 max-w-6xl mx-auto w-full">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-[#0F2C48] uppercase tracking-tight">Formation Développeur Python</h2>
-            <p class="text-slate-400 font-medium text-sm mt-3">L'art de la répétition est le secret de la maîtrise. 🧠</p>
-            <div id="loading" class="mt-6 flex justify-center"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-cta"></div></div>
+    <main class="pt-36 pb-24 px-6 max-w-7xl mx-auto flex-grow w-full">
+        <div class="text-center mb-16">
+            <h2 class="text-6xl font-black mb-4 tracking-tighter">Formation <span class="text-gradient">Développeur Python</span></h2>
+            <p class="text-sm text-white/40 font-black uppercase tracking-[0.5em]">L'excellence technologique au service de l'architecture</p>
+            <div id="loading" class="mt-12 flex justify-center"><i class="fas fa-circle-notch animate-spin text-4xl text-gold"></i></div>
         </div>
 
-        <!-- TABS -->
-        <div class="flex justify-center mb-10 overflow-x-auto">
-            <nav class="bg-white p-2 rounded-2xl shadow-sm flex gap-2">
-                <button onclick="switchTab('accueil')" id="tab-accueil" class="px-8 py-3 rounded-xl font-bold text-[#0F2C48] bg-slate-50 border border-slate-100 transition shadow-sm">🏠 Synthèse</button>
-                <button onclick="switchTab('B1')" id="tab-B1" class="px-8 py-3 rounded-xl font-bold text-slate-400 hover:text-[#0F2C48] transition">B1</button>
-                <button onclick="switchTab('B2')" id="tab-B2" class="px-8 py-3 rounded-xl font-bold text-slate-400 hover:text-[#0F2C48] transition">B2</button>
-                <button onclick="switchTab('B3')" id="tab-B3" class="px-8 py-3 rounded-xl font-bold text-slate-400 hover:text-[#0F2C48] transition">B3</button>
-            </nav>
+        <!-- Navigation Tabs XL -->
+        <div class="flex justify-center mb-16">
+            <div class="glass-card p-2.5 flex gap-3">
+                <button onclick="switchTab('accueil')" id="tab-accueil" class="tab-btn active">SYNTHÈSE</button>
+                <button onclick="switchTab('B1')" id="tab-B1" class="tab-btn">BLOC 1</button>
+                <button onclick="switchTab('B2')" id="tab-B2" class="tab-btn">BLOC 2</button>
+                <button onclick="switchTab('B3')" id="tab-B3" class="tab-btn">BLOC 3</button>
+            </div>
         </div>
 
-        <div id="container" class="space-y-6"></div>
+        <div id="container" class="space-y-10 pb-20"></div>
     </main>
 
-    <footer>
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-12">
-            <div class="text-center md:text-left space-y-4">
-                <h3 class="text-2xl font-bold">Mathilde Martine PAISLEY</h3>
-                <div class="flex flex-col">
-                    <a href="mailto:mathilde.martine.paisley@gmail.com" class="footer-link">
-                        <i class="fas fa-envelope text-cta"></i> mathilde.martine.paisley@gmail.com
-                    </a>
-                    <a href="tel:+33685900887" class="footer-link">
-                        <i class="fas fa-phone-alt text-cta"></i> 06 85 90 08 87
-                    </a>
+    <!-- Navigation Flottante -->
+    <div class="floating-nav">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="nav-circle" title="Remonter"><i class="fas fa-chevron-up"></i></button>
+        <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" class="nav-circle" title="Descendre"><i class="fas fa-chevron-down"></i></button>
+    </div>
+
+    <!-- Footer Slim Mis à Jour -->
+    <footer class="py-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="text-center md:text-left">
+                <h4 class="text-xl font-black text-white tracking-tight">Mathilde Martine PAISLEY</h4>
+                <div class="flex flex-col gap-2 mt-4">
+                    <p class="text-xs text-white/50 font-bold"><i class="fas fa-envelope text-gold mr-4"></i> Mathilde.martine.paisley@gmail.com</p>
+                    <p class="text-xs text-white/50 font-bold"><i class="fas fa-phone-alt text-gold mr-4"></i> 06 85 90 08 87</p>
                 </div>
             </div>
+
+            <div class="flex gap-10">
+                <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" target="_blank" class="social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://discord.gg/redT9wEE6T" target="_blank" class="social-link" title="Discord"><i class="fab fa-discord"></i></a>
+                <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.instagram.com/enervyx/" target="_blank" class="social-link instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
             
-            <div class="flex gap-8 items-center">
-                <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" class="social-circle color-whatsapp"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://discord.gg/redT9wEE6T" class="social-circle color-discord"><i class="fab fa-discord"></i></a>
-                <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" class="social-circle color-linkedin"><i class="fab fa-linkedin"></i></a>
-                <a href="https://www.instagram.com/enervyx/" class="social-circle color-instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@enervyx" class="social-circle color-tiktok"><i class="fab fa-tiktok"></i></a>
+            <div class="text-center md:text-right">
+                <p class="text-[11px] text-white/10 uppercase font-black tracking-[0.6em]">PAIA © 2025 | BY MPA</p>
+                <p class="text-[9px] text-white/5 uppercase mt-2 font-bold tracking-widest">Mastery of Intelligent Systems</p>
             </div>
         </div>
     </footer>
@@ -187,7 +265,7 @@
                 download: true, header: true, skipEmptyLines: true,
                 complete: (results) => {
                     parseData(results.data);
-                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading').classList.add('hidden');
                     switchTab('accueil');
                 }
             });
@@ -208,150 +286,152 @@
                         let codeMatch = title.match(/^(B\d+_M\d+_S\d+)/);
                         let code = codeMatch ? codeMatch[1] : "??";
                         let label = title.substring(code.length).replace(/^[-_\s]+/, '');
-                        resources[curBloc].modules[curMod].push({
-                            code, label,
-                            links: { "Intro_Python_Gamma": row['Intro_Python_Gamma'], "Cours_Python": row['Cours_Python'], "Audio": row['Audio'], "Excel": row['Excel'], "Infographie": row['Infographie'], "Présentation": row['Présentation'], "Video": row['Video'] }
-                        });
+                        resources[curBloc].modules[curMod].push({ code, label, links: row });
                     }
                 }
             });
         }
 
-        function updateProgress(code, cat) {
-            const key = `${code}_${cat}`;
-            progress[key] = !progress[key];
-            localStorage.setItem('paia_elite_v2_progress', JSON.stringify(progress));
-            refreshLine(code);
-            if(window.curTab === 'accueil') renderAccueil();
-        }
-
-        function validateLine(code) {
-            let allOn = catKeys.every(k => progress[`${code}_${k}`]);
-            catKeys.forEach(k => progress[`${code}_${k}`] = !allOn);
-            localStorage.setItem('paia_elite_v2_progress', JSON.stringify(progress));
-            refreshLine(code);
-            if(window.curTab === 'accueil') renderAccueil();
-        }
-
-        function refreshLine(code) {
-            const row = document.querySelector(`[data-code="${code}"]`); if (!row) return;
-            let count = 0;
-            catKeys.forEach(k => {
-                const el = row.querySelector(`[data-cat="${k}"]`);
-                if (progress[`${code}_${k}`]) { el.classList.add('done'); count++; }
-                else el.classList.remove('done');
-            });
-            const percent = Math.round((count / catKeys.length) * 100);
-            row.querySelector('.prog-fill').style.width = percent + '%';
-            const vBtn = row.querySelector('.btn-pill-sexy');
-            if (percent === 100) { vBtn.classList.add('active'); vBtn.innerText = "Terminé"; row.classList.add('fully-complete'); }
-            else { vBtn.classList.remove('active'); vBtn.innerText = "Valider"; row.classList.remove('fully-complete'); }
-        }
-
-        function createCal(title, url, days) {
-            const d = new Date(); d.setDate(d.getDate() + days);
-            const iso = d.toISOString().replace(/-|:|\.\d\d\d/g, "");
-            return `https://www.google.com/calendar/render?action=TEMPLATE&text=RELECTURE : ${encodeURIComponent(title)}&dates=${iso}/${iso}&details=Document : ${title}%0ALien : ${url}&sf=true&output=xml`;
-        }
-
         function switchTab(t) {
             window.curTab = t;
-            document.querySelectorAll('[id^="tab-"]').forEach(b => { 
-                b.classList.remove('text-[#0F2C48]', 'bg-slate-50', 'border-slate-100', 'shadow-sm'); 
-                b.classList.add('text-slate-400'); 
-            });
-            const active = document.getElementById('tab-' + t);
-            active.classList.add('text-[#0F2C48]', 'bg-slate-50', 'border-slate-100', 'shadow-sm');
-            active.classList.remove('text-slate-400');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById('tab-' + t);
+            if(btn) btn.classList.add('active');
             if (t === 'accueil') renderAccueil(); else renderBloc(t);
         }
 
         function renderAccueil() {
-            let html = `<div class="bg-white p-10 rounded-3xl shadow-sm border-l-8 border-cta"><h3 class="text-2xl font-bold mb-8 text-center text-slate-800">Synthèse de Progression 📊</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-8">`;
+            let html = `<div class="grid grid-cols-1 md:grid-cols-3 gap-10">`;
             Object.keys(resources).forEach(b => {
                 let total = 0; let done = 0;
                 for (let m in resources[b].modules) {
-                    resources[b].modules[m].forEach(s => {
-                        catKeys.forEach(k => { total++; if (progress[`${s.code}_${k}`]) done++; });
-                    });
+                    resources[b].modules[m].forEach(s => { catKeys.forEach(k => { total++; if (progress[`${s.code}_${k}`]) done++; }); });
                 }
                 const p = total > 0 ? Math.round((done / total) * 100) : 0;
-                html += `<div class="p-8 border border-slate-100 rounded-3xl text-center bg-slate-50/50">
-                    <h4 class="text-xl font-bold mb-3 text-slate-700">Bloc ${b}</h4>
-                    <div class="h-3 bg-white border border-slate-100 rounded-full overflow-hidden shadow-inner"><div class="h-full bg-cta transition-all duration-1000" style="width:${p}%"></div></div>
-                    <p class="mt-3 font-bold text-cta text-lg">${p}%</p>
-                    <button onclick="switchTab('${b}')" class="mt-5 w-full bg-[#0F2C48] text-white py-3 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition">Détails</button>
+                html += `<div class="glass-card p-12 text-center border-l-[10px] border-gold group cursor-pointer hover:bg-white/5 transition-all" onclick="switchTab('${b}')">
+                    <h4 class="text-4xl font-black mb-3 text-white group-hover:text-gold transition-colors">Bloc ${b}</h4>
+                    <p class="text-[11px] text-white/30 uppercase tracking-[0.3em] mb-10 font-bold">Automation & Intelligence</p>
+                    <div class="h-2.5 bg-white/5 rounded-full overflow-hidden mb-6 shadow-2xl"><div class="h-full bg-gold transition-all duration-1000 shadow-[0_0_15px_#D9A526]" style="width:${p}%"></div></div>
+                    <span class="text-5xl font-black text-gold">${p}%</span>
+                    <div class="mt-10 text-[11px] font-black uppercase text-white/50 group-hover:text-white transition-all">Accéder à la console <i class="fas fa-chevron-right ml-3"></i></div>
                 </div>`;
             });
-            html += `</div></div>`;
-            document.getElementById('container').innerHTML = html;
+            document.getElementById('container').innerHTML = html + `</div>`;
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+            }
         }
 
         function renderBloc(b) {
-            let html = `<div class="bg-white p-6 rounded-3xl shadow-sm border-l-8 border-[#0F2C48]"><h3 class="text-2xl font-bold mb-8 uppercase flex justify-between items-center text-slate-700">Bloc ${b} <span class="text-xs font-bold text-cta bg-amber-50 px-3 py-1 rounded-full">${calculateBlocPercent(b)}%</span></h3>`;
-            let idx = 0;
+            let html = `<div class="glass-card p-10 border-l-[16px] border-gold">
+                <div class="flex justify-between items-end mb-14">
+                    <div>
+                        <h3 class="text-5xl font-black uppercase tracking-tighter">Cockpit ${b}</h3>
+                        <p class="text-[11px] text-white/40 font-black uppercase tracking-[0.4em] mt-2">Architecture Digitale Avancée</p>
+                    </div>
+                    <span class="text-4xl font-black text-gold">${calculateBlocPercent(b)}%</span>
+                </div>`;
+            
+            let modIdx = 0;
             for (let m in resources[b].modules) {
-                const mid = `mod-${b}-${idx++}`;
-                html += `<div class="module-card"><div class="module-header" onclick="document.getElementById('${mid}').classList.toggle('hidden')"><h3 class="font-bold">${m}</h3><i class="fas fa-chevron-down text-slate-300 transition-transform"></i></div><div id="${mid}" class="hidden">`;
+                const modId = `mod-content-${modIdx++}`;
+                html += `<div class="module-card">
+                    <div class="module-header" onclick="toggleAccordion('${modId}')">
+                        <h3 class="font-space">${m}</h3>
+                        <i id="icon-${modId}" class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
+                    </div>
+                    <div id="${modId}" class="session-container" style="max-height:0px;">`;
+                
                 resources[b].modules[m].forEach(s => {
                     const firstUrl = Object.values(s.links).find(l => l && l !== "null" && l.trim() !== "") || "#";
                     html += `<div class="session-row" data-code="${s.code}">
-                        <div class="session-header-line">
-                            <div class="title-block">
-                                <span class="session-code">${s.code}</span>
-                                <span class="session-title-text">- ${s.label}</span>
+                        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8 mb-8">
+                            <div class="flex items-center gap-5">
+                                <span class="text-[12px] font-black text-gold font-space bg-gold/15 px-4 py-1.5 rounded-lg border border-gold/20">${s.code}</span>
+                                <span class="text-lg font-bold text-white/95">${s.label}</span>
                             </div>
-                            <div class="action-controls">
-                                <button onclick="validateLine('${s.code}')" class="btn-pill-sexy">Valider</button>
-                                <div class="relative">
-                                    <div class="btn-agenda-sexy" title="Programmer un rappel"><i class="fas fa-calendar-day"></i></div>
-                                    <div class="cal-popover">
-                                        <p class="text-[9px] font-bold text-slate-400 mb-3 uppercase tracking-tighter border-b pb-2">Art de la répétition 🧠</p>
-                                        <div class="grid grid-cols-2 gap-2">
-                                            ${[3, 10, 30, 60, 90, 120].map(d => `<a href="${createCal(s.label, firstUrl, d)}" target="_blank" class="cal-link">J+${d}</a>`).join('')}
-                                        </div>
+                            <div class="flex items-center gap-5">
+                                <button onclick="validateLine('${s.code}')" class="btn-pill-action">Valider Session</button>
+                                <div class="agenda-container">
+                                    <button onclick="toggleAgenda('${s.code}')" class="w-12 h-12 rounded-full bg-white/5 border border-blue-400/40 flex items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-[#020617] transition-all shadow-lg"><i class="fas fa-calendar-alt"></i></button>
+                                    <div id="agenda-${s.code}" class="agenda-menu">
+                                        <div class="text-[10px] font-black text-white/50 p-3 border-b border-white/10 uppercase mb-3">Planifier Relecture</div>
+                                        ${[3, 10, 30, 60, 90, 120].map(d => `
+                                            <div class="agenda-item" onclick="planCal('${s.label}', '${firstUrl}', ${d})">
+                                                <span>Dans ${d} jours</span> <i class="fas fa-plus-circle opacity-40"></i>
+                                            </div>
+                                        `).join('')}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="prog-track"><div class="prog-fill"></div></div>
-                        <div class="resource-list">`;
-                    catKeys.forEach((k, i) => {
+                        <div class="flex gap-4 flex-wrap">`;
+                    catKeys.forEach(k => {
                         const l = s.links[k]; const av = l && l !== "null" && l.trim() !== "";
-                        html += `
-                        <div class="icon-box">
-                            <div class="icon-btn-elite ${av ? '' : 'opacity-10 pointer-events-none'}" 
-                                 data-cat="${k}" 
-                                 onclick="${av ? `window.open('${l}', '_blank');` : ''} event.stopPropagation();"
-                                 title="${av ? 'Clic: Ouvrir / Bouton + : Valider' : 'Indisponible'}">
-                                ${catEmojis[k]}
-                            </div>
-                            <div class="valid-check"><i class="fas fa-check"></i></div>
-                            <button onclick="updateProgress('${s.code}', '${k}'); event.stopPropagation();" 
-                                    class="manual-plus ${av ? '' : 'hidden'}" title="Valider la lecture">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>`;
-                        if (i < catKeys.length - 1) html += `<div class="resource-dot"></div>`;
+                        html += `<div class="icon-btn-vibe ${av ? '' : 'empty'} ${progress[`${s.code}_${k}`] ? 'done' : ''}" 
+                                     onclick="${av ? `window.open('${l}', '_blank'); updateProgress('${s.code}', '${k}');` : ''}">
+                                    ${catEmojis[k]}<div class="valid-dot"></div>
+                                 </div>`;
                     });
                     html += `</div></div>`;
                 });
                 html += `</div></div>`;
             }
-            document.getElementById('container').innerHTML = html;
-            resources[b].modules[Object.keys(resources[b].modules)[0]]?.forEach(s => refreshLine(s.code));
+            document.getElementById('container').innerHTML = html + `</div>`;
+        }
+
+        function toggleAgenda(code) {
+            const menu = document.getElementById('agenda-' + code);
+            const isVisible = menu.style.display === 'block';
+            document.querySelectorAll('.agenda-menu').forEach(m => m.style.display = 'none');
+            if(!isVisible) menu.style.display = 'block';
+        }
+
+        function planCal(title, url, days) {
+            const d = new Date(); d.setDate(d.getDate() + days);
+            const iso = d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+            const calUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=RELECTURE+PAIA:+${encodeURIComponent(title)}&dates=${iso}/${iso}&details=Document:+${url}&sf=true&output=xml`;
+            window.open(calUrl, '_blank');
+        }
+
+        function updateProgress(code, cat) {
+            const key = `${code}_${cat}`; progress[key] = !progress[key];
+            localStorage.setItem('paia_elite_v2_progress', JSON.stringify(progress));
+            refreshLine(code);
+        }
+
+        function validateLine(code) {
+            catKeys.forEach(k => progress[`${code}_${k}`] = true);
+            localStorage.setItem('paia_elite_v2_progress', JSON.stringify(progress));
+            refreshLine(code);
+        }
+
+        function refreshLine(code) {
+            const row = document.querySelector(`[data-code="${code}"]`); if (!row) return;
+            catKeys.forEach(k => {
+                const el = row.querySelector(`.icon-btn-vibe:nth-child(${catKeys.indexOf(k) + 1})`);
+                if (progress[`${code}_${k}`]) el.classList.add('done'); else el.classList.remove('done');
+            });
+            if (window.curTab === 'accueil') renderAccueil();
         }
 
         function calculateBlocPercent(b) {
             let t = 0; let d = 0;
-            for (let m in resources[b].modules) {
-                resources[b].modules[m].forEach(s => {
-                    catKeys.forEach(k => { t++; if (progress[`${s.code}_${k}`]) d++; });
-                });
-            }
+            if(!resources[b]) return 0;
+            for (let m in resources[b].modules) { resources[b].modules[m].forEach(s => { catKeys.forEach(k => { t++; if (progress[`${s.code}_${k}`]) d++; }); }); }
             return t > 0 ? Math.round((d/t)*100) : 0;
         }
 
+        window.onclick = (e) => { if (!e.target.closest('.agenda-container')) document.querySelectorAll('.agenda-menu').forEach(m => m.style.display = 'none'); };
         window.onload = init;
     </script>
 </body>
