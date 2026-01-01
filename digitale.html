@@ -3,78 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAIA - Expertise Digitale</title>
+    <title>PAIA - Expertise Stratégie Digitale Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-navy: #0F2C48; /* Couleur exacte de ton logo */
-            --color-gold: #D9A526; /* Or logo */
-            --color-slate-bg: #0B1120; /* Fond Onyx profond (reposant) */
-            --color-slate-card: #1E293B; /* Cartes gris bleu doux */
-            --color-text-cloud: #E2E8F0; /* Argenté nuage (anti-fatigue) */
-            --color-text-dim: #94A3B8;
-            --color-done: #10B981;
+            --color-gold: #D9A526;
+            --color-orange-peps: #FF8C00;
+            --color-navy: #0F2C48;
+            --color-done: #10b981;
+            --color-cream: #FAF9F6;
+            --gradient-gold: linear-gradient(135deg, #FFD700 0%, #D9A526 50%, #B4792A 100%);
+            --gradient-peps: linear-gradient(90deg, #FF8C00, #FFD700, #3b82f6, #a855f7, #FF1493);
+            --c-whatsapp: #25D366;
+            --c-discord: #5865F2;
+            --c-linkedin: #0077B5;
+            --c-instagram: #E4405F;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--color-slate-bg);
-            color: var(--color-text-cloud);
+            font-family: 'Outfit', sans-serif;
+            background-color: #020617;
+            color: var(--color-cream);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            font-style: normal !important;
         }
 
-        h1, h2, h3, .font-space { font-family: 'Space Grotesk', sans-serif; }
+        h1, h2, h3, h4, p, span, div, button, a, i, b, strong { font-style: normal !important; }
+        .font-space { font-family: 'Space Grotesk', sans-serif; }
 
-        /* Lueur d'ambiance Or très discrète */
-        .ambient-glow {
+        /* Background Animé */
+        .vibe-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 80% 20%, rgba(217, 165, 38, 0.04) 0%, transparent 40%);
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);
             z-index: -1;
         }
 
-        /* Header Navy XL */
-        .header-main {
-            background-color: var(--color-navy);
-            border-bottom: 3px solid var(--color-gold);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            height: 100px;
+        .blob {
+            position: absolute; width: 500px; height: 500px;
+            filter: blur(120px); border-radius: 50%; z-index: -1; 
+            animation: move 25s infinite alternate; opacity: 0.2;
         }
 
-        /* Navigation Links */
-        .nav-link-custom {
-            font-size: 1rem;
+        @keyframes move { from { transform: translate(-5%, -5%) scale(1); } to { transform: translate(15%, 15%) scale(1.1); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-float { animation: float 5s infinite ease-in-out; }
+
+        .text-gradient-peps {
+            background: var(--gradient-peps);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 800;
-            color: rgba(226, 232, 240, 0.6);
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
-        .nav-link-custom:hover, .nav-link-custom.active {
-            color: var(--color-gold);
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 32px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Tech Cards & Bento */
-        .tech-card {
-            background: var(--color-slate-card);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 28px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        .tech-card:hover { transform: translateY(-5px); border-color: var(--color-gold); }
 
-        /* Accordéon Modules */
+        .accent-border { border-left: 10px solid var(--color-gold); }
+        .accent-text { color: var(--color-gold); font-weight: 800; }
+
         .module-card {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 24px;
             margin-bottom: 1.5rem;
-            overflow: hidden;
         }
 
         .module-header {
@@ -83,354 +93,370 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.02);
-            transition: 0.3s;
         }
-        .module-header:hover { background: rgba(217, 165, 38, 0.05); }
-        .module-header h3 { font-size: 1.1rem; font-weight: 800; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.05em; }
 
-        .session-container { transition: max-height 0.5s ease-in-out; overflow: hidden; }
-        
-        .session-row {
-            padding: 1.75rem 2rem;
-            border-top: 1px solid rgba(226, 232, 240, 0.03);
-            transition: background 0.3s;
-        }
-        .session-row:hover { background: rgba(255, 255, 255, 0.01); }
+        .session-container { transition: max-height 0.6s ease-in-out; overflow: hidden; }
+        .session-row { padding: 1.5rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.04); }
 
-        /* Icons Digital Gold */
-        .icon-btn-gold {
-            width: 48px; height: 48px; border-radius: 14px;
+        /* Icones Design Paie Orange */
+        .icon-btn-vibe {
+            width: 52px; height: 52px; border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1.5px solid rgba(255, 255, 255, 0.1);
-            font-size: 1.5rem; transition: 0.3s;
+            background: rgba(255, 140, 0, 0.08);
+            border: 1.5px solid rgba(255, 140, 0, 0.3);
+            font-size: 1.6rem; transition: 0.3s;
             position: relative; cursor: pointer;
+            color: var(--color-orange-peps);
         }
-        .icon-btn-gold:hover { border-color: var(--color-gold); transform: translateY(-3px) scale(1.05); }
-        .icon-btn-gold.done { border-color: var(--color-done); color: var(--color-done); background: rgba(16, 185, 129, 0.1); }
-        .icon-btn-gold.empty { opacity: 0.15; pointer-events: none; }
+        .icon-btn-vibe:hover { transform: translateY(-3px) scale(1.1); border-color: var(--color-gold); background: rgba(255, 140, 0, 0.15); }
+        .icon-btn-vibe.empty { opacity: 0.3; pointer-events: none; }
+        .icon-btn-vibe.done { border-color: var(--color-done); color: var(--color-done); background: rgba(16, 185, 129, 0.15); border-width: 2.5px; }
 
-        .valid-dot {
-            position: absolute; top: -4px; right: -4px;
-            width: 15px; height: 15px; border-radius: 50%;
-            background: var(--color-done); border: 2.5px solid var(--color-slate-bg);
-            display: none; box-shadow: 0 0 10px var(--color-done);
+        .btn-pill-action {
+            background: var(--gradient-gold);
+            color: #020617; font-weight: 800; padding: 10px 24px;
+            border-radius: 50px; font-size: 0.8rem; text-transform: uppercase;
+            cursor: pointer; border: none; transition: 0.3s;
         }
-        .icon-btn-gold.done .valid-dot { display: block; }
 
-        /* Agenda Popover */
-        .agenda-menu {
-            position: absolute; right: 0; top: 110%;
-            background: #0f172a; border: 1.5px solid var(--color-gold);
-            border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.8);
-            display: none; min-width: 240px; z-index: 100; padding: 12px;
-            backdrop-filter: blur(25px);
-        }
-        .agenda-item {
-            padding: 10px 14px; font-size: 0.8rem; font-weight: 700;
-            border-radius: 10px; cursor: pointer; color: #fff; transition: 0.2s;
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 4px;
-        }
-        .agenda-item:hover { background: var(--color-gold); color: #020617; transform: translateX(5px); }
-
-        /* Navigation Flottante */
-        .nav-circle {
-            width: 55px; height: 55px; border-radius: 50%;
-            background: linear-gradient(135deg, #FFD700 0%, #D9A526 100%);
-            color: #020617; display: flex; align-items: center; justify-content: center;
-            font-size: 1.3rem; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2);
-        }
-        .nav-circle:hover { transform: scale(1.15) rotate(10deg); }
-
-        /* Tabs */
         .tab-btn {
-            padding: 12px 28px; border-radius: 16px;
-            font-weight: 900; color: var(--color-text-dim);
-            transition: 0.3s; font-size: 0.9rem; letter-spacing: 0.05em;
+            padding: 12px 32px; border-radius: 16px;
+            font-weight: 800; color: rgba(255, 255, 255, 0.5);
+            transition: 0.4s; font-size: 0.85rem; letter-spacing: 0.08em;
         }
-        .tab-btn.active { background: var(--color-gold); color: #020617; box-shadow: 0 0 25px rgba(217, 165, 38, 0.3); }
+        .tab-btn.active { background: white; color: #020617; box-shadow: 0 0 25px rgba(255,255,255,0.2); }
 
-        /* Social Icons Peps */
-        .social-link { font-size: 2rem; transition: 0.3s; }
-        .social-link:hover { transform: translateY(-5px) scale(1.1); filter: brightness(1.2); }
-        .c-whatsapp { color: #25D366; }
-        .c-discord { color: #5865F2; }
-        .c-linkedin { color: #0077b5; }
-        .c-instagram { color: #E4405F; }
+        /* Footer MPa */
+        footer { 
+            background: linear-gradient(to bottom, transparent, rgba(15, 44, 72, 0.2)); 
+            border-top: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 80px 20px 40px; 
+            margin-top: auto;
+        }
+        
+        .footer-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 50px;
+            backdrop-filter: blur(15px);
+        }
+
+        .profile-img-footer { 
+            width: 90px; height: 90px; border-radius: 30px; border: 3px solid var(--color-gold);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5); object-fit: cover;
+            transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .profile-img-footer:hover { transform: scale(1.1) rotate(5deg); border-color: #fff; }
+
+        .social-link-permanent {
+            width: 65px; height: 65px; border-radius: 22px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .social-link-permanent:hover { transform: translateY(-10px) rotate(8deg); border-color: rgba(255,255,255,0.2); }
+
+        .c-whatsapp { color: var(--c-whatsapp); }
+        .c-discord { color: var(--c-discord); }
+        .c-linkedin { color: var(--c-linkedin); }
+        .c-instagram { color: var(--c-instagram); }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow"></div>
+    <div class="vibe-bg">
+        <div class="blob" style="top: 10%; left: 10%; background: rgba(217, 165, 38, 0.3);"></div>
+        <div class="blob" style="bottom: 10%; right: 10%; background: rgba(15, 44, 72, 0.5);"></div>
+    </div>
 
-    <!-- Header XL Harmonisé -->
-    <header class="fixed top-0 w-full z-50 header-main">
-        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-            <div class="flex items-center gap-6 group cursor-pointer" onclick="location.href='https://projettechacademy.github.io/Programme_Formation_Digital_Python/'">
+    <header class="fixed top-0 w-full z-50 backdrop-blur-3xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-6 group cursor-pointer" onclick="location.href='index.html'">
                 <div class="relative">
-                    <img class="w-16 h-16 rounded-full border-2 border-gold shadow-2xl transition-transform duration-500 group-hover:rotate-12" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Logo PAIA">
-                    <div class="absolute inset-0 rounded-full bg-gold/20 blur-xl"></div>
+                    <img class="w-14 h-14 rounded-full border-2 border-gold shadow-lg" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="PAIA Logo">
                 </div>
                 <div>
-                    <h1 class="text-xl font-black text-white tracking-tight uppercase">💫 PAIA✨By Mathilde Martine PAISLEY</h1>
-                    <p class="text-[10px] text-gold font-black uppercase tracking-[0.4em]">Payroll Automation & Intelligent Architecture</p>
+                    <h1 class="text-xl font-extrabold text-white tracking-tighter uppercase font-space">💫 PAIA✨By Mathilde Martine PAISLEY</h1>
+                    <p class="text-[9px] text-gold font-black uppercase tracking-[0.4em] mt-0.5 font-space">Expertise Stratégie Digitale - CDO</p>
                 </div>
             </div>
 
             <nav class="hidden lg:flex items-center gap-10">
-                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/" class="nav-link-custom">🏠</a>
-                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/python.html" class="nav-link-custom">🐍 Python</a>
-                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/paie.html" class="nav-link-custom">📊 Paie</a>
-                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/rh.html" class="nav-link-custom">⚖️ RH</a>
-                <a href="https://projettechacademy.github.io/Programme_Formation_Digital_Python/digitale.html" class="nav-link-custom active">🌐 Digital</a>
+                <a href="index.html" class="text-white/60 hover:text-white transition font-black text-[10px] uppercase tracking-widest font-space">Accueil</a>
+                <a href="python.html" class="text-white/60 hover:text-gold transition font-black text-[10px] uppercase tracking-widest font-space">🐍 Python</a>
+                <a href="paie.html" class="text-white/60 hover:text-white transition font-black text-[10px] uppercase tracking-widest font-space">💰 Paie</a>
+                <a href="rh.html" class="text-white/60 hover:text-white transition font-black text-[10px] uppercase tracking-widest font-space">⚖️ RH</a>
+                <a href="digitale.html" class="text-gold font-black text-[10px] uppercase tracking-widest border-b-2 border-gold pb-1 font-space">🌐 Digital</a>
             </nav>
         </div>
     </header>
 
-    <main class="pt-44 pb-24 px-6 max-w-7xl mx-auto flex-grow w-full">
+    <main class="pt-36 pb-24 px-6 max-w-7xl mx-auto flex-grow w-full">
         <div class="text-center mb-16">
-            <h2 class="text-6xl font-black mb-4 tracking-tighter text-white uppercase">Expertise <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 to-amber-500">Digitale</span></h2>
-            <p class="text-sm text-dim font-black uppercase tracking-[0.5em]">Maîtrise des écosystèmes technologiques</p>
-            <div id="loading" class="mt-10 flex justify-center"><i class="fas fa-circle-notch animate-spin text-4xl text-gold"></i></div>
+            <h2 class="text-6xl font-black mb-4 tracking-tighter uppercase font-space leading-tight">
+                Expertise <span class="text-gradient-peps">Stratégie Digitale</span>
+            </h2>
+            <p class="text-xs text-white opacity-60 font-black uppercase tracking-[0.6em] font-space">Architecture & Gouvernance Digitale - Formation CDO</p>
+            <div id="loading" class="mt-12 flex justify-center"><i class="fas fa-circle-notch animate-spin text-4xl text-gold"></i></div>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="flex justify-center mb-16">
-            <div class="tech-card p-2.5 flex gap-3">
-                <button onclick="switchTab('accueil')" id="tab-accueil" class="tab-btn active">SYNTHÈSE</button>
-                <nav id="dynamic-tabs" class="flex gap-3"></nav>
+        <div class="flex justify-center mb-16 overflow-x-auto no-scrollbar">
+            <div class="glass-card p-3 flex gap-4 bg-white/5 border-white/10 shadow-xl">
+                <button onclick="switchTab('accueil')" id="tab-accueil" class="tab-btn active font-space uppercase">🚀 Vue Globale</button>
+                <div id="bloc-tabs" class="flex gap-4"></div>
             </div>
         </div>
 
-        <div id="container" class="space-y-12"></div>
+        <div id="container" class="space-y-12 pb-24"></div>
     </main>
 
-    <!-- Navigation Flottante -->
-    <div class="fixed bottom-8 right-8 flex flex-col gap-4 z-[1000]">
-        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="nav-circle" title="Remonter"><i class="fas fa-chevron-up"></i></button>
-        <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" class="nav-circle" title="Descendre"><i class="fas fa-chevron-down"></i></button>
-    </div>
+    <footer>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="footer-card">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                    <div class="lg:col-span-5 space-y-8">
+                        <div class="flex items-center gap-6">
+                            <div class="flex -space-x-6">
+                                <img class="profile-img-footer" src="https://projettechacademy.github.io/Projet_Python/Asset/Logo_MMPA.jpeg" alt="Logo MPa">
+                                <img class="profile-img-footer relative z-10" src="https://projettechacademy.github.io/Projet_Python/Asset/Photo_Mathilde_Martine_PAISLEY.jpeg" alt="Photo MMPA">
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-black text-white tracking-tight uppercase font-space">Mathilde Martine</h4>
+                                <h4 class="text-2xl font-black text-gold tracking-tight uppercase font-space mt-1">PAISLEY</h4>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-xl font-black uppercase tracking-tighter font-space animate-float text-gradient-peps">
+                                Architecte des systèmes intelligents
+                            </p>
+                            <p class="text-sm text-white opacity-70 font-bold leading-relaxed max-w-sm font-space">
+                                Expertise en Stratégie Digitale et Architecture de Transformation.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                            <a href="mailto:mathilde.martine.paisley@gmail.com" class="flex items-center gap-4 text-white/80 hover:text-white transition group bg-white/5 p-4 rounded-3xl border border-white/5 shadow-inner">
+                                <span class="text-2xl">📧</span>
+                                <div class="flex flex-col">
+                                    <span class="text-[9px] font-black uppercase text-gold tracking-widest">Écrivez-moi</span>
+                                    <span class="text-xs font-bold tracking-widest uppercase font-space">Email Pro</span>
+                                </div>
+                            </a>
+                            <a href="tel:+33685900887" class="flex items-center gap-4 text-white/80 hover:text-white transition group bg-white/5 p-4 rounded-3xl border border-white/5 shadow-inner">
+                                <span class="text-2xl">📱</span>
+                                <div class="flex flex-col">
+                                    <span class="text-[9px] font-black uppercase text-gold tracking-widest">Appelez-moi</span>
+                                    <span class="text-xs font-bold tracking-widest uppercase font-space">iPhone Direct</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 
-    <!-- Footer Slim Pop avec Contact Direct -->
-    <footer class="py-14 bg-black/50 border-t border-gold/10 mt-auto">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row justify-between items-center gap-12">
-            <div class="text-center lg:text-left">
-                <h4 class="text-2xl font-black text-white tracking-tight uppercase">Mathilde Martine PAISLEY</h4>
-                <div class="flex flex-col gap-2 mt-4">
-                    <p class="text-sm text-dim font-bold"><i class="fas fa-envelope text-gold mr-4"></i> Mathilde.martine.paisley@gmail.com</p>
-                    <p class="text-sm text-dim font-bold"><i class="fas fa-phone-alt text-gold mr-4"></i> 06 85 90 08 87</p>
+                    <div class="lg:col-span-4 space-y-10">
+                        <h5 class="text-[10px] font-black uppercase tracking-[0.6em] text-white/30 font-space ml-2">Connectivité Permanente</h5>
+                        <div class="flex flex-wrap gap-5">
+                            <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" target="_blank" class="social-link-permanent c-whatsapp"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://discord.gg/redT9wEE6T" target="_blank" class="social-link-permanent c-discord"><i class="fab fa-discord"></i></a>
+                            <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" target="_blank" class="social-link-permanent c-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.instagram.com/enervyx/" target="_blank" class="social-link-permanent c-instagram"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-3 text-right flex flex-col justify-between h-full items-end">
+                        <img class="w-24 opacity-20" src="https://projettechacademy.github.io/Projet_Python/Asset/2127845D-F95D-49C0-A22B-88C07817841B.png" alt="Ghost Logo">
+                        <div class="space-y-2 mt-auto">
+                            <p class="text-[11px] text-white opacity-40 uppercase font-black tracking-[0.8em] font-space">PAIA © 2026 | BY MPA</p>
+                            <p class="text-[9px] text-gold opacity-50 uppercase font-bold tracking-widest font-space">Expert Strategy in Digital Systems</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Réseaux Sociaux Couleurs Officielles -->
-            <div class="flex gap-10">
-                <a href="https://chat.whatsapp.com/IoMXFl4o2otExYKCPVj22b" target="_blank" class="social-link c-whatsapp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://discord.gg/redT9wEE6T" target="_blank" class="social-link c-discord" title="Discord Principal"><i class="fab fa-discord"></i></a>
-                <a href="https://discord.gg/qwNPV8QzFt" target="_blank" class="social-link c-discord" title="Discord Support"><i class="fas fa-headset"></i></a>
-                <a href="https://www.linkedin.com/in/mathilde-martine-paisley-1a4422382/" target="_blank" class="social-link c-linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://www.instagram.com/enervyx/" target="_blank" class="social-link c-instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
-            
-            <div class="text-center lg:text-right">
-                <p class="text-[11px] text-white/10 uppercase font-black tracking-[0.7em]">PAIA by MPa</p>
-                <p class="text-[9px] text-white/5 uppercase mt-3 font-bold tracking-widest italic">Intelligent Architecture Strategy</p>
             </div>
         </div>
     </footer>
 
     <script>
-        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1VKl4B0GzwQwCgTyu3i7E-5cuZhdRARKVE4dizA87keDFdeKYdfdF5AmqcgiJcSWMaqihkr7iuOTA/pub?gid=0&single=true&output=csv";
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cQoVFW8twSADbAWg6C_dHPMnzHc0Y1X6BfHYAKFGwXOOZU1kSDp_dotUkc20fzp8vsSEvuhyMzGh/pub?gid=0&single=true&output=csv";
+        
         let resources = {};
-        let currentTab = 'accueil';
-        let progress = JSON.parse(localStorage.getItem('paia_digital_v5.6_progress') || '{}');
+        let progress = JSON.parse(localStorage.getItem('paia_digital_strat_v5_progress') || '{}');
 
-        const catKeys = ["Intro_Gamma", "Cours_Paie", "Audio", "Excel", "Infographie", "Présentation", "Video"];
-        const catEmojis = { "Intro_Gamma":"☝️", "Cours_Paie":"📁", "Audio":"🎧", "Excel":"📊", "Infographie":"🖼️", "Présentation":"📽️", "Video":"📹" };
+        const catKeys = ["Digitale_Gamma", "Cours_Digitale", "Digitale_Audio", "Digitale_Excel", "Digitale_Infographie", "Digitale_Presentation", "Digitale_Video"];
+        const catEmojis = { "Digitale_Gamma":"☝️", "Cours_Digitale":"📁", "Digitale_Audio":"🎧", "Digitale_Excel":"📊", "Digitale_Infographie":"🖼️", "Digitale_Presentation":"📽️", "Digitale_Video":"📹" };
 
         function init() {
-            Papa.parse(CSV_URL, { download: true, header: true, skipEmptyLines: true,
-                complete: (res) => { parseData(res.data); document.getElementById('loading').style.display='none'; renderTabs(); switchTab('accueil'); }
+            Papa.parse(CSV_URL, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: (results) => {
+                    parseData(results.data);
+                    document.getElementById('loading').classList.add('hidden');
+                    renderBlocTabs();
+                    switchTab('accueil');
+                }
             });
         }
 
         function parseData(data) {
-            let curB = null; let curM = "Général";
+            let curBloc = null; let curMod = "Général";
             data.forEach(row => {
-                let t = row['Titres des catégories']?.trim(); 
-                if(!t || t === "Emoji" || t === "Titres des catégories" || t === "Calendrier") return;
+                let title = row['Titres des catégories']?.trim(); 
+                if (!title || ["Emoji", "Calendrier", "Titres des catégories"].includes(title)) return;
                 
-                const blocMatch = t.match(/^(Bloc_\d+)(?!_\d+)/i);
-                if (blocMatch) {
-                    curB = blocMatch[1].replace('Bloc_', 'B');
-                    const fullTitle = t.replace(blocMatch[1], '').replace(/^[ _-]+/, '').trim() || t;
-                    if(!resources[curB]) resources[curB] = { id: curB, fullTitle, mods: {} };
-                    curM = "Général"; return;
+                const blocMatch = title.match(/^(B\d+)_/i) || title.match(/^(Bloc_\d+)/i);
+                if (blocMatch && !title.includes('_M')) {
+                    curBloc = blocMatch[1].replace('Bloc_', 'B');
+                    if (!resources[curBloc]) resources[curBloc] = { title: title.replace(/^B\d+[ _-]+/i, '').trim(), modules: {} };
+                    curMod = "Général"; return;
                 }
 
-                const modMatch = t.match(/^(M\d+_Bloc_\d+)/i);
+                const modMatch = title.match(/^(B\d+_M\d+)(?!_\d{3})/i);
                 if (modMatch) {
-                    curM = t.replace(modMatch[1], '').replace(/^[. _-]+/, '').trim() || t;
-                    if(curB && !resources[curB].mods[curM]) resources[curB].mods[curM] = []; return;
+                    curMod = title.replace(modMatch[1], '').replace(/^[ _-]+/, '').trim();
+                    if (curBloc && !resources[curBloc].modules[curMod]) resources[curBloc].modules[curMod] = [];
+                    return;
                 }
 
-                const sessionMatch = t.match(/^(Bloc_\d+_\d+)/i);
+                const sessionMatch = title.match(/^(B\d+_M\d+_\d{3})/i);
                 if (sessionMatch) {
                     const code = sessionMatch[1];
-                    const label = t.replace(code, '').replace(/^[ _-]+/, '').replace(/\.pdf$/i, '').trim();
-                    if(curB) {
-                        if(!resources[curB].mods[curM]) resources[curB].mods[curM] = [];
-                        resources[curB].mods[curM].push({ code, label, links: row });
+                    const label = title.replace(code, '').replace(/^[ _-]+/, '').trim();
+                    if (curBloc) {
+                        if (!resources[curBloc].modules[curMod]) resources[curBloc].modules[curMod] = [];
+                        resources[curBloc].modules[curMod].push({ code, label, links: row });
                     }
                 }
             });
         }
 
-        function renderTabs() {
-            let h = "";
+        function renderBlocTabs() {
+            let html = "";
             Object.keys(resources).sort().forEach(b => {
-                h += `<button onclick="switchTab('${b}')" id="tab-${b}" class="tab-btn">Bloc ${b.replace('B','')}</button>`;
+                html += `<button onclick="switchTab('${b}')" id="tab-${b}" class="tab-btn uppercase font-space">Bloc ${b.replace('B','')}</button>`;
             });
-            document.getElementById('dynamic-tabs').innerHTML = h;
+            document.getElementById('bloc-tabs').innerHTML = html;
         }
 
         function switchTab(t) {
-            currentTab = t;
+            window.curTab = t;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            const activeTab = document.getElementById('tab-'+t);
-            if(activeTab) activeTab.classList.add('active');
-            if(t === 'accueil') renderAccueil(); else renderBloc(t);
+            const btn = document.getElementById('tab-' + t);
+            if(btn) btn.classList.add('active');
+            if (t === 'accueil') renderAccueil(); else renderBloc(t);
         }
 
         function renderAccueil() {
-            let h = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">`;
+            let html = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">`;
             Object.keys(resources).sort().forEach(b => {
                 let total = 0; let done = 0;
-                for(let m in resources[b].mods) {
-                    resources[b].mods[m].forEach(s => {
-                        catKeys.forEach(k => { total++; if(progress[`${s.code}_${k}`]) done++; });
+                for (let m in resources[b].modules) {
+                    resources[b].modules[m].forEach(s => { 
+                        catKeys.forEach(k => { 
+                            const val = s.links[k];
+                            if (val && val.startsWith('http')) { total++; if (progress[`${s.code}_${k}`]) done++; }
+                        }); 
                     });
                 }
                 const p = total > 0 ? Math.round((done / total) * 100) : 0;
-
-                h += `<div class="tech-card p-12 text-center border-l-[10px] border-gold group cursor-pointer hover:bg-white/5 transition-all" onclick="switchTab('${b}')">
-                    <h4 class="text-4xl font-black mb-3 text-white group-hover:text-gold transition-colors">Bloc ${b.replace('B','')}</h4>
-                    <p class="text-[11px] text-dim uppercase tracking-[0.3em] mb-10 font-bold">${resources[b].fullTitle}</p>
-                    <div class="h-2.5 bg-white/5 rounded-full overflow-hidden mb-6"><div class="h-full bg-gold shadow-[0_0_15px_#D9A526] transition-all duration-1000" style="width:${p}%"></div></div>
-                    <span class="text-5xl font-black text-gold">${p}%</span>
-                    <div class="mt-10 text-[11px] font-black uppercase text-white/50 group-hover:text-white transition-all">Consulter <i class="fas fa-chevron-right ml-3"></i></div>
+                html += `<div class="glass-card p-12 text-center accent-border group cursor-pointer" onclick="switchTab('${b}')">
+                    <h4 class="text-5xl font-black mb-4 text-white group-hover:accent-text transition-colors font-space">Bloc ${b.replace('B','')}</h4>
+                    <p class="text-[11px] text-white opacity-40 uppercase tracking-[0.4em] mb-12 font-bold truncate font-space">${resources[b].title}</p>
+                    <div class="h-4 bg-white/5 rounded-full overflow-hidden mb-8 shadow-inner border border-white/5">
+                        <div class="h-full bg-gold transition-all duration-1000 rounded-full" style="width:${p}%"></div>
+                    </div>
+                    <span class="text-6xl font-black accent-text font-space">${p}%</span>
                 </div>`;
             });
-            document.getElementById('container').innerHTML = h + `</div>`;
+            document.getElementById('container').innerHTML = html + `</div>`;
+        }
+
+        function renderBloc(b) {
+            const bloc = resources[b];
+            let html = `<div class="glass-card p-12 accent-border">
+                <div class="flex justify-between items-end mb-16">
+                    <div>
+                        <h3 class="text-6xl font-black uppercase tracking-tighter font-space">Bloc ${b.replace('B','')}</h3>
+                        <p class="text-xs text-white opacity-50 font-black uppercase tracking-[0.5em] mt-3 font-space">${bloc.title}</p>
+                    </div>
+                    <span class="text-5xl font-black accent-text font-space">${calculateBlocPercent(b)}%</span>
+                </div>`;
+            
+            let modIdx = 0;
+            for (let m in bloc.modules) {
+                const modId = `mod-content-${modIdx++}`;
+                html += `<div class="module-card">
+                    <div class="module-header" onclick="toggleAccordion('${modId}')">
+                        <h3 class="accent-text font-space text-lg">⚡ Module : ${m}</h3>
+                        <i id="icon-${modId}" class="fas fa-chevron-down accent-text transition-transform duration-500"></i>
+                    </div>
+                    <div id="${modId}" class="session-container" style="max-height:0px;">`;
+                
+                bloc.modules[m].forEach(s => {
+                    html += `<div class="session-row" data-code="${s.code}">
+                        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-10 mb-10">
+                            <div class="flex items-center gap-6">
+                                <span class="text-sm font-black accent-text bg-white/5 px-5 py-2 rounded-xl border border-white/10 tracking-widest font-space shadow-xl">${s.code}</span>
+                                <span class="text-xl font-bold text-white opacity-90 font-space">${s.label}</span>
+                            </div>
+                            <button onclick="validateLine('${s.code}')" class="btn-pill-action font-space">Valider</button>
+                        </div>
+                        <div class="flex gap-6 flex-wrap">`;
+                    catKeys.forEach(k => {
+                        const l = s.links[k]; const av = l && l.startsWith('http');
+                        html += `<div class="icon-btn-vibe ${av ? '' : 'empty'} ${progress[`${s.code}_${k}`] ? 'done' : ''}" 
+                                     onclick="${av ? `window.open('${l}', '_blank'); updateProgress('${s.code}', '${k}');` : ''}">
+                                    ${catEmojis[k]}
+                                 </div>`;
+                    });
+                    html += `</div></div>`;
+                });
+                html += `</div></div>`;
+            }
+            document.getElementById('container').innerHTML = html + `</div>`;
         }
 
         function toggleAccordion(id) {
             const content = document.getElementById(id);
             const icon = document.getElementById('icon-' + id);
-            if(content.style.maxHeight && content.style.maxHeight !== '0px') {
-                content.style.maxHeight = '0px';
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                icon.style.transform = 'rotate(180deg)';
-            }
+            if(content.style.maxHeight) { content.style.maxHeight = null; icon.style.transform = 'rotate(0deg)'; }
+            else { content.style.maxHeight = content.scrollHeight + "px"; icon.style.transform = 'rotate(180deg)'; }
         }
 
-        function renderBloc(b) {
-            const bloc = resources[b];
-            let h = `<div class="tech-card p-10 border-l-[16px] border-gold">
-                <div class="flex justify-between items-end mb-14">
-                    <div>
-                        <h3 class="text-5xl font-black uppercase tracking-tighter text-white">Console ${b}</h3>
-                        <p class="text-[11px] text-dim font-black uppercase tracking-[0.4em] mt-2">${bloc.fullTitle}</p>
-                    </div>
-                    <span class="text-4xl font-black text-gold">${calculateBlocPercent(b)}%</span>
-                </div>`;
-            
-            let modIdx = 0;
-            for(let m in bloc.mods) {
-                const mid = `mod-content-${modIdx++}`;
-                h += `<div class="module-card">
-                    <div class="module-header" onclick="toggleAccordion('${mid}')">
-                        <h3 class="font-space">${m}</h3>
-                        <i id="icon-${mid}" class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
-                    </div>
-                    <div id="${mid}" class="session-container" style="max-height:0px;">`;
-                
-                bloc.mods[m].forEach(s => {
-                    const firstUrl = Object.values(s.links).find(l => l && l !== "null" && l.trim() !== "") || "#";
-                    h += `<div class="session-row" data-code="${s.code}">
-                        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8 mb-8">
-                            <div class="flex items-center gap-5">
-                                <span class="text-[12px] font-black text-gold font-space bg-gold/15 px-4 py-1.5 rounded-lg border border-gold/20">${s.code}</span>
-                                <span class="text-lg font-bold text-white/95">${s.label}</span>
-                            </div>
-                            <div class="flex items-center gap-5">
-                                <button onclick="validateLine('${s.code}')" class="px-6 py-2.5 bg-gradient-to-r from-[#FFD700] to-[#D9A526] text-slate-900 text-[10px] font-black rounded-full uppercase hover:scale-108 transition-all shadow-xl">Valider</button>
-                                <div class="agenda-container">
-                                    <button onclick="toggleAgenda('${s.code}')" class="w-12 h-12 rounded-full bg-white/5 border border-blue-400/40 flex items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-slate-900 transition-all shadow-lg"><i class="fas fa-calendar-alt"></i></button>
-                                    <div id="agenda-${s.code}" class="agenda-menu">
-                                        <div class="text-[10px] font-black text-dim p-3 border-b border-white/10 uppercase mb-3 text-center">Planifier Relecture</div>
-                                        ${[3, 10, 30, 60, 90, 120].map(d => `
-                                            <div class="agenda-item" onclick="plan('${s.label}', '${firstUrl}', ${d})">
-                                                <span>Dans ${d} jours</span> <i class="fas fa-plus-circle opacity-40"></i>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 flex-wrap">`;
-                    catKeys.forEach(k => {
-                        let url = s.links[k]; let av = url && url !== "" && url !== "null";
-                        h += `<div class="icon-btn-gold ${av ? '' : 'empty'} ${progress[`${s.code}_${k}`] ? 'done' : ''}" 
-                                     onclick="${av ? `window.open('${url}','_blank'); toggleProg('${s.code}','${k}')` : ''}">
-                                    ${catEmojis[k]}<div class="valid-dot"></div>
-                                 </div>`;
-                    });
-                    h += `</div></div>`;
-                });
-                h += `</div></div>`;
-            }
-            document.getElementById('container').innerHTML = h + `</div>`;
+        function updateProgress(code, cat) {
+            const key = `${code}_${cat}`; progress[key] = !progress[key];
+            localStorage.setItem('paia_digital_strat_v5_progress', JSON.stringify(progress));
+            refreshLine(code);
+        }
+
+        function validateLine(code) {
+            catKeys.forEach(k => progress[`${code}_${k}`] = true);
+            localStorage.setItem('paia_digital_strat_v5_progress', JSON.stringify(progress));
+            refreshLine(code);
+        }
+
+        function refreshLine(code) {
+            const row = document.querySelector(`[data-code="${code}"]`); if (!row) return;
+            catKeys.forEach((k, idx) => {
+                const el = row.querySelectorAll('.icon-btn-vibe')[idx];
+                if (progress[`${code}_${k}`]) el.classList.add('done'); else el.classList.remove('done');
+            });
+            if (window.curTab === 'accueil') renderAccueil();
         }
 
         function calculateBlocPercent(b) {
-            let t = 0; let d = 0;
-            if(!resources[b]) return 0;
-            for (let m in resources[b].mods) { resources[b].mods[m].forEach(s => { catKeys.forEach(k => { t++; if (progress[`${s.code}_${k}`]) d++; }); }); }
+            let t = 0; let d = 0; if(!resources[b]) return 0;
+            for (let m in resources[b].modules) { 
+                resources[b].modules[m].forEach(s => { 
+                    catKeys.forEach(k => { 
+                        const val = s.links[k];
+                        if (val && val.startsWith('http')) { t++; if (progress[`${s.code}_${k}`]) d++; }
+                    }); 
+                }); 
+            }
             return t > 0 ? Math.round((d/t)*100) : 0;
         }
 
-        function toggleAgenda(code) {
-            const menu = document.getElementById('agenda-' + code);
-            const isVisible = menu.style.display === 'block';
-            document.querySelectorAll('.agenda-menu').forEach(m => m.style.display = 'none');
-            if(!isVisible) menu.style.display = 'block';
-        }
-
-        function plan(title, url, days) {
-            const d = new Date(); d.setDate(d.getDate() + days);
-            const iso = d.toISOString().replace(/-|:|\\.\\d\\d\\d/g, "");
-            const calUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=RELECTURE DIGITAL : ${encodeURIComponent(title)}&dates=${iso}/${iso}&details=Document : ${url}&sf=true&output=xml`;
-            window.open(calUrl, '_blank');
-        }
-
-        function toggleProg(c,k){ let key = c+'_'+k; progress[key]=!progress[key]; localStorage.setItem('paia_digital_v5.6_progress', JSON.stringify(progress)); refreshLine(c); if(window.curTab === 'accueil') renderAccueil(); }
-        function validateLine(c){ catKeys.forEach(k => progress[c+'_'+k]=true); localStorage.setItem('paia_digital_v5.6_progress', JSON.stringify(progress)); refreshLine(c); if(window.curTab === 'accueil') renderAccueil(); }
-        function refreshLine(c) {
-            const row = document.querySelector(`[data-code="${c}"]`); if(!row) return;
-            catKeys.forEach(k => { 
-                const el = row.querySelector(`.icon-btn-gold:nth-child(${catKeys.indexOf(k) + 1})`);
-                if(progress[c+'_'+k]) el.classList.add('done'); else el.classList.remove('done');
-            });
-        }
-
-        window.onclick = (e) => { if (!e.target.closest('.agenda-container')) document.querySelectorAll('.agenda-menu').forEach(m => m.style.display = 'none'); };
         window.onload = init;
     </script>
 </body>
